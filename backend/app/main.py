@@ -3,6 +3,7 @@ from app.api.routers import database
 from app.config.settings import settings
 from app.api.routers import health
 from app.api.routers import auth
+from app.api.routers import users
 
 # Create FastAPI application
 app = FastAPI(
@@ -26,3 +27,7 @@ app.include_router(
     prefix="/api/v1"
 )
 
+app.include_router(
+    users.router,
+    prefix="/api/v1"
+)
