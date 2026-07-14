@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.api.routers import database
 from app.config.settings import settings
 from app.api.routers import health
+from app.api.routers import auth
 
 # Create FastAPI application
 app = FastAPI(
@@ -20,4 +21,8 @@ def root():
 # Include Routers
 app.include_router(health.router)
 app.include_router(database.router)
+app.include_router(
+    auth.router,
+    prefix="/api/v1"
+)
 
