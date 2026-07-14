@@ -1,12 +1,12 @@
 import Navbar from "../../components/landing/Navbar";
 import HeroSection from "../../components/landing/HeroSection";
 import OverviewSection from "../../components/landing/OverviewSection";
-import HowItWorks from "../../components/landing/HowItWorks";
-import FeaturesSection from "../../components/landing/FeaturesSection";
+import howitworks from "../../components/landing/howitworks";
+import featuressection from "../../components/landing/featuressection";
 import StatisticsSection from "../../components/landing/StatisticsSection";
-import DepartmentsSection from "../../components/landing/DepartmentsSection";
+import departmentssection from "../../components/landing/departmentssection";
 import ContactSection from "../../components/landing/ContactSection";
-import Footer from "../../components/landing/Footer";
+import footer from "../../components/landing/footer";
 
 function LandingPage() {
   return (
@@ -14,12 +14,12 @@ function LandingPage() {
       <Navbar />
       <HeroSection />
       <OverviewSection />
-      <HowItWorks />
-      <FeaturesSection />
+      <howitworks />
+      <featuressection />
       <StatisticsSection />
-      <DepartmentsSection />
+      <departmentssection />
       <ContactSection />
-      <Footer />
+      <footer />
     </>
   );
 }
