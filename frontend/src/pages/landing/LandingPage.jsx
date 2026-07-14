@@ -7,6 +7,7 @@ import StatisticsSection from "../../components/landing/StatisticsSection";
 import departmentssection from "../../components/landing/departmentssection";
 import ContactSection from "../../components/landing/ContactSection";
 import footer from "../../components/landing/footer";
+import ScrollTop from "../../components/common/ScrollTop";
 
 function LandingPage() {
   return (
@@ -20,6 +21,7 @@ function LandingPage() {
       <departmentssection />
       <ContactSection />
       <footer />
+      <ScrollTop />
     </>
   );
 }
