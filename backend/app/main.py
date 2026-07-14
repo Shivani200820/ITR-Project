@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from app.api.routers import database
 from app.config.settings import settings
 from app.api.routers import health
 
@@ -19,4 +19,5 @@ def root():
 
 # Include Routers
 app.include_router(health.router)
+app.include_router(database.router)
 
