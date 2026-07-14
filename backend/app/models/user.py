@@ -3,13 +3,13 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
 from app.shared.base_model import BaseModel
-from app.shared.mixins import TimestampMixin
-from app.shared.enums import UserRole
 from app.shared.constants import (
-    MAX_NAME_LENGTH,
     MAX_EMAIL_LENGTH,
+    MAX_NAME_LENGTH,
     MAX_PHONE_LENGTH,
 )
+from app.shared.enums import UserRole
+from app.shared.mixins import TimestampMixin
 
 
 class User(Base, BaseModel, TimestampMixin):
@@ -23,8 +23,8 @@ class User(Base, BaseModel, TimestampMixin):
     email: Mapped[str] = mapped_column(
         String(MAX_EMAIL_LENGTH),
         unique=True,
-        index=True,
         nullable=False,
+        index=True,
     )
 
     phone: Mapped[str] = mapped_column(
