@@ -1,8 +1,5 @@
-import { Routes, Route } from "react-router-dom";
-
-function LandingPage() {
-  return <h1>Welcome to CivicAI</h1>;
-}
+  import { Routes, Route } from "react-router-dom";
+import LandingPage from "../pages/landing/LandingPage";
 
 function AppRoutes() {
   return (
