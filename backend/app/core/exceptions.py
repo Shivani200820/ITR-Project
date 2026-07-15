@@ -87,3 +87,26 @@ class ComplaintPriorityNotFoundException(CivicAIException):
             message="Complaint priority not found.",
             status_code=404,
         )
+
+class ComplaintStatusAlreadyExistsException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint status already exists.",
+            status_code=400,
+        )
+
+
+class ComplaintStatusSequenceExistsException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint status sequence already exists.",
+            status_code=400,
+        )
+
+
+class ComplaintStatusNotFoundException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint status not found.",
+            status_code=404,
+        )

@@ -6,3 +6,7 @@ from app.services.complaint_category_service import (
 from app.services.complaint_priority_service import (
     ComplaintPriorityService,
 )
+
+from app.services.complaint_status_service import (
+    ComplaintStatusService,
+)
