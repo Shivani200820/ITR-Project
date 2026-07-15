@@ -10,3 +10,9 @@ from app.schemas.department import (
     DepartmentUpdate,
     DepartmentResponse,
 )
+from app.schemas.complaint_category import (
+    ComplaintCategoryBase,
+    ComplaintCategoryCreate,
+    ComplaintCategoryUpdate,
+    ComplaintCategoryResponse,
+)
