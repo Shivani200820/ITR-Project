@@ -34,3 +34,18 @@ class PermissionDeniedException(
     CivicAIException
 ):
     pass
+
+class DepartmentAlreadyExistsException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Department already exists.",
+            status_code=400
+        )
+
+
+class DepartmentNotFoundException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Department not found.",
+            status_code=404
+        )
