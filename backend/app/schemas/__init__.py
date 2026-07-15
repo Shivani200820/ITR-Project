@@ -16,3 +16,10 @@ from app.schemas.complaint_category import (
     ComplaintCategoryUpdate,
     ComplaintCategoryResponse,
 )
+
+from app.schemas.complaint_priority import (
+    ComplaintPriorityBase,
+    ComplaintPriorityCreate,
+    ComplaintPriorityUpdate,
+    ComplaintPriorityResponse,
+)
