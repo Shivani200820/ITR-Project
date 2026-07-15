@@ -4,3 +4,9 @@ from app.schemas.user import (
     UserUpdate,
     UserResponse
 )
+from app.schemas.department import (
+    DepartmentBase,
+    DepartmentCreate,
+    DepartmentUpdate,
+    DepartmentResponse,
+)
