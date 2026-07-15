@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 // Landing Page
 import LandingPage from "../pages/landing/LandingPage";
+import RegisterComplaint from "../pages/citizen/RegisterComplaint";
 
 // Auth Layout
 import AuthLayout from "../layouts/AuthLayout";
@@ -59,6 +60,10 @@ function AppRoutes() {
         <Route
           path="dashboard"
           element={<Dashboard />}
+        />
+        <Route
+          path="register-complaint"
+          element={<RegisterComplaint />}
         />
 
       </Route>
