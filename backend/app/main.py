@@ -15,6 +15,7 @@ from app.core.handlers import (
 from app.api.routers import department
 from app.api.routers import complaint_category
 from app.api.routers import complaint_priority
+from app.api.routers import complaint_status
 
 
 # Create FastAPI application
@@ -50,5 +51,9 @@ app.include_router(
 )
 app.include_router(
     complaint_priority.router,
+    prefix="/api/v1",
+)
+app.include_router(
+    complaint_status.router,
     prefix="/api/v1",
 )
