@@ -5,17 +5,17 @@ from app.models.user import User
 from app.shared.enums import UserRole
 
 router = APIRouter(
-    prefix="/admin",
-    tags=["Admin"],
+    prefix="/citizen",
+    tags=["Citizen"],
 )
 
 
 @router.get("/dashboard")
-def admin_dashboard(
+def citizen_dashboard(
     current_user: User = Depends(
-        require_role(UserRole.ADMIN)
+        require_role(UserRole.CITIZEN)
     ),
 ):
     return {
-        "message": f"Welcome Admin {current_user.full_name}"
+        "message": f"Welcome {current_user.full_name}"
     }
