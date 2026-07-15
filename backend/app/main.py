@@ -20,6 +20,7 @@ from contextlib import asynccontextmanager
 
 from app.database.session import SessionLocal
 from app.database.seed import run_seeders
+from app.api.routers import upload
 
 @asynccontextmanager
 async def lifespan(app):
@@ -77,5 +78,10 @@ app.include_router(
 )
 app.include_router(
     complaint_status.router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    upload.router,
     prefix="/api/v1",
 )

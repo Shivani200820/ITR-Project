@@ -10,3 +10,5 @@ from app.services.complaint_priority_service import (
 from app.services.complaint_status_service import (
     ComplaintStatusService,
 )
+
+from app.services.upload_service import UploadService
