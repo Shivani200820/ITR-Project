@@ -23,3 +23,10 @@ from app.schemas.complaint_priority import (
     ComplaintPriorityUpdate,
     ComplaintPriorityResponse,
 )
+
+from app.schemas.complaint_status import (
+    ComplaintStatusBase,
+    ComplaintStatusCreate,
+    ComplaintStatusUpdate,
+    ComplaintStatusResponse,
+)
