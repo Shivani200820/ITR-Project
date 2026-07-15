@@ -1,26 +1,16 @@
-import {
-  Typography,
-  Paper,
-} from "@mui/material";
+import WelcomeCard from "../../components/citizen/dashboard/WelcomeCard";
+import SummaryCards from "../../components/citizen/dashboard/SummaryCards";
+import QuickActions from "../../components/citizen/dashboard/QuickActions";
+import RecentComplaints from "../../components/citizen/dashboard/RecentComplaints";
 
 function Dashboard() {
   return (
-    <Paper
-      sx={{
-        p: 5,
-      }}
-    >
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-      >
-        Welcome to CivicAI 👋
-      </Typography>
-
-      <Typography mt={2}>
-        This is the Citizen Dashboard.
-      </Typography>
-    </Paper>
+    <>
+      <WelcomeCard />
+      <SummaryCards />
+      <QuickActions />
+      <RecentComplaints />
+    </>
   );
 }
 
