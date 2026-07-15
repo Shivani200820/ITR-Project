@@ -49,3 +49,18 @@ class DepartmentNotFoundException(CivicAIException):
             message="Department not found.",
             status_code=404
         )
+    
+class ComplaintCategoryAlreadyExistsException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint category already exists.",
+            status_code=400
+        )
+
+
+class ComplaintCategoryNotFoundException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint category not found.",
+            status_code=404
+        )
