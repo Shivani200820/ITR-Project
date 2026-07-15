@@ -1,11 +1,13 @@
-function Register(){
+import AuthHeader from "../../components/auth/AuthHeader";
+import RegisterForm from "../../components/auth/RegisterForm";
 
-return(
-
-<h1>Register</h1>
-
-)
-
+function Register() {
+  return (
+    <>
+      <AuthHeader />
+      <RegisterForm />
+    </>
+  );
 }
 
-export default Register
+export default Register;

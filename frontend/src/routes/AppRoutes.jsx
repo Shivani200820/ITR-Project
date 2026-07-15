@@ -5,8 +5,9 @@ import LandingPage from "../pages/landing/LandingPage";
 
 // Auth Layout
 import AuthLayout from "../layouts/AuthLayout";
-
-// Auth Pages
+import { useNavigate } from "react-router-dom";
+import CitizenLayout from "../layouts/CitizenLayout";
+import Dashboard from "../pages/citizen/Dashboard";
 import RoleSelection from "../pages/auth/RoleSelection";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
@@ -22,6 +23,7 @@ function AppRoutes() {
         path="/"
         element={<LandingPage />}
       />
+
 
       {/* Authentication Layout */}
       <Route element={<AuthLayout />}>
@@ -49,6 +51,14 @@ function AppRoutes() {
         <Route
           path="/reset-password"
           element={<ResetPassword />}
+        />
+
+      </Route>
+      <Route path="/citizen" element={<CitizenLayout />}>
+
+        <Route
+          path="dashboard"
+          element={<Dashboard />}
         />
 
       </Route>
