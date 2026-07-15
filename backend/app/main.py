@@ -12,6 +12,7 @@ from app.api.routers import (
 from app.core.handlers import (
     register_exception_handlers
 )
+from app.api.routers import department
 
 
 # Create FastAPI application
@@ -37,3 +38,7 @@ app.include_router(users.router, prefix="/api/v1")
 app.include_router(admin.router, prefix="/api/v1")
 app.include_router(officer.router, prefix="/api/v1")
 app.include_router(citizen.router, prefix="/api/v1")
+app.include_router(
+    department.router,
+    prefix="/api/v1",
+)

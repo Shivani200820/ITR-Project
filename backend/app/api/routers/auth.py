@@ -62,11 +62,6 @@ def login(
     token = auth_service.create_user_token(user)
 
     return {
-        "success": True,
-        "message": "Login successful",
-        "data": {
-            "access_token": token,
-            "token_type": "bearer"
-    },
-    "errors": None
+    "access_token": token,
+    "token_type": "bearer"
 }
