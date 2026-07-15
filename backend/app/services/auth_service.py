@@ -19,6 +19,7 @@ from app.schemas.user import (
 )
 
 from app.shared.enums import UserRole
+from app.core.exceptions import InvalidCredentialsException, UserAlreadyExistsException
 
 
 class AuthService:
@@ -48,8 +49,9 @@ class AuthService:
 
 
         if existing_user:
-            raise ValueError(
-                "Email already registered"
+            raise UserAlreadyExistsException(
+                message="Email already registered",
+                status_code=409
             )
 
 
@@ -60,8 +62,9 @@ class AuthService:
 
 
         if existing_phone:
-            raise ValueError(
-                "Phone already registered"
+            raise UserAlreadyExistsException(
+                message="Phone already registered",
+                status_code=409
             )
 
 
@@ -98,14 +101,20 @@ class AuthService:
 
 
         if not user:
-            return None
+            raise InvalidCredentialsException(
+                message="Invalid email or password",
+                status_code=401
+    )
 
 
         if not verify_password(
             password,
             user.password_hash
         ):
-            return None
+            raise InvalidCredentialsException(
+                message="Invalid email or password",
+                status_code=401
+            )
 
 
         return user

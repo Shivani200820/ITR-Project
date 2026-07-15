@@ -7,6 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from app.database.session import get_db
 
+from app.schemas import user
 from app.schemas.user import (
     UserCreate,
     UserResponse
@@ -36,24 +37,16 @@ def register(
 
     auth_service = AuthService(db)
 
+    user = auth_service.register_user(user_data)
 
-    try:
-
-        user = (
-            auth_service
-            .register_user(user_data)
-        )
-
-
-        return user
+    return {
+        "success": True,
+        "message": "User registered successfully",
+        "data": UserResponse.model_validate(user),
+        "errors": None
+}
 
 
-    except ValueError as error:
-
-        raise HTTPException(
-            status_code=400,
-            detail=str(error)
-        )
 @router.post("/login")
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -62,19 +55,18 @@ def login(
     auth_service = AuthService(db)
 
     user = auth_service.authenticate_user(
-        form_data.username,   # इथे email येईल
+        form_data.username,
         form_data.password
     )
-
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
-        )
 
     token = auth_service.create_user_token(user)
 
     return {
-        "access_token": token,
-        "token_type": "bearer"
-    }
+        "success": True,
+        "message": "Login successful",
+        "data": {
+            "access_token": token,
+            "token_type": "bearer"
+    },
+    "errors": None
+}

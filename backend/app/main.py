@@ -2,8 +2,6 @@ from fastapi import FastAPI
 from app.api.routers import database
 from app.config.settings import settings
 from app.api.routers import health
-from app.api.routers import auth
-from app.api.routers import users
 from app.api.routers import (
     admin,
     auth,
@@ -11,7 +9,9 @@ from app.api.routers import (
     officer,
     users,
 )
-
+from app.core.handlers import (
+    register_exception_handlers
+)
 
 
 # Create FastAPI application
@@ -20,7 +20,7 @@ app = FastAPI(
     version=settings.APP_VERSION,
     description="AI Powered Smart Civic Complaint & Resolution Platform",
 )
-
+register_exception_handlers(app)
 # Root Endpoint
 @app.get("/", tags=["Root"])
 def root():
@@ -31,15 +31,6 @@ def root():
 # Include Routers
 app.include_router(health.router)
 app.include_router(database.router)
-app.include_router(
-    auth.router,
-    prefix="/api/v1"
-)
-
-app.include_router(
-    users.router,
-    prefix="/api/v1"
-)
 
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
