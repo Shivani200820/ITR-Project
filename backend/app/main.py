@@ -22,6 +22,7 @@ from app.database.session import SessionLocal
 from app.database.seed import run_seeders
 from app.api.routers import upload
 from fastapi.staticfiles import StaticFiles
+import app.core.cloudinary
 
 @asynccontextmanager
 async def lifespan(app):

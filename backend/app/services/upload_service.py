@@ -1,19 +1,21 @@
 from fastapi import UploadFile
 
+from app.config.settings import settings
 from app.utils.file_upload import FileUploadUtility
+from app.utils.cloudinary_upload import CloudinaryUploadUtility
 
 
 class UploadService:
     """
-    Upload service.
-
-    Currently uses local storage.
-    Later we'll switch to Cloudinary automatically.
+    Storage driver service.
     """
 
     async def upload_image(
         self,
         file: UploadFile,
     ) -> str:
+
+        if settings.storage_driver.lower() == "cloudinary":
+            return await CloudinaryUploadUtility.upload_image(file)
 
         return await FileUploadUtility.save_image(file)
