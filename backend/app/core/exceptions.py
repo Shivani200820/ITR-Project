@@ -64,3 +64,26 @@ class ComplaintCategoryNotFoundException(CivicAIException):
             message="Complaint category not found.",
             status_code=404
         )
+
+class ComplaintPriorityAlreadyExistsException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint priority already exists.",
+            status_code=400,
+        )
+
+
+class ComplaintPriorityLevelAlreadyExistsException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Priority level already exists.",
+            status_code=400,
+        )
+
+
+class ComplaintPriorityNotFoundException(CivicAIException):
+    def __init__(self):
+        super().__init__(
+            message="Complaint priority not found.",
+            status_code=404,
+        )
