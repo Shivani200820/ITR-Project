@@ -63,6 +63,7 @@ def seed_priorities(db: Session):
         db,
         ComplaintPriority,
         COMPLAINT_PRIORITIES,
+        unique_field="level",
     )
 
 
@@ -72,6 +73,7 @@ def seed_statuses(db: Session):
         db,
         ComplaintStatus,
         COMPLAINT_STATUSES,
+        unique_field="sequence",
     )
 
 def run_seeders(db: Session):

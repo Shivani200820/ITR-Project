@@ -16,6 +16,26 @@ from app.api.routers import department
 from app.api.routers import complaint_category
 from app.api.routers import complaint_priority
 from app.api.routers import complaint_status
+from contextlib import asynccontextmanager
+
+from app.database.session import SessionLocal
+from app.database.seed import run_seeders
+
+@asynccontextmanager
+async def lifespan(app):
+    """
+    Runs once when the application starts.
+    """
+
+    db = SessionLocal()
+
+    try:
+        run_seeders(db)
+        print("✅ Master data initialized.")
+    finally:
+        db.close()
+
+    yield
 
 
 # Create FastAPI application
@@ -23,6 +43,8 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="AI Powered Smart Civic Complaint & Resolution Platform",
+    lifespan=lifespan,
+
 )
 register_exception_handlers(app)
 # Root Endpoint
