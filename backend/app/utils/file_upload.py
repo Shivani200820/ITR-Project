@@ -50,4 +50,4 @@ class FileUploadUtility:
         with open(file_path, "wb") as image:
             image.write(content)
 
-        return file_path
+        return f"/uploads/{filename}"

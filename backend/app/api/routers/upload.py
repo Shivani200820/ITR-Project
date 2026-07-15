@@ -18,6 +18,6 @@ async def upload_image(
     path = await service.upload_image(file)
 
     return {
-        "message": "Upload successful",
-        "path": path,
-    }
+    "message": "Upload successful",
+    "image_url": path,
+}

@@ -21,6 +21,7 @@ from contextlib import asynccontextmanager
 from app.database.session import SessionLocal
 from app.database.seed import run_seeders
 from app.api.routers import upload
+from fastapi.staticfiles import StaticFiles
 
 @asynccontextmanager
 async def lifespan(app):
@@ -84,4 +85,10 @@ app.include_router(
 app.include_router(
     upload.router,
     prefix="/api/v1",
+)
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory="uploads"),
+    name="uploads",
 )
