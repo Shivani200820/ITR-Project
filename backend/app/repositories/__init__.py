@@ -6,3 +6,7 @@ from app.repositories.complaint_category_repository import (
 from app.repositories.complaint_priority_repository import (
     ComplaintPriorityRepository,
 )
+
+from app.repositories.complaint_status_repository import (
+    ComplaintStatusRepository,
+)
