@@ -26,6 +26,9 @@ from app.utils.complaint_number import generate_complaint_number
 
 from app.ai.complaint_analyzer import ComplaintAnalyzer
 from app.ai.response_parser import AIResponseParser
+from app.services.complaint.duplicate_detection_service import (
+    DuplicateDetectionService,
+)
 
 CATEGORY_MAP = {
     "road": "Pothole",
@@ -126,6 +129,29 @@ class ComplaintService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Priority '{parsed.priority.value}' not found.",
             )
+
+        # Duplicate Detection
+        duplicate_service = DuplicateDetectionService(
+            self.db
+        )
+
+        existing = duplicate_service.find_duplicate(
+            latitude=data.latitude,
+            longitude=data.longitude,
+            category_id=category.id,
+        )
+
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "message": "Similar complaint already exists.",
+                    "complaint_id": existing.id,
+                    "complaint_number": existing.complaint_number,
+                },
+            )
+
+      
 
         complaint = Complaint(
             complaint_number=generate_complaint_number(),
