@@ -1,8 +1,7 @@
 import { Container, Typography } from "@mui/material";
-import ComplaintSearch from "../../components/citizen/complaints/ComplaintSearch";
-import ComplaintFilters from "../../components/citizen/complaints/ComplaintFilters";
-import ComplaintList from "../../components/citizen/complaints/ComplaintList";
-
+import ComplaintSearch from "../../components/citizen/complaint/ComplaintSearch";
+import ComplaintFilters from "../../components/citizen/complaint/ComplaintFilters";
+import ComplaintList from "../../components/citizen/complaint/ComplaintList";
 function MyComplaints() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
