@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
-// Landing Page
+import ComplaintSuccess from "../pages/citizen/ComplaintSuccess";
 import LandingPage from "../pages/landing/LandingPage";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
 import AIPreview from "../pages/citizen/AIPreview";
@@ -28,6 +28,10 @@ function AppRoutes() {
       <Route
         path="duplicate-complaints"
         element={<DuplicateComplaint />}
+      />
+      <Route
+        path="complaint-success"
+        element={<ComplaintSuccess />}
       />
 
 
