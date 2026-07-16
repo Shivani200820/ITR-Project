@@ -71,5 +71,16 @@ class ComplaintRepository:
             )
             .all()
         )
+    
+    def update(
+        self,
+        complaint: Complaint,
+    ) -> Complaint:
+
+        self.db.commit()
+
+        self.db.refresh(complaint)
+
+        return complaint
 
 

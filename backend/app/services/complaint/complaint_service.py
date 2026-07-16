@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.models.complaint import Complaint
 from app.repositories.complaint.complaint_repository import ComplaintRepository
 from app.schemas.complaint import ComplaintCreate
+from app.schemas.complaint.update import ComplaintUpdate
 from app.utils.complaint_number import generate_complaint_number
 from fastapi import HTTPException, status
 
@@ -128,4 +129,43 @@ class ComplaintService:
                 citizen_id
             )
             .all()
+        )
+    def update_complaint(
+        self,
+        complaint_id: int,
+        data: ComplaintUpdate,
+        citizen_id: int,
+    ):
+
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        # Ownership Check
+        if complaint.citizen_id != citizen_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You cannot update this complaint.",
+            )
+
+        # Status Check (Pending = 1)
+        if complaint.status_id != 1:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Complaint can no longer be updated.",
+            )
+
+        update_data = data.model_dump(
+            exclude_unset=True
+        )
+
+        for key, value in update_data.items():
+            setattr(
+                complaint,
+                key,
+                value,
+            )
+
+        return self.repository.update(
+            complaint
         )

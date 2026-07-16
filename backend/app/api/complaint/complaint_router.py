@@ -17,6 +17,7 @@ from app.schemas.complaint import (
     ComplaintResponse,
 )
 from app.services.complaint import ComplaintService
+from app.schemas.complaint import ComplaintUpdate
 
 router = APIRouter(
     prefix="/complaints",
@@ -101,5 +102,23 @@ def list_complaints(
     return service.list_complaints(
         page=page,
         page_size=page_size,
+    )
+
+@router.patch(
+    "/{complaint_id}",
+    response_model=ComplaintResponse,
+)
+def update_complaint(
+    complaint_id: int,
+    complaint: ComplaintUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    service = ComplaintService(db)
+
+    return service.update_complaint(
+        complaint_id=complaint_id,
+        data=complaint,
+        citizen_id=current_user.id,
     )
 
