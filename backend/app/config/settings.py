@@ -21,6 +21,8 @@ class Settings(BaseSettings):
 
     GROQ_API_KEY: str
 
+    GROQ_MODEL: str
+
     storage_driver: str = "local"
 
     upload_directory: str = "uploads"
