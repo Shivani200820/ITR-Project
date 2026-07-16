@@ -12,6 +12,7 @@ from sqlalchemy.orm import relationship
 from app.database.base import Base
 from app.shared.mixins import TimestampMixin
 
+
 class Complaint(Base, TimestampMixin):
     __tablename__ = "complaints"
 
@@ -83,18 +84,25 @@ class Complaint(Base, TimestampMixin):
         nullable=True,
     )
 
-    ai_category = Column(
-        String(100),
+    # =========================
+    # AI Generated Values
+    # =========================
+
+    ai_category_id = Column(
+        Integer,
+        ForeignKey("complaint_categories.id"),
         nullable=True,
     )
 
-    ai_department = Column(
-        String(100),
+    ai_department_id = Column(
+        Integer,
+        ForeignKey("departments.id"),
         nullable=True,
     )
 
-    ai_priority = Column(
-        String(100),
+    ai_priority_id = Column(
+        Integer,
+        ForeignKey("complaint_priorities.id"),
         nullable=True,
     )
 
@@ -103,6 +111,42 @@ class Complaint(Base, TimestampMixin):
         nullable=True,
     )
 
+    ai_confidence = Column(
+        Float,
+        nullable=True,
+    )
+
+    # =========================
+    # Final User Approved Values
+    # =========================
+
+    final_category_id = Column(
+        Integer,
+        ForeignKey("complaint_categories.id"),
+        nullable=True,
+    )
+
+    final_department_id = Column(
+        Integer,
+        ForeignKey("departments.id"),
+        nullable=True,
+    )
+
+    final_priority_id = Column(
+        Integer,
+        ForeignKey("complaint_priorities.id"),
+        nullable=True,
+    )
+
+    final_description = Column(
+        Text,
+        nullable=True,
+    )
+
+    # =========================
+    # Relationships
+    # =========================
+
     citizen = relationship(
         "User",
         back_populates="complaints",
@@ -110,16 +154,19 @@ class Complaint(Base, TimestampMixin):
 
     department = relationship(
         "Department",
+        foreign_keys=[department_id],
         back_populates="complaints",
     )
 
     category = relationship(
         "ComplaintCategory",
+        foreign_keys=[category_id],
         back_populates="complaints",
     )
 
     priority = relationship(
         "ComplaintPriority",
+        foreign_keys=[priority_id],
         back_populates="complaints",
     )
 
@@ -135,19 +182,19 @@ class Complaint(Base, TimestampMixin):
     )
 
     history = relationship(
-    "ComplaintHistory",
-    back_populates="complaint",
-    cascade="all, delete-orphan",
-)
-    
+        "ComplaintHistory",
+        back_populates="complaint",
+        cascade="all, delete-orphan",
+    )
+
     supports = relationship(
-    "ComplaintSupport",
-    back_populates="complaint",
-    cascade="all, delete-orphan",
-)
-    
+        "ComplaintSupport",
+        back_populates="complaint",
+        cascade="all, delete-orphan",
+    )
+
     remarks = relationship(
-    "OfficerRemark",
-    back_populates="complaint",
-    cascade="all, delete-orphan",
-)
+        "OfficerRemark",
+        back_populates="complaint",
+        cascade="all, delete-orphan",
+    )

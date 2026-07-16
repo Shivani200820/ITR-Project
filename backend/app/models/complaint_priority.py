@@ -49,6 +49,7 @@ class ComplaintPriority(Base, BaseModel, TimestampMixin):
     )
 
     complaints = relationship(
-    "Complaint",
-    back_populates="priority",
-)
+        "Complaint",
+        back_populates="priority",
+        foreign_keys="Complaint.priority_id",
+    )

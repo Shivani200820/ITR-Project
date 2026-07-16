@@ -36,6 +36,7 @@ class Department(Base, BaseModel, TimestampMixin):
     )
 
     complaints = relationship(
-    "Complaint",
-    back_populates="department",
-)
+        "Complaint",
+        back_populates="department",
+        foreign_keys="Complaint.department_id",
+    )

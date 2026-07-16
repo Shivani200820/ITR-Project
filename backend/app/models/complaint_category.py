@@ -36,6 +36,7 @@ class ComplaintCategory(Base, BaseModel, TimestampMixin):
     )
 
     complaints = relationship(
-    "Complaint",
-    back_populates="category",
-)
+        "Complaint",
+        back_populates="category",
+        foreign_keys="Complaint.category_id",
+    )

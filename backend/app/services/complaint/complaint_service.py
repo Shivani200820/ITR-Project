@@ -1,26 +1,71 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
 
 from app.constants.complaint_status import ComplaintStatusCode
 from app.models.complaint import Complaint
-from app.repositories import complaint
-from app.repositories.complaint.complaint_repository import ComplaintRepository
-from app.schemas import complaint
-from app.schemas.complaint import ComplaintCreate
-from app.schemas.complaint.update import ComplaintUpdate
-from app.utils.complaint_number import generate_complaint_number
-from fastapi import HTTPException, status
 
+from app.repositories.complaint.complaint_repository import ComplaintRepository
 from app.repositories.complaint.complaint_query import (
     ComplaintQueryRepository,
 )
-from app.constants.complaint_status import ComplaintStatusCode
+
+from app.repositories.complaint_category_repository import (
+    ComplaintCategoryRepository,
+)
+from app.repositories.department_repository import (
+    DepartmentRepository,
+)
+from app.repositories.complaint_priority_repository import (
+    ComplaintPriorityRepository,
+)
+
+from app.schemas.complaint import ComplaintCreate
+from app.schemas.complaint.update import ComplaintUpdate
+
+from app.utils.complaint_number import generate_complaint_number
+
+from app.ai.complaint_analyzer import ComplaintAnalyzer
+from app.ai.response_parser import AIResponseParser
+
+CATEGORY_MAP = {
+    "road": "Pothole",
+    "pothole": "Pothole",
+    "garbage": "Garbage",
+    "water leakage": "Water Leakage",
+    "water": "Water Leakage",
+    "street light": "Street Light",
+    "drain": "Drain Blockage",
+    "drain blockage": "Drain Blockage",
+}
+
+DEPARTMENT_MAP = {
+    "public works department": "Roads",
+    "roads": "Roads",
+    "road": "Roads",
+    "sanitation": "Sanitation",
+    "water supply": "Water Supply",
+    "electricity": "Electricity",
+    "drainage": "Drainage",
+}
+
+PRIORITY_MAP = {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical",
+}
 
 class ComplaintService:
 
     def __init__(self, db: Session):
         self.db = db
+
         self.repository = ComplaintRepository(db)
         self.query_repository = ComplaintQueryRepository(db)
+
+        self.category_repository = ComplaintCategoryRepository(db)
+        self.department_repository = DepartmentRepository(db)
+        self.priority_repository = ComplaintPriorityRepository(db)
 
     def create_complaint(
         self,
@@ -28,24 +73,94 @@ class ComplaintService:
         citizen_id: int,
     ) -> Complaint:
 
+        # AI Analysis
+        analyzer = ComplaintAnalyzer()
+
+        raw_response = analyzer.analyze(
+            citizen_text=data.description,
+        )
+
+        parsed = AIResponseParser.parse(
+            raw_response,
+        )
+
+        category_name = CATEGORY_MAP.get(
+            parsed.category.strip().lower(),
+            parsed.category,
+        )
+
+        department_name = DEPARTMENT_MAP.get(
+            parsed.department.strip().lower(),
+            parsed.department,
+        )
+
+        priority_name = PRIORITY_MAP.get(
+            parsed.priority.value.strip().lower(),
+            parsed.priority.value,
+        )
+        category = self.category_repository.get_by_name(
+            category_name
+        )
+
+        department = self.department_repository.get_by_name(
+            department_name
+        )
+
+        priority = self.priority_repository.get_by_name(
+            priority_name
+        )
+        if category is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Category '{parsed.category}' not found.",
+            )
+
+        if department is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Department '{parsed.department}' not found.",
+            )
+
+        if priority is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Priority '{parsed.priority.value}' not found.",
+            )
+
         complaint = Complaint(
             complaint_number=generate_complaint_number(),
             citizen_id=citizen_id,
+
             title=data.title,
             description=data.description,
+
             latitude=data.latitude,
             longitude=data.longitude,
+
             voice_note_url=data.voice_note_url,
 
-            # Temporary defaults
-            department_id=1,
-            category_id=1,
-            priority_id=1,
-            status_id=1,
+            # Current values
+            department_id=department.id,
+            category_id=category.id,
+            priority_id=priority.id,
+            status_id=ComplaintStatusCode.PENDING,
+
+            # AI values
+            ai_category_id=category.id,
+            ai_department_id=department.id,
+            ai_priority_id=priority.id,
+            ai_description=parsed.description,
+            ai_confidence=parsed.confidence,
+
+            # Final values
+            final_category_id=category.id,
+            final_department_id=department.id,
+            final_priority_id=priority.id,
+            final_description=parsed.description,
         )
 
         return self.repository.create(complaint)
-    
+
     def get_complaint(
         self,
         complaint_id: int,
@@ -103,9 +218,7 @@ class ComplaintService:
 
         return (
             self.query_repository
-            .filter_by_status(
-                status_id
-            )
+            .filter_by_status(status_id)
             .all()
         )
 
@@ -116,9 +229,7 @@ class ComplaintService:
 
         return (
             self.query_repository
-            .filter_by_department(
-                department_id
-            )
+            .filter_by_department(department_id)
             .all()
         )
 
@@ -129,11 +240,10 @@ class ComplaintService:
 
         return (
             self.query_repository
-            .filter_by_citizen(
-                citizen_id
-            )
+            .filter_by_citizen(citizen_id)
             .all()
         )
+
     def update_complaint(
         self,
         complaint_id: int,
@@ -145,15 +255,13 @@ class ComplaintService:
             complaint_id
         )
 
-        # Ownership Check
         if complaint.citizen_id != citizen_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You cannot update this complaint.",
             )
 
-        # Status Check (Pending = 1)
-        if complaint.status_id != 1:
+        if complaint.status_id != ComplaintStatusCode.PENDING:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Complaint can no longer be updated.",
@@ -173,7 +281,7 @@ class ComplaintService:
         return self.repository.update(
             complaint
         )
-    
+
     def delete_complaint(
         self,
         complaint_id: int,
@@ -184,14 +292,12 @@ class ComplaintService:
             complaint_id
         )
 
-        # Ownership check
         if complaint.citizen_id != citizen_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You cannot delete this complaint.",
             )
 
-        # Status check
         if complaint.status_id != ComplaintStatusCode.PENDING:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

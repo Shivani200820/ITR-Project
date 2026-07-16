@@ -37,6 +37,23 @@ class ComplaintCreate(BaseModel):
         max_length=500,
     )
 
+    final_category_id: int | None = Field(
+        default=None,
+    )
+
+    final_department_id: int | None = Field(
+        default=None,
+    )
+
+    final_priority_id: int | None = Field(
+        default=None,
+    )
+
+    final_description: str | None = Field(
+        default=None,
+        max_length=5000,
+    )
+
     model_config = ConfigDict(
         from_attributes=True
     )
