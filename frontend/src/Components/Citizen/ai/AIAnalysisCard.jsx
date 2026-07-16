@@ -15,7 +15,10 @@ const departments = [
   "Electricity",
 ];
 
-function AIAnalysisCard() {
+function AIAnalysisCard({ data }) {
+
+  data = data || {};
+
   return (
     <Paper sx={{ p: 3, borderRadius: 3 }}>
       <Stack spacing={3}>
@@ -26,14 +29,14 @@ function AIAnalysisCard() {
 
         <TextField
           label="Category"
-          defaultValue="Road Damage"
+          defaultValue={data.category || "Road Damage"}
           fullWidth
         />
 
         <TextField
           select
           label="Department"
-          defaultValue="Road Department"
+          defaultValue={data.department || "Road Department"}
           fullWidth
         >
           {departments.map((item) => (
@@ -46,7 +49,7 @@ function AIAnalysisCard() {
         <TextField
           select
           label="Priority"
-          defaultValue="High"
+          defaultValue={data.priority || "High"}
           fullWidth
         >
           {priorities.map((item) => (
@@ -60,7 +63,10 @@ function AIAnalysisCard() {
           multiline
           rows={5}
           label="Generated Description"
-          defaultValue="A pothole has been detected on the road. Immediate repair is recommended for public safety."
+          defaultValue={
+            data.description ||
+            "A pothole has been detected on the road. Immediate repair is recommended for public safety."
+          }
           fullWidth
         />
 

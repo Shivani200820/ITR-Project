@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import {
@@ -10,18 +12,12 @@ import {
 
 import { LoadingButton } from "@mui/lab";
 
+import { analyzeComplaint } from "../../../services/complaintService";
+
 import ComplaintImageUpload from "./ComplaintImageUpload";
 import LocationButton from "./LocationButton";
 import VoiceUpload from "./VoiceUpload";
-import { useNavigate } from "react-router-dom";
 
-const navigate = useNavigate();
-
-const onSubmit = (data) => {
-  console.log(data);
-
-  navigate("/citizen/ai-preview");
-};
 const categories = [
   "Road Damage",
   "Garbage",
@@ -32,7 +28,13 @@ const categories = [
   "Public Park",
   "Other",
 ];
+
 function ComplaintForm() {
+
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -40,11 +42,41 @@ function ComplaintForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
 
-    // Next module:
-    // Navigate to AI Preview
+    if (!image) {
+      alert("Please upload a complaint image.");
+      return;
+    }
+
+    try {
+
+      setLoading(true);
+
+      const formData = new FormData();
+
+      formData.append("image", image);
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("category", data.category);
+
+      const aiData = await analyzeComplaint(formData);
+
+      navigate("/citizen/ai-preview", {
+        state: aiData,
+      });
+
+    } catch (error) {
+
+      console.error(error);
+      alert("AI analysis failed.");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
   };
 
   return (
@@ -67,7 +99,11 @@ function ComplaintForm() {
         <Grid container spacing={3}>
 
           <Grid item xs={12} md={4}>
-            <ComplaintImageUpload />
+
+            <ComplaintImageUpload
+              onImageSelect={setImage}
+            />
+
           </Grid>
 
           <Grid item xs={12} md={8}>
@@ -122,10 +158,11 @@ function ComplaintForm() {
             <VoiceUpload />
 
             <LoadingButton
-              fullWidth
+              loading={loading}
+              type="submit"
               variant="contained"
               size="large"
-              type="submit"
+              fullWidth
               sx={{ mt: 4 }}
             >
               Analyze with AI

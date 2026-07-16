@@ -14,7 +14,6 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
-import AIPreview from "../pages/citizen/AIPreview";
 
 function AppRoutes() {
   return (

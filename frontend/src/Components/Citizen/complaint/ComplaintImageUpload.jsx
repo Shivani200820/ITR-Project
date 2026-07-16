@@ -5,6 +5,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+function ComplaintImageUpload({ onImageSelect }) {
+  const [preview, setPreview] = useState("");
+
 
 function ComplaintImageUpload() {
   const [preview, setPreview] = useState("");
@@ -14,8 +17,38 @@ function ComplaintImageUpload() {
 
     if (file) {
       setPreview(URL.createObjectURL(file));
+      onImageSelect(file);
     }
   };
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+};
 
   return (
     <Stack spacing={2} alignItems="center">
@@ -47,6 +80,6 @@ function ComplaintImageUpload() {
       </Typography>
     </Stack>
   );
-}
+
 
 export default ComplaintImageUpload;
