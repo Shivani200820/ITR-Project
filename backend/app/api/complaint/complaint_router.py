@@ -18,6 +18,7 @@ from app.schemas.complaint import (
 )
 from app.services.complaint import ComplaintService
 from app.schemas.complaint import ComplaintUpdate
+from app.schemas.complaint import ComplaintSupportResponse
 
 router = APIRouter(
     prefix="/complaints",
@@ -136,4 +137,20 @@ def delete_complaint(
     return service.delete_complaint(
         complaint_id,
         current_user.id,
+    )
+
+@router.post(
+    "/{complaint_id}/support",
+    response_model=ComplaintSupportResponse,
+)
+def support_complaint(
+    complaint_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    service = ComplaintService(db)
+
+    return service.support_complaint(
+        complaint_id=complaint_id,
+        citizen_id=current_user.id,
     )

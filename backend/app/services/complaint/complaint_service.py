@@ -29,6 +29,10 @@ from app.ai.response_parser import AIResponseParser
 from app.services.complaint.duplicate_detection_service import (
     DuplicateDetectionService,
 )
+from app.repositories.complaint.complaint_support_repository import (
+    ComplaintSupportRepository,
+)
+from app.models.complaint_support import ComplaintSupport
 
 CATEGORY_MAP = {
     "road": "Pothole",
@@ -69,6 +73,7 @@ class ComplaintService:
         self.category_repository = ComplaintCategoryRepository(db)
         self.department_repository = DepartmentRepository(db)
         self.priority_repository = ComplaintPriorityRepository(db)
+        self.support_repository = ComplaintSupportRepository(db)
 
     def create_complaint(
         self,
@@ -336,4 +341,39 @@ class ComplaintService:
 
         return {
             "message": "Complaint deleted successfully."
+        }
+    
+    def support_complaint(
+        self,
+        complaint_id: int,
+        citizen_id: int,
+    ):
+
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        if self.support_repository.exists(
+            complaint_id,
+            citizen_id,
+        ):
+            raise HTTPException(
+                status_code=409,
+                detail="You already support this complaint.",
+            )
+
+        support = ComplaintSupport(
+            complaint_id=complaint.id,
+            citizen_id=citizen_id,
+        )
+
+        self.support_repository.create(
+            support
+        )
+
+        return {
+            "message": "Support added successfully.",
+            "support_count": self.support_repository.count(
+                complaint.id
+            ),
         }

@@ -4,3 +4,4 @@ from .response import (
     ComplaintResponse,
     ComplaintListResponse,
 )
+from .support_response import ComplaintSupportResponse
