@@ -4,6 +4,8 @@ import ComplaintInfo from "../../components/citizen/complaint-details/ComplaintI
 import ComplaintImages from "../../components/citizen/complaint-details/ComplaintImages";
 import OfficerRemarks from "../../components/citizen/complaint-details/OfficerRemarks";
 import ResolutionCard from "../../components/citizen/complaint-details/ResolutionCard";
+import ComplaintMap from "../../components/citizen/complaint-details/ComplaintMap";
+import StatusTimeline from "../../components/citizen/complaint-details/StatusTimeline";
 
 function ComplaintDetails() {
   return (
@@ -11,10 +13,15 @@ function ComplaintDetails() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <ComplaintInfo />
+
           <ComplaintImages />
+
+          <ComplaintMap />
+
+          <StatusTimeline />
+
           <OfficerRemarks />
         </Grid>
-
         <Grid item xs={12} md={4}>
           <ResolutionCard />
         </Grid>

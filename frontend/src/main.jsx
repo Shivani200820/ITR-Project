@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import "./styles/global.css";
 import App from "./App";
 import store from "./redux/store";
+import "leaflet/dist/leaflet.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
