@@ -14,6 +14,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+import DuplicateComplaint from "../pages/citizen/DuplicateComplaint";
 
 function AppRoutes() {
   return (
@@ -23,6 +24,10 @@ function AppRoutes() {
       <Route
         path="/"
         element={<LandingPage />}
+      />
+      <Route
+        path="duplicate-complaints"
+        element={<DuplicateComplaint />}
       />
 
 
