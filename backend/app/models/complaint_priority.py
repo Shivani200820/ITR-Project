@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
 from app.shared.base_model import BaseModel
@@ -47,3 +47,8 @@ class ComplaintPriority(Base, BaseModel, TimestampMixin):
         default=True,
         nullable=False,
     )
+
+    complaints = relationship(
+    "Complaint",
+    back_populates="priority",
+)
