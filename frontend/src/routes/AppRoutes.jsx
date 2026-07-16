@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 // Landing Page
 import LandingPage from "../pages/landing/LandingPage";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
-
+import AIPreview from "../pages/citizen/AIPreview";
 // Auth Layout
 import AuthLayout from "../layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+import AIPreview from "../pages/citizen/AIPreview";
 
 function AppRoutes() {
   return (
@@ -64,6 +65,14 @@ function AppRoutes() {
         <Route
           path="register-complaint"
           element={<RegisterComplaint />}
+        />
+        <Route
+          path="ai-preview"
+          element={<AIPreview />}
+        />
+        <Route
+          path="ai-preview"
+          element={<AIPreview />}
         />
 
       </Route>

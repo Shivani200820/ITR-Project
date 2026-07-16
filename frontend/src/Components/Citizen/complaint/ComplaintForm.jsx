@@ -13,6 +13,15 @@ import { LoadingButton } from "@mui/lab";
 import ComplaintImageUpload from "./ComplaintImageUpload";
 import LocationButton from "./LocationButton";
 import VoiceUpload from "./VoiceUpload";
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
+
+const onSubmit = (data) => {
+  console.log(data);
+
+  navigate("/citizen/ai-preview");
+};
 const categories = [
   "Road Damage",
   "Garbage",
