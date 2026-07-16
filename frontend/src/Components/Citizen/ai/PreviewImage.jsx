@@ -7,9 +7,8 @@ function PreviewImage() {
     <Card>
       <CardMedia
         component="img"
-        height="400"
-        image={demoImage}
-        alt="Complaint"
+        image={roadImage}
+        alt="Road Damage"
       />
     </Card>
   );

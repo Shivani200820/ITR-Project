@@ -4,7 +4,7 @@ import ComplaintSuccess from "../pages/citizen/ComplaintSuccess";
 import LandingPage from "../pages/landing/LandingPage";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
 import AIPreview from "../pages/citizen/AIPreview";
-// Auth Layout
+import MyComplaints from "../pages/citizen/MyComplaints";
 import AuthLayout from "../layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
 import CitizenLayout from "../layouts/CitizenLayout";
@@ -28,6 +28,10 @@ function AppRoutes() {
       <Route
         path="duplicate-complaints"
         element={<DuplicateComplaint />}
+      />
+      <Route
+        path="my-complaints"
+        element={<MyComplaints />}
       />
       <Route
         path="complaint-success"
