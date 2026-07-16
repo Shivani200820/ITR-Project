@@ -23,6 +23,7 @@ from app.database.seed import run_seeders
 from app.api.routers import upload
 from fastapi.staticfiles import StaticFiles
 import app.core.cloudinary
+from app.api.complaint.complaint_router import router as complaint_router
 
 @asynccontextmanager
 async def lifespan(app):
@@ -93,3 +94,5 @@ app.mount(
     StaticFiles(directory="uploads"),
     name="uploads",
 )
+
+app.include_router(complaint_router)
