@@ -19,6 +19,8 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str
 
+    GROQ_API_KEY: str
+
     storage_driver: str = "local"
 
     upload_directory: str = "uploads"
