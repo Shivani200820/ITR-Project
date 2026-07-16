@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 
 function SubmitComplaint() {
+  const navigate = useNavigate();
   return (
     <Box mt={4}>
 
@@ -26,7 +27,7 @@ function SubmitComplaint() {
         variant="contained"
         fullWidth
         size="large"
-        sx={{ mt: 4 }}
+        onClick={() => navigate("/citizen/complaint-success")}
       >
         Submit Complaint
       </Button>
