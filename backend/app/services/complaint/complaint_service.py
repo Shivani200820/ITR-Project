@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
 
+from app.constants.complaint_status import ComplaintStatusCode
 from app.models.complaint import Complaint
+from app.repositories import complaint
 from app.repositories.complaint.complaint_repository import ComplaintRepository
+from app.schemas import complaint
 from app.schemas.complaint import ComplaintCreate
 from app.schemas.complaint.update import ComplaintUpdate
 from app.utils.complaint_number import generate_complaint_number
@@ -10,6 +13,7 @@ from fastapi import HTTPException, status
 from app.repositories.complaint.complaint_query import (
     ComplaintQueryRepository,
 )
+from app.constants.complaint_status import ComplaintStatusCode
 
 class ComplaintService:
 
@@ -169,3 +173,35 @@ class ComplaintService:
         return self.repository.update(
             complaint
         )
+    
+    def delete_complaint(
+        self,
+        complaint_id: int,
+        citizen_id: int,
+    ):
+
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        # Ownership check
+        if complaint.citizen_id != citizen_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You cannot delete this complaint.",
+            )
+
+        # Status check
+        if complaint.status_id != ComplaintStatusCode.PENDING:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Complaint cannot be deleted after it has been accepted.",
+            )
+
+        self.repository.delete(
+            complaint
+        )
+
+        return {
+            "message": "Complaint deleted successfully."
+        }

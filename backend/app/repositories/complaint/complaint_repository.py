@@ -82,5 +82,14 @@ class ComplaintRepository:
         self.db.refresh(complaint)
 
         return complaint
+    
+    def delete(
+        self,
+        complaint: Complaint,
+    ) -> None:
+
+        self.db.delete(complaint)
+
+        self.db.commit()
 
 
