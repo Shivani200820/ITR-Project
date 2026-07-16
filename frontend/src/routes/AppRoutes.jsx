@@ -15,6 +15,7 @@ import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import DuplicateComplaint from "../pages/citizen/DuplicateComplaint";
+import ComplaintDetails from "../pages/citizen/ComplaintDetails";
 
 function AppRoutes() {
   return (
@@ -24,6 +25,10 @@ function AppRoutes() {
       <Route
         path="/"
         element={<LandingPage />}
+      />
+      <Route
+        path="complaints/:id"
+        element={<ComplaintDetails />}
       />
       <Route
         path="duplicate-complaints"
