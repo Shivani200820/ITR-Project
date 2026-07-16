@@ -133,3 +133,9 @@ class Complaint(Base, TimestampMixin):
         back_populates="complaint",
         cascade="all, delete-orphan",
     )
+
+    history = relationship(
+    "ComplaintHistory",
+    back_populates="complaint",
+    cascade="all, delete-orphan",
+)
