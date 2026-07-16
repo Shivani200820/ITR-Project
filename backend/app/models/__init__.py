@@ -4,3 +4,4 @@ from app.models.complaint_category import ComplaintCategory
 from app.models.complaint_priority import ComplaintPriority
 from app.models.complaint_status import ComplaintStatus
 from app.models.complaint import Complaint
+from app.models.complaint_image import ComplaintImage

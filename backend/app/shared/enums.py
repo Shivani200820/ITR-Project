@@ -31,3 +31,4 @@ class ComplaintCategory(str, Enum):
     STREET_LIGHT = "Street Light"
     DRAINAGE = "Drainage"
     OTHER = "Other"
+
