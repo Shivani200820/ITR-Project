@@ -45,3 +45,31 @@ class ComplaintRepository:
             )
             .first()
         )
+    
+    def list(
+        self,
+        page: int = 1,
+        page_size: int = 10,
+    ) -> list[Complaint]:
+
+        return (
+            self.db.query(Complaint)
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all()
+        )
+    
+    def get_by_citizen(
+        self,
+        citizen_id: int,
+    ) -> list[Complaint]:
+
+        return (
+            self.db.query(Complaint)
+            .filter(
+                Complaint.citizen_id == citizen_id
+            )
+            .all()
+        )
+
+

@@ -41,91 +41,91 @@ class ComplaintService:
 
         return self.repository.create(complaint)
     
-def get_complaint(
-    self,
-    complaint_id: int,
-):
+    def get_complaint(
+        self,
+        complaint_id: int,
+    ):
 
-    complaint = self.repository.get_by_id(
-        complaint_id
-    )
-
-    if complaint is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Complaint not found.",
+        complaint = self.repository.get_by_id(
+            complaint_id
         )
 
-    return complaint
+        if complaint is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Complaint not found.",
+            )
 
-def get_by_number(
-    self,
-    complaint_number: str,
-):
+        return complaint
 
-    complaint = self.repository.get_by_number(
-        complaint_number
-    )
+    def get_by_number(
+        self,
+        complaint_number: str,
+    ):
 
-    if complaint is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Complaint not found.",
+        complaint = self.repository.get_by_number(
+            complaint_number
         )
 
-    return complaint
+        if complaint is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Complaint not found.",
+            )
 
-def list_complaints(
-    self,
-    page: int = 1,
-    page_size: int = 10,
-):
+        return complaint
 
-    query = self.query_repository.get_query()
+    def list_complaints(
+        self,
+        page: int = 1,
+        page_size: int = 10,
+    ):
 
-    query = self.query_repository.sort(query)
+        query = self.query_repository.get_query()
 
-    return self.query_repository.paginate(
-        query,
-        page,
-        page_size,
-    )
+        query = self.query_repository.sort(query)
 
-def complaints_by_status(
-    self,
-    status_id: int,
-):
-
-    return (
-        self.query_repository
-        .filter_by_status(
-            status_id
+        return self.query_repository.paginate(
+            query,
+            page,
+            page_size,
         )
-        .all()
-    )
 
-def complaints_by_department(
-    self,
-    department_id: int,
-):
+    def complaints_by_status(
+        self,
+        status_id: int,
+    ):
 
-    return (
-        self.query_repository
-        .filter_by_department(
-            department_id
+        return (
+            self.query_repository
+            .filter_by_status(
+                status_id
+            )
+            .all()
         )
-        .all()
-    )
 
-def citizen_complaints(
-    self,
-    citizen_id: int,
-):
+    def complaints_by_department(
+        self,
+        department_id: int,
+    ):
 
-    return (
-        self.query_repository
-        .filter_by_citizen(
-            citizen_id
+        return (
+            self.query_repository
+            .filter_by_department(
+                department_id
+            )
+            .all()
         )
-        .all()
-    )
+
+    def citizen_complaints(
+        self,
+        citizen_id: int,
+    ):
+
+        return (
+            self.query_repository
+            .filter_by_citizen(
+                citizen_id
+            )
+            .all()
+        )
