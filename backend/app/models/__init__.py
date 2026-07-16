@@ -6,3 +6,4 @@ from app.models.complaint_status import ComplaintStatus
 from app.models.complaint import Complaint
 from app.models.complaint_image import ComplaintImage
 from app.models.complaint_history import ComplaintHistory
+from app.models.complaint_support import ComplaintSupport
