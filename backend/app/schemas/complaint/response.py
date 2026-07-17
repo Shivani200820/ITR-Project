@@ -27,7 +27,9 @@ class ComplaintResponse(BaseModel):
     voice_note_url: Optional[str] = None
 
     created_at: datetime
-
+  
+    rejection_reason: str | None = None
+    
     updated_at: datetime
 
     model_config = ConfigDict(

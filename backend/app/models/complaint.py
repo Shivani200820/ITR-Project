@@ -90,6 +90,10 @@ class Complaint(Base, TimestampMixin):
         nullable=True,
     )
 
+    rejection_reason = Column(
+        Text,
+        nullable=True,
+    )
     # =========================
     # AI Generated Values
     # =========================

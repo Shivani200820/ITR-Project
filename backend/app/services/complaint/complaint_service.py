@@ -54,6 +54,7 @@ CATEGORY_MAP = {
 }
 
 DEPARTMENT_MAP = {
+    "municipal corporation": "Sanitation",
     "public works department": "Roads",
     "roads": "Roads",
     "road": "Roads",
@@ -420,6 +421,50 @@ class ComplaintService:
             old_status_id=old_status,
             new_status_id=ComplaintStatus.ACCEPTED,
             changed_by=officer.id,
+        )
+
+        self.history_repository.create(
+            history
+        )
+
+        return complaint
+    
+    def reject_complaint(
+        self,
+        complaint_id: int,
+        officer: User,
+        reason: str,
+    ):
+
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        if not is_valid_transition(
+            ComplaintStatus(complaint.status_id),
+            ComplaintStatus.REJECTED,
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid status transition.",
+            )
+
+        old_status = complaint.status_id
+
+        complaint.status_id = ComplaintStatus.REJECTED
+        complaint.assigned_officer_id = officer.id
+        complaint.rejection_reason = reason
+
+        self.repository.save(
+            complaint
+        )
+
+        history = ComplaintHistory(
+            complaint_id=complaint.id,
+            old_status_id=old_status,
+            new_status_id=ComplaintStatus.REJECTED,
+            changed_by=officer.id,
+            remarks=reason,
         )
 
         self.history_repository.create(

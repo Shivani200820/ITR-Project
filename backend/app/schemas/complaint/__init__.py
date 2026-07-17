@@ -5,3 +5,4 @@ from .response import (
     ComplaintListResponse,
 )
 from .support_response import ComplaintSupportResponse
+from .reject import ComplaintRejectRequest

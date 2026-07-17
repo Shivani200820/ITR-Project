@@ -35,4 +35,11 @@ COMPLAINT_STATUSES = [
         "sequence": 6,
         "is_final": False,
     },
+
+        {
+        "name": "Rejected",
+        "description": "Complaint rejected",
+        "sequence": 7,
+        "is_final": True,
+    },
 ]
