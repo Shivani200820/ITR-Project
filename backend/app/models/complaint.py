@@ -59,6 +59,12 @@ class Complaint(Base, TimestampMixin):
         nullable=False,
     )
 
+    assigned_officer_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=True,
+    )
+
     title = Column(
         String(255),
         nullable=False,
@@ -149,8 +155,15 @@ class Complaint(Base, TimestampMixin):
 
     citizen = relationship(
         "User",
+        foreign_keys=[citizen_id],
         back_populates="complaints",
     )
+
+    assigned_officer = relationship(
+        "User",
+        foreign_keys=[assigned_officer_id],
+        back_populates="assigned_complaints",
+    )  
 
     department = relationship(
         "Department",
@@ -198,3 +211,4 @@ class Complaint(Base, TimestampMixin):
         back_populates="complaint",
         cascade="all, delete-orphan",
     )
+

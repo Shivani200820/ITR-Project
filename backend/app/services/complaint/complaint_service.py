@@ -1,8 +1,12 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
-from app.constants.complaint_status import ComplaintStatusCode
+from app.constants.complaint_status import (
+    ComplaintStatus,
+    is_valid_transition,
+)
 from app.models.complaint import Complaint
+from app.models.user import User
 
 from app.repositories.complaint.complaint_repository import ComplaintRepository
 from app.repositories.complaint.complaint_query import (
@@ -33,6 +37,10 @@ from app.repositories.complaint.complaint_support_repository import (
     ComplaintSupportRepository,
 )
 from app.models.complaint_support import ComplaintSupport
+from app.repositories.complaint.complaint_history_repository import (
+    ComplaintHistoryRepository,
+)
+from app.models.complaint_history import ComplaintHistory
 
 CATEGORY_MAP = {
     "road": "Pothole",
@@ -74,7 +82,7 @@ class ComplaintService:
         self.department_repository = DepartmentRepository(db)
         self.priority_repository = ComplaintPriorityRepository(db)
         self.support_repository = ComplaintSupportRepository(db)
-
+        self.history_repository = ComplaintHistoryRepository(db)
     def create_complaint(
         self,
         data: ComplaintCreate,
@@ -174,7 +182,7 @@ class ComplaintService:
             department_id=department.id,
             category_id=category.id,
             priority_id=priority.id,
-            status_id=ComplaintStatusCode.PENDING,
+            status_id=ComplaintStatus.PENDING,
 
             # AI values
             ai_category_id=category.id,
@@ -292,7 +300,7 @@ class ComplaintService:
                 detail="You cannot update this complaint.",
             )
 
-        if complaint.status_id != ComplaintStatusCode.PENDING:
+        if complaint.status_id != ComplaintStatus.PENDING:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Complaint can no longer be updated.",
@@ -329,7 +337,7 @@ class ComplaintService:
                 detail="You cannot delete this complaint.",
             )
 
-        if complaint.status_id != ComplaintStatusCode.PENDING:
+        if complaint.status_id != ComplaintStatus.PENDING:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Complaint cannot be deleted after it has been accepted.",
@@ -377,3 +385,45 @@ class ComplaintService:
                 complaint.id
             ),
         }
+    def accept_complaint(
+        self,
+        complaint_id: int,
+        officer: User,
+    ):
+
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        if not is_valid_transition(
+            ComplaintStatus(complaint.status_id),
+            ComplaintStatus.ACCEPTED,
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid status transition.",
+            )
+
+        old_status = ComplaintStatus(
+            complaint.status_id
+        )
+
+        complaint.assigned_officer_id = officer.id
+        complaint.status_id = ComplaintStatus.ACCEPTED
+
+        self.repository.save(
+            complaint
+        )
+
+        history = ComplaintHistory(
+            complaint_id=complaint.id,
+            old_status_id=old_status,
+            new_status_id=ComplaintStatus.ACCEPTED,
+            changed_by=officer.id,
+        )
+
+        self.history_repository.create(
+            history
+        )
+
+        return complaint

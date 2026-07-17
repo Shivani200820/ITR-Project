@@ -24,3 +24,17 @@ def require_role(*allowed_roles: UserRole):
         return current_user
 
     return role_checker
+
+
+
+require_officer = require_role(
+    UserRole.OFFICER
+)
+
+require_admin = require_role(
+    UserRole.ADMIN
+)
+
+require_citizen = require_role(
+    UserRole.CITIZEN
+)

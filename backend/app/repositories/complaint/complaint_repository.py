@@ -93,3 +93,10 @@ class ComplaintRepository:
         self.db.commit()
 
 
+    def save(
+        self,
+        complaint: Complaint,
+    ):
+        self.db.commit()
+        self.db.refresh(complaint)
+        return complaint

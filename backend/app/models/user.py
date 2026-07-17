@@ -57,6 +57,13 @@ class User(Base, BaseModel, TimestampMixin):
     )
 
     complaints = relationship(
-    "Complaint",
-    back_populates="citizen",
-)
+        "Complaint",
+        foreign_keys="Complaint.citizen_id",
+        back_populates="citizen",
+    )
+
+    assigned_complaints = relationship(
+        "Complaint",
+        foreign_keys="Complaint.assigned_officer_id",
+        back_populates="assigned_officer",
+    )

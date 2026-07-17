@@ -3,8 +3,7 @@ from math import radians, sin, cos, sqrt, atan2
 from sqlalchemy.orm import Session
 
 from app.models.complaint import Complaint
-from app.constants.complaint_status import ComplaintStatusCode
-
+from app.constants.complaint_status import ComplaintStatus
 
 class DuplicateDetectionService:
 
@@ -46,7 +45,7 @@ class DuplicateDetectionService:
             self.db.query(Complaint)
             .filter(
                 Complaint.category_id == category_id,
-                Complaint.status_id != ComplaintStatusCode.CLOSED,
+                Complaint.status_id != ComplaintStatus.CLOSED,
             )
             .all()
         )

@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 
-class ComplaintStatusCode(IntEnum):
+class ComplaintStatus(IntEnum):
     PENDING = 1
     ACCEPTED = 2
     IN_PROGRESS = 3
@@ -12,33 +12,33 @@ class ComplaintStatusCode(IntEnum):
 
 
 ALLOWED_STATUS_TRANSITIONS = {
-    ComplaintStatusCode.PENDING: [
-        ComplaintStatusCode.ACCEPTED,
-        ComplaintStatusCode.REJECTED,
+    ComplaintStatus.PENDING: [
+        ComplaintStatus.ACCEPTED,
+        ComplaintStatus.REJECTED,
     ],
 
-    ComplaintStatusCode.ACCEPTED: [
-        ComplaintStatusCode.IN_PROGRESS,
+    ComplaintStatus.ACCEPTED: [
+        ComplaintStatus.IN_PROGRESS,
     ],
 
-    ComplaintStatusCode.IN_PROGRESS: [
-        ComplaintStatusCode.RESOLVED,
+    ComplaintStatus.IN_PROGRESS: [
+        ComplaintStatus.RESOLVED,
     ],
 
-    ComplaintStatusCode.RESOLVED: [
-        ComplaintStatusCode.CLOSED,
-        ComplaintStatusCode.REOPENED,
+    ComplaintStatus.RESOLVED: [
+        ComplaintStatus.CLOSED,
+        ComplaintStatus.REOPENED,
     ],
 
-    ComplaintStatusCode.REOPENED: [
-        ComplaintStatusCode.IN_PROGRESS,
+    ComplaintStatus.REOPENED: [
+        ComplaintStatus.IN_PROGRESS,
     ],
 }
 
 
 def is_valid_transition(
-    current_status: ComplaintStatusCode,
-    new_status: ComplaintStatusCode,
+    current_status: ComplaintStatus,
+    new_status: ComplaintStatus,
 ) -> bool:
 
     return new_status in ALLOWED_STATUS_TRANSITIONS.get(

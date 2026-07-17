@@ -24,6 +24,9 @@ from app.api.routers import upload
 from fastapi.staticfiles import StaticFiles
 import app.core.cloudinary
 from app.api.complaint.complaint_router import router as complaint_router
+from app.api.complaint.officer_router import (
+    router as officer_router,
+)
 
 @asynccontextmanager
 async def lifespan(app):
@@ -96,3 +99,7 @@ app.mount(
 )
 
 app.include_router(complaint_router)
+
+app.include_router(
+    officer_router
+)

@@ -28,12 +28,17 @@ class ComplaintHistory(
         nullable=False,
     )
 
-    status_id = Column(
+    old_status_id = Column(
         Integer,
         ForeignKey("complaint_statuses.id"),
         nullable=False,
     )
 
+    new_status_id = Column(
+        Integer,
+        ForeignKey("complaint_statuses.id"),
+        nullable=False,
+    )
     changed_by = Column(
         Integer,
         ForeignKey("users.id"),
@@ -50,8 +55,14 @@ class ComplaintHistory(
         back_populates="history",
     )
 
-    status = relationship(
+    old_status = relationship(
         "ComplaintStatus",
+        foreign_keys=[old_status_id],
+    )
+
+    new_status = relationship(
+        "ComplaintStatus",
+        foreign_keys=[new_status_id],
     )
 
     user = relationship(
