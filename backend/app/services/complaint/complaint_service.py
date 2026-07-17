@@ -24,6 +24,7 @@ from app.repositories.complaint_priority_repository import (
     ComplaintPriorityRepository,
 )
 
+from app.schemas import complaint
 from app.schemas.complaint import ComplaintCreate
 from app.schemas.complaint.update import ComplaintUpdate
 
@@ -94,6 +95,21 @@ class ComplaintService:
         self.priority_repository = ComplaintPriorityRepository(db)
         self.support_repository = ComplaintSupportRepository(db)
         self.history_repository = ComplaintHistoryRepository(db)
+
+    def calculate_resolution_duration(
+        self,
+        complaint,
+    ):
+        if complaint.started_at and complaint.closed_at:
+            delta = complaint.closed_at - complaint.started_at
+
+            return round(
+                delta.total_seconds() / 3600,
+                2,
+            )
+
+        return None
+
     def create_complaint(
         self,
         data: ComplaintCreate,
@@ -305,6 +321,12 @@ class ComplaintService:
             complaint_id
         )
 
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )        
+
         if complaint.citizen_id != citizen_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -341,6 +363,12 @@ class ComplaintService:
         complaint = self.get_complaint(
             complaint_id
         )
+
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )
 
         if complaint.citizen_id != citizen_id:
             raise HTTPException(
@@ -406,6 +434,12 @@ class ComplaintService:
             complaint_id
         )
 
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )
+
         if not is_valid_transition(
             ComplaintStatus(complaint.status_id),
             ComplaintStatus.ACCEPTED,
@@ -449,6 +483,11 @@ class ComplaintService:
         complaint = self.get_complaint(
             complaint_id
         )
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )
 
         if not is_valid_transition(
             ComplaintStatus(complaint.status_id),
@@ -491,6 +530,12 @@ class ComplaintService:
         complaint = self.get_complaint(
             complaint_id
         )
+
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )
 
         # Only assigned officer can start work
         if complaint.assigned_officer_id != officer.id:
@@ -542,6 +587,12 @@ class ComplaintService:
             complaint_id
         )
 
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )
+
         # Only assigned officer can restart work
         if complaint.assigned_officer_id != officer.id:
             raise HTTPException(
@@ -592,6 +643,12 @@ class ComplaintService:
         complaint = self.get_complaint(
             complaint_id
         )
+
+        if complaint.is_locked:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Closed complaints cannot be modified.",
+            )
 
         if complaint.assigned_officer_id != officer.id:
             raise HTTPException(
@@ -664,20 +721,31 @@ class ComplaintService:
                 detail="Only resolved complaints can be confirmed.",
             )
 
-        old_status = complaint.status_id
-
-        # Save citizen feedback
+        old_status = ComplaintStatus(
+            complaint.status_id
+        )
+                # Save citizen feedback
         complaint.citizen_feedback = request.feedback
         complaint.citizen_rating = request.rating
 
-        # Decision
         if request.decision == "close":
-            complaint.status_id = ComplaintStatus.CLOSED
-            complaint.closed_at = datetime.utcnow()
-            new_status = ComplaintStatus.CLOSED
+                complaint.status_id = ComplaintStatus.CLOSED
+
+                complaint.closed_at = datetime.utcnow()
+
+                complaint.is_locked = True
+
+                complaint.resolution_duration_hours = (
+                    self.calculate_resolution_duration(
+                        complaint
+                    )
+                )
+
+                new_status = ComplaintStatus.CLOSED
         else:
-            complaint.status_id = ComplaintStatus.REOPENED
-            new_status = ComplaintStatus.REOPENED
+                complaint.status_id = ComplaintStatus.REOPENED
+
+                new_status = ComplaintStatus.REOPENED
 
         self.repository.save(
             complaint

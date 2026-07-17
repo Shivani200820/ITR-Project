@@ -6,6 +6,7 @@ from sqlalchemy import (
     Text,
     Float,
     ForeignKey,
+    Boolean,
 )
 
 
@@ -132,6 +133,16 @@ class Complaint(Base, TimestampMixin):
     closed_at = Column(
         DateTime,
         nullable=True,
+    )
+
+    resolution_duration_hours = Column(
+    Float,
+    nullable=True,
+    )
+
+    is_locked = Column(
+        Boolean,
+        default=False,
     )
 
     # =========================

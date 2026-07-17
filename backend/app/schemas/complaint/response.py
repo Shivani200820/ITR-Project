@@ -43,6 +43,12 @@ class ComplaintResponse(BaseModel):
     citizen_rating: int | None = None
 
     closed_at: datetime | None = None
+
+    is_locked: bool
+
+    resolution_duration_hours: float | None = None
+
+    updated_at: datetime
     
     updated_at: datetime
 

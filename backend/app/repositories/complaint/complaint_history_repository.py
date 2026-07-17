@@ -18,3 +18,18 @@ class ComplaintHistoryRepository:
         self.db.refresh(history)
 
         return history
+    
+    def get_history(
+        self,
+        complaint_id: int,
+    ):
+        return (
+            self.db.query(ComplaintHistory)
+            .filter(
+                ComplaintHistory.complaint_id == complaint_id
+            )
+            .order_by(
+                ComplaintHistory.created_at.asc()
+            )
+            .all()
+        )

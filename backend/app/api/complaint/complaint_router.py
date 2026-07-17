@@ -20,6 +20,9 @@ from app.schemas.complaint import (
 from app.schemas.complaint import ComplaintUpdate
 from app.schemas.complaint import ComplaintSupportResponse
 from app.services.complaint.complaint_service import ComplaintService
+from app.repositories.complaint.complaint_history_repository import (
+    ComplaintHistoryRepository,
+)
 
 router = APIRouter(
     prefix="/complaints",
@@ -172,4 +175,17 @@ def citizen_confirmation(
         complaint_id=complaint_id,
         citizen=current_user,
         request=request,
+    )
+
+@router.get(
+    "/{complaint_id}/timeline",
+)
+def complaint_timeline(
+    complaint_id: int,
+    db: Session = Depends(get_db),
+):
+    history_repo = ComplaintHistoryRepository(db)
+
+    return history_repo.get_history(
+        complaint_id
     )
