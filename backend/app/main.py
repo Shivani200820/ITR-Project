@@ -43,6 +43,9 @@ from app.api.admin.citizen_analytics_router import (
 from app.api.admin.chart_router import (
     router as chart_router,
 )
+from app.api.admin.recent_activity_router import (
+    router as recent_activity_router,
+)
 
 @asynccontextmanager
 async def lifespan(app):
@@ -141,3 +144,7 @@ app.include_router(
 )
 
 app.include_router(chart_router)
+
+app.include_router(
+    recent_activity_router
+)
