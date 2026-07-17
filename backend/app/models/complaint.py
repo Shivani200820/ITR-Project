@@ -8,6 +8,8 @@ from sqlalchemy import (
     ForeignKey,
 )
 
+
+
 from datetime import datetime
 from sqlalchemy.orm import relationship
 
@@ -98,6 +100,21 @@ class Complaint(Base, TimestampMixin):
     )
     
     started_at = Column(
+        DateTime,
+        nullable=True,
+    )
+
+    resolution_remarks = Column(
+    Text,
+    nullable=True,
+    )
+
+    resolution_image_url = Column(
+        String(500),
+        nullable=True,
+    )
+
+    resolved_at = Column(
         DateTime,
         nullable=True,
     )

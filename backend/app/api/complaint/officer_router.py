@@ -7,6 +7,7 @@ from app.schemas.complaint.response import ComplaintResponse
 from app.models.user import User
 from app.dependencies.rbac import require_officer
 from app.schemas.complaint.reject import ComplaintRejectRequest
+from app.schemas.complaint import ComplaintResolveRequest
 
 router = APIRouter(
     prefix="/officer/complaints",
@@ -64,4 +65,22 @@ def start_work(
     return service.start_work(
         complaint_id,
         current_user,
+    )
+
+@router.patch(
+    "/{complaint_id}/resolve",
+    response_model=ComplaintResponse,
+)
+def resolve_complaint(
+    complaint_id: int,
+    request: ComplaintResolveRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_officer),
+):
+    service = ComplaintService(db)
+
+    return service.resolve_complaint(
+        complaint_id=complaint_id,
+        officer=current_user,
+        request=request,
     )

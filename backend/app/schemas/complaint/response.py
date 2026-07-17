@@ -31,6 +31,12 @@ class ComplaintResponse(BaseModel):
     rejection_reason: str | None = None
 
     started_at: datetime | None = None
+
+    resolution_remarks: str | None = None
+
+    resolution_image_url: str | None = None
+
+    resolved_at: datetime | None = None
     
     updated_at: datetime
 
