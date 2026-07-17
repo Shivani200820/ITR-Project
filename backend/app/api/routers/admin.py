@@ -10,12 +10,3 @@ router = APIRouter(
 )
 
 
-@router.get("/dashboard")
-def admin_dashboard(
-    current_user: User = Depends(
-        require_role(UserRole.ADMIN)
-    ),
-):
-    return {
-        "message": f"Welcome Admin {current_user.full_name}"
-    }

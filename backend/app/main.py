@@ -27,6 +27,7 @@ from app.api.complaint.complaint_router import router as complaint_router
 from app.api.complaint.officer_router import (
     router as officer_router,
 )
+from app.api.admin.dashboard_router import router as dashboard_router
 
 @asynccontextmanager
 async def lifespan(app):
@@ -103,3 +104,8 @@ app.include_router(complaint_router)
 app.include_router(
     officer_router
 )
+app.include_router(
+    dashboard_router,
+    prefix="/api/v1",
+)
+
