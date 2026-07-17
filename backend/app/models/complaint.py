@@ -119,6 +119,21 @@ class Complaint(Base, TimestampMixin):
         nullable=True,
     )
 
+    citizen_feedback = Column(
+    Text,
+    nullable=True,
+    )
+
+    citizen_rating = Column(
+        Integer,
+        nullable=True,
+    )
+
+    closed_at = Column(
+        DateTime,
+        nullable=True,
+    )
+
     # =========================
     # AI Generated Values
     # =========================

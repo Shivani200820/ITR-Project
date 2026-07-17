@@ -37,6 +37,12 @@ class ComplaintResponse(BaseModel):
     resolution_image_url: str | None = None
 
     resolved_at: datetime | None = None
+
+    citizen_feedback: str | None = None
+
+    citizen_rating: int | None = None
+
+    closed_at: datetime | None = None
     
     updated_at: datetime
 

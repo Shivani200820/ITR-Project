@@ -15,10 +15,11 @@ from app.models.user import User
 from app.schemas.complaint import (
     ComplaintCreate,
     ComplaintResponse,
+    CitizenConfirmationRequest,
 )
-from app.services.complaint import ComplaintService
 from app.schemas.complaint import ComplaintUpdate
 from app.schemas.complaint import ComplaintSupportResponse
+from app.services.complaint.complaint_service import ComplaintService
 
 router = APIRouter(
     prefix="/complaints",
@@ -153,4 +154,22 @@ def support_complaint(
     return service.support_complaint(
         complaint_id=complaint_id,
         citizen_id=current_user.id,
+    )
+
+@router.patch(
+    "/{complaint_id}/confirm",
+    response_model=ComplaintResponse,
+)
+def citizen_confirmation(
+    complaint_id: int,
+    request: CitizenConfirmationRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    service = ComplaintService(db)
+
+    return service.citizen_confirmation(
+        complaint_id=complaint_id,
+        citizen=current_user,
+        request=request,
     )

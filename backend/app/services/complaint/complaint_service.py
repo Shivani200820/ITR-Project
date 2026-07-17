@@ -45,8 +45,10 @@ from app.models.complaint_history import ComplaintHistory
 
 from datetime import datetime
 
-from app.schemas.complaint import ComplaintResolveRequest
-
+from app.schemas.complaint import (
+    ComplaintResolveRequest,
+    CitizenConfirmationRequest,
+)
 
 
 CATEGORY_MAP = {
@@ -580,6 +582,63 @@ class ComplaintService:
             new_status_id=ComplaintStatus.RESOLVED,
             changed_by=officer.id,
             remarks=request.resolution_remarks,
+        )
+
+        self.history_repository.create(
+            history
+        )
+
+        return complaint
+    
+    def citizen_confirmation(
+        self,
+        complaint_id: int,
+        citizen: User,
+        request: CitizenConfirmationRequest,
+    ):
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        # Verify complaint owner
+        if complaint.citizen_id != citizen.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You can only confirm your own complaint.",
+            )
+
+        # Only resolved complaints can be confirmed
+        if ComplaintStatus(complaint.status_id) != ComplaintStatus.RESOLVED:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Only resolved complaints can be confirmed.",
+            )
+
+        old_status = complaint.status_id
+
+        # Save citizen feedback
+        complaint.citizen_feedback = request.feedback
+        complaint.citizen_rating = request.rating
+
+        # Decision
+        if request.decision == "close":
+            complaint.status_id = ComplaintStatus.CLOSED
+            complaint.closed_at = datetime.utcnow()
+            new_status = ComplaintStatus.CLOSED
+        else:
+            complaint.status_id = ComplaintStatus.REOPENED
+            new_status = ComplaintStatus.REOPENED
+
+        self.repository.save(
+            complaint
+        )
+
+        history = ComplaintHistory(
+            complaint_id=complaint.id,
+            old_status_id=old_status,
+            new_status_id=new_status,
+            changed_by=citizen.id,
+            remarks=request.feedback,
         )
 
         self.history_repository.create(

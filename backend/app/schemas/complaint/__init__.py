@@ -7,3 +7,4 @@ from .response import (
 from .support_response import ComplaintSupportResponse
 from .reject import ComplaintRejectRequest
 from .resolve import ComplaintResolveRequest
+from .confirm import CitizenConfirmationRequest
