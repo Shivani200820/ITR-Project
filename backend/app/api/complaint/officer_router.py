@@ -84,3 +84,20 @@ def resolve_complaint(
         officer=current_user,
         request=request,
     )
+
+
+@router.patch(
+    "/{complaint_id}/restart-work",
+    response_model=ComplaintResponse,
+)
+def restart_work(
+    complaint_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_officer),
+):
+    service = ComplaintService(db)
+
+    return service.restart_work(
+        complaint_id=complaint_id,
+        officer=current_user,
+    )
