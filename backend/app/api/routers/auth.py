@@ -10,7 +10,8 @@ from app.database.session import get_db
 from app.schemas import user
 from app.schemas.user import (
     UserCreate,
-    UserResponse
+    UserResponse,
+    UserRegisterResponse,
 )
 
 from app.services.auth_service import (
@@ -27,7 +28,7 @@ router = APIRouter(
 
 @router.post(
     "/register",
-    response_model=UserResponse,
+    response_model=UserRegisterResponse,
     status_code=status.HTTP_201_CREATED
 )
 def register(
@@ -39,12 +40,12 @@ def register(
 
     user = auth_service.register_user(user_data)
 
-    return {
-        "success": True,
-        "message": "User registered successfully",
-        "data": UserResponse.model_validate(user),
-        "errors": None
-}
+    return UserRegisterResponse(
+        success=True,
+        message="User registered successfully",
+        data=UserResponse.model_validate(user),
+        errors=None
+    )
 
 
 @router.post("/login")

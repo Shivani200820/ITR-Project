@@ -29,6 +29,8 @@ class ComplaintResponse(BaseModel):
     created_at: datetime
   
     rejection_reason: str | None = None
+
+    started_at: datetime | None = None
     
     updated_at: datetime
 

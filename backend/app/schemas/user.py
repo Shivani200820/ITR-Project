@@ -78,3 +78,9 @@ class UserResponse(UserBase):
     class Config:
 
         from_attributes = True
+
+class UserRegisterResponse(BaseModel):
+    success: bool
+    message: str
+    data: UserResponse
+    errors: str | None = None

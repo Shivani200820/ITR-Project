@@ -49,3 +49,19 @@ def reject_complaint(
         officer=current_user,
         reason=request.reason,
     )
+
+@router.patch(
+    "/{complaint_id}/start-work",
+    response_model=ComplaintResponse,
+)
+def start_work(
+    complaint_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_officer),
+):
+    service = ComplaintService(db)
+
+    return service.start_work(
+        complaint_id,
+        current_user,
+    )

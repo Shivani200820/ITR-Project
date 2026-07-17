@@ -42,6 +42,10 @@ from app.repositories.complaint.complaint_history_repository import (
 )
 from app.models.complaint_history import ComplaintHistory
 
+from datetime import datetime
+
+
+
 CATEGORY_MAP = {
     "road": "Pothole",
     "pothole": "Pothole",
@@ -51,6 +55,7 @@ CATEGORY_MAP = {
     "street light": "Street Light",
     "drain": "Drain Blockage",
     "drain blockage": "Drain Blockage",
+    "water supply": "Water Leakage",
 }
 
 DEPARTMENT_MAP = {
@@ -465,6 +470,55 @@ class ComplaintService:
             new_status_id=ComplaintStatus.REJECTED,
             changed_by=officer.id,
             remarks=reason,
+        )
+
+        self.history_repository.create(
+            history
+        )
+
+        return complaint
+    
+    def start_work(
+        self,
+        complaint_id: int,
+        officer: User,
+    ):
+        complaint = self.get_complaint(
+            complaint_id
+        )
+
+        # Only assigned officer can start work
+        if complaint.assigned_officer_id != officer.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not assigned to this complaint.",
+            )
+
+        # Validate status transition
+        if not is_valid_transition(
+            ComplaintStatus(complaint.status_id),
+            ComplaintStatus.IN_PROGRESS,
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid status transition.",
+            )
+
+        # Don't hardcode old status
+        old_status = complaint.status_id
+
+        complaint.status_id = ComplaintStatus.IN_PROGRESS
+        complaint.started_at = datetime.utcnow()
+
+        self.repository.save(
+            complaint
+        )
+
+        history = ComplaintHistory(
+            complaint_id=complaint.id,
+            old_status_id=old_status,
+            new_status_id=ComplaintStatus.IN_PROGRESS,
+            changed_by=officer.id,
         )
 
         self.history_repository.create(

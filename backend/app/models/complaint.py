@@ -1,5 +1,6 @@
 from sqlalchemy import (
     Column,
+    DateTime,
     Integer,
     String,
     Text,
@@ -7,6 +8,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 
+from datetime import datetime
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
@@ -94,6 +96,12 @@ class Complaint(Base, TimestampMixin):
         Text,
         nullable=True,
     )
+    
+    started_at = Column(
+        DateTime,
+        nullable=True,
+    )
+
     # =========================
     # AI Generated Values
     # =========================
