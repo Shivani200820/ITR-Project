@@ -34,6 +34,9 @@ from app.api.admin.analytics_router import (
 from app.api.admin.department_analytics_router import (
     router as department_analytics_router,
 )
+from app.api.admin.officer_analytics_router import (
+    router as officer_analytics_router,
+)
 
 @asynccontextmanager
 async def lifespan(app):
@@ -121,4 +124,8 @@ app.include_router(
 
 app.include_router(
     department_analytics_router
+)
+
+app.include_router(
+    officer_analytics_router
 )
