@@ -1,12 +1,51 @@
-from fastapi import FastAPI, Request
+from fastapi import (
+    FastAPI,
+    Request,
+    HTTPException,
+)
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import (
+    RequestValidationError,
+)
 
 from app.core.exceptions import CivicAIException
+from app.utils.response import error_response
 
 
 def register_exception_handlers(
     app: FastAPI
 ):
+
+    @app.exception_handler(HTTPException)
+    async def http_exception_handler(
+        request: Request,
+        exc: HTTPException,
+    ):
+        response = error_response(
+            message=exc.detail,
+            errors=None,
+        )
+
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=response.model_dump(),
+        )
+
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(
+        request: Request,
+        exc: RequestValidationError,
+    ):
+        response = error_response(
+            message="Validation Error",
+            errors=exc.errors(),
+        )
+
+        return JSONResponse(
+            status_code=422,
+            content=response.model_dump(),
+        )
 
     @app.exception_handler(CivicAIException)
     async def civic_exception_handler(
@@ -14,29 +53,27 @@ def register_exception_handlers(
         exc: CivicAIException
     ):
 
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={
-                "success": False,
-                "message": exc.message,
-                "data": None,
-                "errors": None
-            }
+        response = error_response(
+            message=exc.message,
+            errors=None,
         )
 
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=response.model_dump(),
+        )
 
     @app.exception_handler(Exception)
     async def general_exception_handler(
         request: Request,
-        exc: Exception
+        exc: Exception,
     ):
+        response = error_response(
+            message="Internal Server Error",
+            errors=str(exc),
+        )
 
         return JSONResponse(
             status_code=500,
-            content={
-                "success": False,
-                "message": "Internal Server Error",
-                "data": None,
-                "errors": str(exc)
-            }
+            content=response.model_dump(),
         )
