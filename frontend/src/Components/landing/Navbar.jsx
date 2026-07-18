@@ -60,36 +60,63 @@ function Navbar() {
 
           <Stack
             direction="row"
-            spacing={2}
+            spacing={4}
             sx={{
               display: { xs: "none", md: "flex" },
               alignItems: "center",
             }}
           >
             {navItems.map((item) => (
-              <Button
+              <Typography
                 key={item}
-                color="inherit"
+                component={Link}
+                to={item === "Home" ? "/" : `#${item.toLowerCase()}`}
                 sx={{
-                  color: "#333",
+                  color: "#374151",
+                  textDecoration: "none",
                   fontWeight: 600,
+                  fontSize: 16,
+                  transition: "color 0.2s ease",
+                  '&:hover': {
+                    color: "#1565C0",
+                  },
                 }}
               >
                 {item}
-              </Button>
+              </Typography>
             ))}
 
-            <Button variant="contained">
-              Citizen Login
-            </Button>
+            <Typography
+              component={Link}
+              to="/auth/login/citizen"
+              sx={{
+                color: "#374151",
+                textDecoration: "none",
+                fontWeight: 600,
+                fontSize: 16,
+                '&:hover': {
+                  color: "#1565C0",
+                },
+              }}
+            >
+              Login
+            </Typography>
 
-            <Button variant="outlined">
-              Officer
-            </Button>
-
-            <Button variant="outlined">
-              Admin
-            </Button>
+            <Typography
+              component={Link}
+              to="/auth/register"
+              sx={{
+                color: "#374151",
+                textDecoration: "none",
+                fontWeight: 600,
+                fontSize: 16,
+                '&:hover': {
+                  color: "#1565C0",
+                },
+              }}
+            >
+              Signup
+            </Typography>
           </Stack>
 
           {/* Mobile Icon */}
@@ -122,39 +149,64 @@ function Navbar() {
 
             {navItems.map((item) => (
               <ListItem key={item} disablePadding>
-                <ListItemButton>
-
-                  <ListItemText primary={item} />
-
+                <ListItemButton
+                  component={Link}
+                  to={item === "Home" ? "/" : `#${item.toLowerCase()}`}
+                  sx={{
+                    justifyContent: "center",
+                    paddingY: 1.5,
+                  }}
+                >
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{
+                      sx: {
+                        color: "#374151",
+                        fontWeight: 600,
+                        textAlign: "center",
+                      },
+                    }}
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
 
-            <ListItem>
-              <Button
-                fullWidth
-                variant="contained"
+            <ListItem disablePadding>
+              <ListItemButton
+                component={Link}
+                to="/auth/login/citizen"
+                sx={{ justifyContent: "center" }}
               >
-                Citizen Login
-              </Button>
+                <ListItemText
+                  primary="Login"
+                  primaryTypographyProps={{
+                    sx: {
+                      color: "#374151",
+                      fontWeight: 600,
+                      textAlign: "center",
+                    },
+                  }}
+                />
+              </ListItemButton>
             </ListItem>
 
-            <ListItem>
-              <Button
-                fullWidth
-                variant="outlined"
+            <ListItem disablePadding>
+              <ListItemButton
+                component={Link}
+                to="/auth/register"
+                sx={{ justifyContent: "center" }}
               >
-                Officer Login
-              </Button>
-            </ListItem>
-
-            <ListItem>
-              <Button
-                fullWidth
-                variant="outlined"
-              >
-                Admin Login
-              </Button>
+                <ListItemText
+                  primary="Signup"
+                  primaryTypographyProps={{
+                    sx: {
+                      color: "#374151",
+                      fontWeight: 600,
+                      textAlign: "center",
+                    },
+                  }}
+                />
+              </ListItemButton>
             </ListItem>
 
           </List>

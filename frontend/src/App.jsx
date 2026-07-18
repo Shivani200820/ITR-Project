@@ -1,7 +1,15 @@
+import { CssBaseline, ThemeProvider } from "@mui/material";
+
 import AppRoutes from "./routes/AppRoutes";
+import theme from "./theme/theme";
 
 function App() {
-  return <AppRoutes />;
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AppRoutes />
+    </ThemeProvider>
+  );
 }
 
 export default App;
