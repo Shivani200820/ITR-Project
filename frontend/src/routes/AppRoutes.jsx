@@ -1,16 +1,20 @@
 import { Navigate, Route, Routes, Outlet } from "react-router-dom";
 
+// Layouts
 import AuthLayout from "../layouts/AuthLayout";
 import CitizenLayout from "../layouts/CitizenLayout";
 
+// Landing Page
 import LandingPage from "../pages/landing/LandingPage";
 
+// Authentication Pages
 import RoleSelection from "../pages/auth/RoleSelection";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 
+// Citizen Pages
 import Dashboard from "../pages/citizen/Dashboard";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
 import AIPreview from "../pages/citizen/AIPreview";
@@ -19,8 +23,10 @@ import ComplaintDetails from "../pages/citizen/ComplaintDetails";
 import ComplaintSuccess from "../pages/citizen/ComplaintSuccess";
 import DuplicateComplaint from "../pages/citizen/DuplicateComplaint";
 
-
+// Protected Route
 import PrivateRoute from "./ProtectedRoute";
+
+// ---------------- Officer Layout ----------------
 
 function OfficerLayout() {
   return (
@@ -30,6 +36,8 @@ function OfficerLayout() {
   );
 }
 
+// ---------------- Admin Layout ----------------
+
 function AdminLayout() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>
@@ -37,6 +45,8 @@ function AdminLayout() {
     </div>
   );
 }
+
+// ---------------- Officer Pages ----------------
 
 function OfficerDashboardPage() {
   return <div style={{ padding: 24 }}>Officer Dashboard</div>;
@@ -50,6 +60,8 @@ function OfficerProfilePage() {
   return <div style={{ padding: 24 }}>Officer Profile</div>;
 }
 
+// ---------------- Admin Pages ----------------
+
 function AdminDashboardPage() {
   return <div style={{ padding: 24 }}>Admin Dashboard</div>;
 }
@@ -62,10 +74,14 @@ function AdminReportsPage() {
   return <div style={{ padding: 24 }}>Admin Reports</div>;
 }
 
+// ---------------- Routes ----------------
+
 function AppRoutes() {
   return (
     <Routes>
 
+      {/* Landing Page */}
+      <Route path="/" element={<LandingPage />} />
 
       {/* Authentication */}
       <Route element={<AuthLayout />}>
@@ -76,11 +92,14 @@ function AppRoutes() {
         <Route path="/auth/reset-password" element={<ResetPassword />} />
       </Route>
 
-      {/* Citizen */}
+      {/* Citizen Routes */}
       <Route
         path="/citizen"
         element={
-          <PrivateRoute allowedRoles={["citizen"]} userRole="citizen">
+          <PrivateRoute
+            allowedRoles={["citizen"]}
+            userRole="citizen"
+          >
             <CitizenLayout />
           </PrivateRoute>
         }
@@ -90,15 +109,24 @@ function AppRoutes() {
         <Route path="ai-preview" element={<AIPreview />} />
         <Route path="my-complaints" element={<MyComplaints />} />
         <Route path="complaints/:id" element={<ComplaintDetails />} />
-        <Route path="duplicate-complaints" element={<DuplicateComplaint />} />
-        <Route path="complaint-success" element={<ComplaintSuccess />} />
+        <Route
+          path="duplicate-complaints"
+          element={<DuplicateComplaint />}
+        />
+        <Route
+          path="complaint-success"
+          element={<ComplaintSuccess />}
+        />
       </Route>
 
-      {/* Officer */}
+      {/* Officer Routes */}
       <Route
         path="/officer"
         element={
-          <PrivateRoute allowedRoles={["officer"]} userRole="officer">
+          <PrivateRoute
+            allowedRoles={["officer"]}
+            userRole="officer"
+          >
             <OfficerLayout />
           </PrivateRoute>
         }
@@ -107,15 +135,15 @@ function AppRoutes() {
         <Route path="complaints" element={<OfficerComplaintsPage />} />
         <Route path="profile" element={<OfficerProfilePage />} />
       </Route>
-      <Route path="/officer" element={<OfficerLayout />}>
-        <Route index element={<OfficerDashboard />} />
-      </Route>
 
-      {/* Admin */}
+      {/* Admin Routes */}
       <Route
         path="/admin"
         element={
-          <PrivateRoute allowedRoles={["admin"]} userRole="admin">
+          <PrivateRoute
+            allowedRoles={["admin"]}
+            userRole="admin"
+          >
             <AdminLayout />
           </PrivateRoute>
         }
@@ -126,7 +154,10 @@ function AppRoutes() {
       </Route>
 
       {/* 404 */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="*"
+        element={<Navigate to="/" replace />}
+      />
 
     </Routes>
   );
