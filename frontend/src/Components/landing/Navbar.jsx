@@ -3,7 +3,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
   IconButton,
   Drawer,
   List,
@@ -17,75 +16,83 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 
+// Navigation Items
 const navItems = [
-  "Home",
-  "About",
-  "Features",
-  "Departments",
-  "Contact",
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Features", path: "/features" },
+  { name: "Departments", path: "/departments" },
+  { name: "Contact", path: "/contact" },
 ];
 
 function Navbar() {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    setOpen((prev) => !prev);
   };
 
   return (
     <>
+      {/* Navbar */}
       <AppBar
         position="sticky"
         elevation={2}
         sx={{
-          backgroundColor: "#ffffff",
+          backgroundColor: "#fff",
         }}
       >
         <Toolbar>
 
           {/* Logo */}
-
           <Typography
             variant="h5"
+            component={Link}
+            to="/"
             sx={{
               flexGrow: 1,
               color: "#1565C0",
               fontWeight: "bold",
+              textDecoration: "none",
             }}
           >
             CivicAI
           </Typography>
 
           {/* Desktop Menu */}
-
           <Stack
             direction="row"
             spacing={4}
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: {
+                xs: "none",
+                md: "flex",
+              },
               alignItems: "center",
             }}
           >
             {navItems.map((item) => (
               <Typography
-                key={item}
+                key={item.name}
                 component={Link}
-                to={item === "Home" ? "/" : `#${item.toLowerCase()}`}
+                to={item.path}
                 sx={{
                   color: "#374151",
                   textDecoration: "none",
                   fontWeight: 600,
                   fontSize: 16,
-                  transition: "color 0.2s ease",
-                  '&:hover': {
+                  transition: "0.3s",
+
+                  "&:hover": {
                     color: "#1565C0",
                   },
                 }}
               >
-                {item}
+                {item.name}
               </Typography>
             ))}
 
+            {/* Login */}
             <Typography
               component={Link}
               to="/auth/login/citizen"
@@ -94,7 +101,8 @@ function Navbar() {
                 textDecoration: "none",
                 fontWeight: 600,
                 fontSize: 16,
-                '&:hover': {
+
+                "&:hover": {
                   color: "#1565C0",
                 },
               }}
@@ -102,6 +110,7 @@ function Navbar() {
               Login
             </Typography>
 
+            {/* Signup */}
             <Typography
               component={Link}
               to="/auth/register"
@@ -110,7 +119,8 @@ function Navbar() {
                 textDecoration: "none",
                 fontWeight: 600,
                 fontSize: 16,
-                '&:hover': {
+
+                "&:hover": {
                   color: "#1565C0",
                 },
               }}
@@ -119,51 +129,51 @@ function Navbar() {
             </Typography>
           </Stack>
 
-          {/* Mobile Icon */}
-
+          {/* Mobile Menu Button */}
           <IconButton
             onClick={toggleDrawer}
             sx={{
-              display: { xs: "block", md: "none" },
+              display: {
+                xs: "block",
+                md: "none",
+              },
             }}
           >
             <MenuIcon />
           </IconButton>
-
         </Toolbar>
       </AppBar>
 
-      {/* Drawer */}
-
+      {/* Mobile Drawer */}
       <Drawer
         anchor="right"
         open={open}
         onClose={toggleDrawer}
       >
-        <Box
-          sx={{
-            width: 250,
-          }}
-        >
+        <Box sx={{ width: 250 }}>
           <List>
 
             {navItems.map((item) => (
-              <ListItem key={item} disablePadding>
+              <ListItem
+                key={item.name}
+                disablePadding
+              >
                 <ListItemButton
                   component={Link}
-                  to={item === "Home" ? "/" : `#${item.toLowerCase()}`}
+                  to={item.path}
+                  onClick={toggleDrawer}
                   sx={{
                     justifyContent: "center",
-                    paddingY: 1.5,
+                    py: 1.5,
                   }}
                 >
                   <ListItemText
-                    primary={item}
+                    primary={item.name}
                     primaryTypographyProps={{
                       sx: {
-                        color: "#374151",
-                        fontWeight: 600,
                         textAlign: "center",
+                        fontWeight: 600,
+                        color: "#374151",
                       },
                     }}
                   />
@@ -171,38 +181,46 @@ function Navbar() {
               </ListItem>
             ))}
 
+            {/* Login */}
             <ListItem disablePadding>
               <ListItemButton
                 component={Link}
                 to="/auth/login/citizen"
-                sx={{ justifyContent: "center" }}
+                onClick={toggleDrawer}
+                sx={{
+                  justifyContent: "center",
+                }}
               >
                 <ListItemText
                   primary="Login"
                   primaryTypographyProps={{
                     sx: {
-                      color: "#374151",
-                      fontWeight: 600,
                       textAlign: "center",
+                      fontWeight: 600,
+                      color: "#374151",
                     },
                   }}
                 />
               </ListItemButton>
             </ListItem>
 
+            {/* Signup */}
             <ListItem disablePadding>
               <ListItemButton
                 component={Link}
                 to="/auth/register"
-                sx={{ justifyContent: "center" }}
+                onClick={toggleDrawer}
+                sx={{
+                  justifyContent: "center",
+                }}
               >
                 <ListItemText
                   primary="Signup"
                   primaryTypographyProps={{
                     sx: {
-                      color: "#374151",
-                      fontWeight: 600,
                       textAlign: "center",
+                      fontWeight: 600,
+                      color: "#374151",
                     },
                   }}
                 />
@@ -212,7 +230,6 @@ function Navbar() {
           </List>
         </Box>
       </Drawer>
-
     </>
   );
 }

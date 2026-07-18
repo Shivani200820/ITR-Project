@@ -2,12 +2,15 @@ import { Navigate, Route, Routes, Outlet } from "react-router-dom";
 
 import AuthLayout from "../layouts/AuthLayout";
 import CitizenLayout from "../layouts/CitizenLayout";
+
 import LandingPage from "../pages/landing/LandingPage";
+
 import RoleSelection from "../pages/auth/RoleSelection";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+
 import Dashboard from "../pages/citizen/Dashboard";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
 import AIPreview from "../pages/citizen/AIPreview";
@@ -15,6 +18,8 @@ import MyComplaints from "../pages/citizen/MyComplaints";
 import ComplaintDetails from "../pages/citizen/ComplaintDetails";
 import ComplaintSuccess from "../pages/citizen/ComplaintSuccess";
 import DuplicateComplaint from "../pages/citizen/DuplicateComplaint";
+
+
 import PrivateRoute from "./ProtectedRoute";
 
 function OfficerLayout() {
@@ -60,8 +65,9 @@ function AdminReportsPage() {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
 
+
+      {/* Authentication */}
       <Route element={<AuthLayout />}>
         <Route path="/auth" element={<RoleSelection />} />
         <Route path="/auth/login/:role" element={<Login />} />
@@ -70,6 +76,7 @@ function AppRoutes() {
         <Route path="/auth/reset-password" element={<ResetPassword />} />
       </Route>
 
+      {/* Citizen */}
       <Route
         path="/citizen"
         element={
@@ -87,6 +94,7 @@ function AppRoutes() {
         <Route path="complaint-success" element={<ComplaintSuccess />} />
       </Route>
 
+      {/* Officer */}
       <Route
         path="/officer"
         element={
@@ -99,7 +107,11 @@ function AppRoutes() {
         <Route path="complaints" element={<OfficerComplaintsPage />} />
         <Route path="profile" element={<OfficerProfilePage />} />
       </Route>
+      <Route path="/officer" element={<OfficerLayout />}>
+        <Route index element={<OfficerDashboard />} />
+      </Route>
 
+      {/* Admin */}
       <Route
         path="/admin"
         element={
@@ -113,7 +125,9 @@ function AppRoutes() {
         <Route path="reports" element={<AdminReportsPage />} />
       </Route>
 
+      {/* 404 */}
       <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }
