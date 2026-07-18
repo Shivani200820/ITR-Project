@@ -18,6 +18,8 @@ from app.services.complaint_priority_service import (
 )
 
 from app.shared.enums import UserRole
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
 
 
 router = APIRouter(
@@ -28,7 +30,8 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=ComplaintPriorityResponse,
+
+    response_model=ApiResponse[ComplaintPriorityResponse],
     status_code=status.HTTP_201_CREATED,
 )
 def create_priority(
@@ -41,13 +44,17 @@ def create_priority(
 
     service = ComplaintPriorityService(db)
 
-    return service.create_priority(priority_data)
+    priority = service.create_priority(priority_data)
 
+    return success_response(
+        message="Complaint priority created successfully.",
+        data=priority,
+    )
 
 
 @router.get(
     "",
-    response_model=list[ComplaintPriorityResponse],
+    response_model=ApiResponse[list[ComplaintPriorityResponse]]
 )
 def get_priorities(
     db: Session = Depends(get_db),
@@ -56,13 +63,17 @@ def get_priorities(
 
     service = ComplaintPriorityService(db)
 
-    return service.get_priorities()
+    priorities = service.get_priorities()
 
+    return success_response(
+        message="Complaint priorities fetched successfully.",
+        data=priorities,
+    )
 
 
 @router.get(
     "/{priority_id}",
-    response_model=ComplaintPriorityResponse,
+    response_model=ApiResponse[ComplaintPriorityResponse]
 )
 def get_priority(
     priority_id: int,
@@ -72,13 +83,17 @@ def get_priority(
 
     service = ComplaintPriorityService(db)
 
-    return service.get_priority(priority_id)
+    priority = service.get_priority(priority_id)
 
+    return success_response(
+        message="Complaint priority fetched successfully.",
+        data=priority,
+    )
 
 
 @router.put(
     "/{priority_id}",
-    response_model=ComplaintPriorityResponse,
+    response_model=ApiResponse[ComplaintPriorityResponse]
 )
 def update_priority(
     priority_id: int,
@@ -91,16 +106,20 @@ def update_priority(
 
     service = ComplaintPriorityService(db)
 
-    return service.update_priority(
+    priority = service.update_priority(
         priority_id,
         priority_data,
     )
 
+    return success_response(
+        message="Complaint priority updated successfully.",
+        data=priority,
+    )
 
 
 @router.patch(
     "/{priority_id}/activate",
-    response_model=ComplaintPriorityResponse,
+    response_model=ApiResponse[ComplaintPriorityResponse]
 )
 def activate_priority(
     priority_id: int,
@@ -112,13 +131,17 @@ def activate_priority(
 
     service = ComplaintPriorityService(db)
 
-    return service.activate_priority(priority_id)
+    priority = service.activate_priority(priority_id)
 
+    return success_response(
+        message="Complaint priority activated successfully.",
+        data=priority,
+    )
 
 
 @router.patch(
     "/{priority_id}/deactivate",
-    response_model=ComplaintPriorityResponse,
+    response_model=ApiResponse[ComplaintPriorityResponse]
 )
 def deactivate_priority(
     priority_id: int,
@@ -130,4 +153,9 @@ def deactivate_priority(
 
     service = ComplaintPriorityService(db)
 
-    return service.deactivate_priority(priority_id)
+    priority = service.deactivate_priority(priority_id)
+
+    return success_response(
+        message="Complaint priority deactivated successfully.",
+        data=priority,
+    )

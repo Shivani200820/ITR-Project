@@ -8,17 +8,28 @@ from app.services.dashboard.officer_analytics_service import (
     OfficerAnalyticsService,
 )
 
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
+
 router = APIRouter(
     prefix="/admin",
     tags=["Officer Analytics"],
 )
 
 
-@router.get("/officer-analytics")
+@router.get(
+    "/officer-analytics",
+    response_model=ApiResponse[dict]
+)
 def officer_analytics(
     db: Session = Depends(get_db),
     current_user=Depends(require_admin),
 ):
-    return OfficerAnalyticsService(
-        db
-    ).get_officer_analytics()
+    service = OfficerAnalyticsService(db)
+
+    officer_data = service.get_officer_analytics()
+
+    return success_response(
+        message="Officer analytics fetched successfully.",
+        data=officer_data,
+    )

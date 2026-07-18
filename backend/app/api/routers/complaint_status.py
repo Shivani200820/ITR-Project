@@ -19,6 +19,8 @@ from app.services.complaint_status_service import (
 )
 
 from app.shared.enums import UserRole
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
 
 
 router = APIRouter(
@@ -30,7 +32,7 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=ComplaintStatusResponse,
+    response_model=ApiResponse[ComplaintStatusResponse],
     status_code=status.HTTP_201_CREATED,
 )
 def create_status(
@@ -41,17 +43,21 @@ def create_status(
     ),
 ):
 
+
     service = ComplaintStatusService(db)
 
-    return service.create_status(
-        status_data
+    complaint_status = service.create_status(status_data)
+
+    return success_response(
+        message="Complaint status created successfully.",
+        data=complaint_status,
     )
 
 
 
 @router.get(
     "",
-    response_model=list[ComplaintStatusResponse],
+    response_model=ApiResponse[list[ComplaintStatusResponse]]
 )
 def get_statuses(
     db: Session = Depends(get_db),
@@ -62,13 +68,17 @@ def get_statuses(
 
     service = ComplaintStatusService(db)
 
-    return service.get_statuses()
+    statuses = service.get_statuses()
 
+    return success_response(
+        message="Complaint statuses fetched successfully.",
+        data=statuses,
+    )
 
 
 @router.get(
     "/{status_id}",
-    response_model=ComplaintStatusResponse,
+    response_model=ApiResponse[ComplaintStatusResponse]
 )
 def get_status(
     status_id: int,
@@ -80,15 +90,17 @@ def get_status(
 
     service = ComplaintStatusService(db)
 
-    return service.get_status(
-        status_id
-    )
+    complaint_status = service.get_status(status_id)
 
+    return success_response(
+        message="Complaint status fetched successfully.",
+        data=complaint_status,
+    )
 
 
 @router.put(
     "/{status_id}",
-    response_model=ComplaintStatusResponse,
+    response_model=ApiResponse[ComplaintStatusResponse]
 )
 def update_status(
     status_id: int,
@@ -101,16 +113,21 @@ def update_status(
 
     service = ComplaintStatusService(db)
 
-    return service.update_status(
-        status_id,
-        status_data,
+    complaint_status = service.update_status(
+    status_id,
+    status_data,
+    )
+
+    return success_response(
+        message="Complaint status updated successfully.",
+        data=complaint_status,
     )
 
 
 
 @router.patch(
     "/{status_id}/activate",
-    response_model=ComplaintStatusResponse,
+    response_model=ApiResponse[ComplaintStatusResponse]
 )
 def activate_status(
     status_id: int,
@@ -122,15 +139,18 @@ def activate_status(
 
     service = ComplaintStatusService(db)
 
-    return service.activate_status(
-        status_id
+    complaint_status = service.activate_status(status_id)
+
+    return success_response(
+        message="Complaint status activated successfully.",
+        data=complaint_status,
     )
 
 
 
 @router.patch(
     "/{status_id}/deactivate",
-    response_model=ComplaintStatusResponse,
+    response_model=ApiResponse[ComplaintStatusResponse]
 )
 def deactivate_status(
     status_id: int,
@@ -142,6 +162,9 @@ def deactivate_status(
 
     service = ComplaintStatusService(db)
 
-    return service.deactivate_status(
-        status_id
+    complaint_status = service.deactivate_status(status_id)
+
+    return success_response(
+        message="Complaint status deactivated successfully.",
+        data=complaint_status,
     )

@@ -138,11 +138,13 @@ class Complaint(Base, TimestampMixin):
     resolution_duration_hours = Column(
     Float,
     nullable=True,
+    
     )
 
     is_locked = Column(
         Boolean,
         default=False,
+        
     )
 
     # =========================

@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.dependencies.rbac import require_admin
 
-from app.services.dashboard.chart_service import (
-    ChartService,
-)
+from app.services.dashboard.chart_service import ChartService
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
 
 router = APIRouter(
     prefix="/admin",
@@ -14,9 +14,17 @@ router = APIRouter(
 )
 
 
-@router.get("/dashboard/charts")
+@router.get(
+    "/dashboard/charts",
+    response_model=ApiResponse[dict]
+)
 def dashboard_charts(
     db: Session = Depends(get_db),
     current_user=Depends(require_admin),
 ):
-    return ChartService(db).dashboard_charts()
+    charts = ChartService(db).dashboard_charts()
+
+    return success_response(
+        message="Dashboard charts fetched successfully.",
+        data=charts,
+    )

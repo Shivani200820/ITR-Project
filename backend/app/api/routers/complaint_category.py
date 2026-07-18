@@ -15,6 +15,8 @@ from app.services.complaint_category_service import (
     ComplaintCategoryService,
 )
 from app.shared.enums import UserRole
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
 
 router = APIRouter(
     prefix="/complaint-categories",
@@ -24,7 +26,7 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=ComplaintCategoryResponse,
+    response_model=ApiResponse[ComplaintCategoryResponse],
     status_code=status.HTTP_201_CREATED,
 )
 def create_category(
@@ -36,12 +38,16 @@ def create_category(
 ):
     service = ComplaintCategoryService(db)
 
-    return service.create_category(category_data)
+    category = service.create_category(category_data)
 
+    return success_response(
+        message="Category created successfully.",
+        data=category,
+    )
 
 @router.get(
     "",
-    response_model=list[ComplaintCategoryResponse],
+    response_model=ApiResponse[list[ComplaintCategoryResponse]],
 )
 def get_categories(
     db: Session = Depends(get_db),
@@ -49,12 +55,16 @@ def get_categories(
 ):
     service = ComplaintCategoryService(db)
 
-    return service.get_categories()
+    categories = service.get_categories()
 
+    return success_response(
+        message="Categories fetched successfully.",
+        data=categories,
+    )
 
 @router.get(
     "/{category_id}",
-    response_model=ComplaintCategoryResponse,
+    response_model=ApiResponse[ComplaintCategoryResponse]
 )
 def get_category(
     category_id: int,
@@ -63,12 +73,16 @@ def get_category(
 ):
     service = ComplaintCategoryService(db)
 
-    return service.get_category(category_id)
+    category = service.get_category(category_id)
 
+    return success_response(
+        message="Category fetched successfully.",
+        data=category,
+    )
 
 @router.put(
     "/{category_id}",
-    response_model=ComplaintCategoryResponse,
+    response_model=ApiResponse[ComplaintCategoryResponse],
 )
 def update_category(
     category_id: int,
@@ -80,15 +94,20 @@ def update_category(
 ):
     service = ComplaintCategoryService(db)
 
-    return service.update_category(
+    category = service.update_category(
         category_id,
         category_data,
+    )
+
+    return success_response(
+        message="Category updated successfully.",
+        data=category,
     )
 
 
 @router.patch(
     "/{category_id}/activate",
-    response_model=ComplaintCategoryResponse,
+    response_model=ApiResponse[ComplaintCategoryResponse]
 )
 def activate_category(
     category_id: int,
@@ -99,12 +118,17 @@ def activate_category(
 ):
     service = ComplaintCategoryService(db)
 
-    return service.activate_category(category_id)
+    category = service.activate_category(category_id)
 
+    return success_response(
+        message="Category activated successfully.",
+        data=category,
+    )
 
 @router.patch(
     "/{category_id}/deactivate",
-    response_model=ComplaintCategoryResponse,
+    
+    response_model=ApiResponse[ComplaintCategoryResponse],
 )
 def deactivate_category(
     category_id: int,
@@ -115,4 +139,9 @@ def deactivate_category(
 ):
     service = ComplaintCategoryService(db)
 
-    return service.deactivate_category(category_id)
+    category = service.deactivate_category(category_id)
+
+    return success_response(
+        message="Category deactivated successfully.",
+        data=category,
+    )

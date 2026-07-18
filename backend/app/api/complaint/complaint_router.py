@@ -23,6 +23,8 @@ from app.services.complaint.complaint_service import ComplaintService
 from app.repositories.complaint.complaint_history_repository import (
     ComplaintHistoryRepository,
 )
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
 
 router = APIRouter(
     prefix="/complaints",
@@ -31,7 +33,7 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse],
     status_code=status.HTTP_201_CREATED,
 )
 def create_complaint(
@@ -41,28 +43,38 @@ def create_complaint(
 ):
     service = ComplaintService(db)
 
-    return service.create_complaint(
+    complaint_data = service.create_complaint(
         data=complaint,
         citizen_id=current_user.id,
     )
 
+    return success_response(
+        message="Complaint created successfully.",
+        data=complaint_data,
+    )
+
 @router.get(
     "/me",
-    response_model=list[ComplaintResponse],
-)
+    response_model=ApiResponse[list[ComplaintResponse]]
+    )
 def my_complaints(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     service = ComplaintService(db)
 
-    return service.citizen_complaints(
+    complaints = service.citizen_complaints(
         current_user.id
+    )
+
+    return success_response(
+        message="Complaints fetched successfully.",
+        data=complaints,
     )
 
 @router.get(
     "/number/{complaint_number}",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse]
 )
 def get_complaint_by_number(
     complaint_number: str,
@@ -71,13 +83,18 @@ def get_complaint_by_number(
 ):
     service = ComplaintService(db)
 
-    return service.get_by_number(
+    complaint = service.get_by_number(
         complaint_number
+    )
+
+    return success_response(
+        message="Complaint fetched successfully.",
+        data=complaint,
     )
 
 @router.get(
     "/{complaint_id}",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse]
 )
 def get_complaint(
     complaint_id: int,
@@ -86,15 +103,20 @@ def get_complaint(
 ):
     service = ComplaintService(db)
 
-    return service.get_complaint(
+    complaint = service.get_complaint(
         complaint_id
+    )
+
+    return success_response(
+        message="Complaint fetched successfully.",
+        data=complaint,
     )
 
 
 
 @router.get(
     "",
-    response_model=list[ComplaintResponse],
+    response_model=ApiResponse[list[ComplaintResponse]]
 )
 def list_complaints(
     page: int = Query(1, ge=1),
@@ -104,14 +126,19 @@ def list_complaints(
 ):
     service = ComplaintService(db)
 
-    return service.list_complaints(
+    complaints = service.list_complaints(
         page=page,
         page_size=page_size,
     )
 
+    return success_response(
+        message="Complaints fetched successfully.",
+        data=complaints,
+    )
+
 @router.patch(
     "/{complaint_id}",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse]
 )
 def update_complaint(
     complaint_id: int,
@@ -121,14 +148,20 @@ def update_complaint(
 ):
     service = ComplaintService(db)
 
-    return service.update_complaint(
+    complaint = service.update_complaint(
         complaint_id=complaint_id,
         data=complaint,
         citizen_id=current_user.id,
     )
 
+    return success_response(
+        message="Complaint updated successfully.",
+        data=complaint,
+    )
+
 @router.delete(
     "/{complaint_id}",
+    response_model=ApiResponse[None],
     status_code=status.HTTP_200_OK,
 )
 def delete_complaint(
@@ -138,14 +171,18 @@ def delete_complaint(
 ):
     service = ComplaintService(db)
 
-    return service.delete_complaint(
+    service.delete_complaint(
         complaint_id,
         current_user.id,
     )
 
+    return success_response(
+        message="Complaint deleted successfully."
+    )
+
 @router.post(
     "/{complaint_id}/support",
-    response_model=ComplaintSupportResponse,
+    response_model=ApiResponse[ComplaintSupportResponse]
 )
 def support_complaint(
     complaint_id: int,
@@ -154,14 +191,19 @@ def support_complaint(
 ):
     service = ComplaintService(db)
 
-    return service.support_complaint(
+    support = service.support_complaint(
         complaint_id=complaint_id,
         citizen_id=current_user.id,
     )
 
+    return success_response(
+        message="Complaint supported successfully.",
+        data=support,
+    )
+
 @router.patch(
     "/{complaint_id}/confirm",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse]
 )
 def citizen_confirmation(
     complaint_id: int,
@@ -171,14 +213,21 @@ def citizen_confirmation(
 ):
     service = ComplaintService(db)
 
-    return service.citizen_confirmation(
+    complaint = service.citizen_confirmation(
         complaint_id=complaint_id,
         citizen=current_user,
         request=request,
     )
 
+    return success_response(
+        message="Citizen confirmation updated successfully.",
+        data=complaint,
+    )
+
 @router.get(
     "/{complaint_id}/timeline",
+    response_model=ApiResponse[list]
+
 )
 def complaint_timeline(
     complaint_id: int,
@@ -186,6 +235,11 @@ def complaint_timeline(
 ):
     history_repo = ComplaintHistoryRepository(db)
 
-    return history_repo.get_history(
+    history = history_repo.get_history(
         complaint_id
+    )
+
+    return success_response(
+        message="Complaint timeline fetched successfully.",
+        data=history,
     )

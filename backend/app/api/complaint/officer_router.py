@@ -8,6 +8,8 @@ from app.models.user import User
 from app.dependencies.rbac import require_officer
 from app.schemas.complaint.reject import ComplaintRejectRequest
 from app.schemas.complaint import ComplaintResolveRequest
+from app.schemas.common import ApiResponse
+from app.utils.response import success_response
 
 router = APIRouter(
     prefix="/officer/complaints",
@@ -17,7 +19,7 @@ router = APIRouter(
 
 @router.patch(
     "/{complaint_id}/accept",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse],
 )
 def accept_complaint(
     complaint_id: int,
@@ -25,16 +27,22 @@ def accept_complaint(
     current_user: User = Depends(require_officer),
 ):
 
+
     service = ComplaintService(db)
 
-    return service.accept_complaint(
+    complaint = service.accept_complaint(
         complaint_id,
         current_user,
     )
 
+    return success_response(
+        message="Complaint accepted successfully.",
+        data=complaint,
+    )    
+
 @router.patch(
     "/{complaint_id}/reject",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse],
 )
 def reject_complaint(
     complaint_id: int,
@@ -45,15 +53,20 @@ def reject_complaint(
 
     service = ComplaintService(db)
 
-    return service.reject_complaint(
+    complaint = service.reject_complaint(
         complaint_id=complaint_id,
         officer=current_user,
         reason=request.reason,
     )
 
+    return success_response(
+        message="Complaint rejected successfully.",
+        data=complaint,
+    )
+
 @router.patch(
     "/{complaint_id}/start-work",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse],
 )
 def start_work(
     complaint_id: int,
@@ -62,14 +75,19 @@ def start_work(
 ):
     service = ComplaintService(db)
 
-    return service.start_work(
+    complaint = service.start_work(
         complaint_id,
         current_user,
     )
 
+    return success_response(
+        message="Work started successfully.",
+        data=complaint,
+    )
+
 @router.patch(
     "/{complaint_id}/resolve",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse],
 )
 def resolve_complaint(
     complaint_id: int,
@@ -79,25 +97,36 @@ def resolve_complaint(
 ):
     service = ComplaintService(db)
 
-    return service.resolve_complaint(
+    complaint = service.resolve_complaint(
         complaint_id=complaint_id,
         officer=current_user,
         request=request,
     )
 
+    return success_response(
+        message="Complaint resolved successfully.",
+        data=complaint,
+    )
+
 
 @router.patch(
     "/{complaint_id}/restart-work",
-    response_model=ComplaintResponse,
+    response_model=ApiResponse[ComplaintResponse],
 )
 def restart_work(
     complaint_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_officer),
 ):
+
     service = ComplaintService(db)
 
-    return service.restart_work(
+    complaint = service.restart_work(
         complaint_id=complaint_id,
         officer=current_user,
+    )
+
+    return success_response(
+        message="Work restarted successfully.",
+        data=complaint,
     )
