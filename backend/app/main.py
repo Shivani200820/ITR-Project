@@ -46,6 +46,9 @@ from app.api.admin.chart_router import (
 from app.api.admin.recent_activity_router import (
     router as recent_activity_router,
 )
+from app.core.request_logger import (
+    RequestLoggingMiddleware,
+)
 
 @asynccontextmanager
 async def lifespan(app):
@@ -72,6 +75,10 @@ app = FastAPI(
     lifespan=lifespan,
 
 )
+app.add_middleware(
+    RequestLoggingMiddleware
+)
+
 register_exception_handlers(app)
 # Root Endpoint
 @app.get("/", tags=["Root"])

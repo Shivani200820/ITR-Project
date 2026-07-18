@@ -50,6 +50,7 @@ from app.schemas.complaint import (
     ComplaintResolveRequest,
     CitizenConfirmationRequest,
 )
+from app.core.logging import logger
 
 
 CATEGORY_MAP = {
@@ -181,7 +182,12 @@ class ComplaintService:
             category_id=category.id,
         )
 
+
         if existing:
+            logger.warning(
+                f"Duplicate complaint detected for citizen {citizen_id}. Existing complaint ID: {existing.id}"
+            )
+
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail={
@@ -225,7 +231,14 @@ class ComplaintService:
             final_description=parsed.description,
         )
 
-        return self.repository.create(complaint)
+        created_complaint = self.repository.create(complaint)
+
+        logger.info(
+            f"Complaint {created_complaint.id} created by user {citizen_id}"
+        )
+
+        return created_complaint
+
 
     def get_complaint(
         self,
@@ -350,9 +363,16 @@ class ComplaintService:
                 value,
             )
 
-        return self.repository.update(
+        updated_complaint = self.repository.update(
             complaint
         )
+
+        logger.info(
+            f"Complaint {updated_complaint.id} updated by user {citizen_id}"
+        )
+
+        return updated_complaint
+
 
     def delete_complaint(
         self,
@@ -386,6 +406,10 @@ class ComplaintService:
             complaint
         )
 
+        logger.info(
+            f"Complaint {complaint.id} deleted by user {citizen_id}"
+        )
+
         return {
             "message": "Complaint deleted successfully."
         }
@@ -416,6 +440,10 @@ class ComplaintService:
 
         self.support_repository.create(
             support
+        )
+
+        logger.info(
+            f"Complaint {complaint.id} supported by citizen {citizen_id}"
         )
 
         return {
@@ -471,6 +499,10 @@ class ComplaintService:
             history
         )
 
+        logger.info(
+            f"Complaint {complaint.id} accepted by officer {officer.id}"
+        )
+
         return complaint
     
     def reject_complaint(
@@ -518,6 +550,10 @@ class ComplaintService:
 
         self.history_repository.create(
             history
+        )
+
+        logger.info(
+            f"Complaint {complaint.id} rejected by officer {officer.id}"
         )
 
         return complaint
@@ -575,6 +611,10 @@ class ComplaintService:
             history
         )
 
+        logger.info(
+            f"Officer {officer.id} started work on complaint {complaint.id}"
+        )
+
         return complaint
     
 
@@ -629,6 +669,10 @@ class ComplaintService:
 
         self.history_repository.create(
             history
+        )
+
+        logger.info(
+            f"Officer {officer.id} restarted work on complaint {complaint.id}"
         )
 
         return complaint
@@ -693,6 +737,10 @@ class ComplaintService:
 
         self.history_repository.create(
             history
+        )
+
+        logger.info(
+            f"Complaint {complaint.id} resolved by officer {officer.id}"
         )
 
         return complaint
@@ -761,6 +809,10 @@ class ComplaintService:
 
         self.history_repository.create(
             history
+        )
+
+        logger.info(
+            f"Citizen {citizen.id} marked complaint {complaint.id} as {new_status.name}"
         )
 
         return complaint

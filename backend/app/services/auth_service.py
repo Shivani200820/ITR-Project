@@ -20,6 +20,7 @@ from app.schemas.user import (
 
 from app.shared.enums import UserRole
 from app.core.exceptions import InvalidCredentialsException, UserAlreadyExistsException
+from app.core.logging import logger
 
 
 class AuthService:
@@ -81,6 +82,7 @@ class AuthService:
             )
         )
 
+        logger.info(f"User registered: {user.email}")
 
         return user
 
@@ -101,21 +103,26 @@ class AuthService:
 
 
         if not user:
+            logger.warning(f"Failed login attempt: {email}")
+
             raise InvalidCredentialsException(
                 message="Invalid email or password",
                 status_code=401
-    )
+            )
 
 
         if not verify_password(
             password,
             user.password_hash
         ):
+            logger.warning(f"Failed login attempt: {email}")
+
             raise InvalidCredentialsException(
                 message="Invalid email or password",
                 status_code=401
             )
 
+        logger.info(f"User logged in: {user.email}")
 
         return user
 
