@@ -15,4 +15,4 @@ def dashboard(
     db: Session = Depends(get_db),
     current_user=Depends(require_admin),
 ):
-    return DashboardService(db).dashboard()
+    return DashboardService(db).get_complete_dashboard()
