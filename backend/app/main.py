@@ -49,6 +49,15 @@ from app.api.admin.recent_activity_router import (
 from app.core.request_logger import (
     RequestLoggingMiddleware,
 )
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.security_headers import (
+    SecurityHeadersMiddleware,
+)
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.extension import _rate_limit_exceeded_handler
 
 @asynccontextmanager
 async def lifespan(app):
@@ -67,6 +76,10 @@ async def lifespan(app):
     yield
 
 
+limiter = Limiter(
+    key_func=get_remote_address
+)
+
 # Create FastAPI application
 app = FastAPI(
     title=settings.APP_NAME,
@@ -75,11 +88,38 @@ app = FastAPI(
     lifespan=lifespan,
 
 )
+
+app.state.limiter = limiter
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.add_middleware(
     RequestLoggingMiddleware
 )
 
+app.add_middleware(
+    SlowAPIMiddleware
+)
+
+app.add_middleware(
+    SecurityHeadersMiddleware
+)
+
 register_exception_handlers(app)
+
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler,
+)
+
 # Root Endpoint
 @app.get("/", tags=["Root"])
 def root():

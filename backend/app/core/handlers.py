@@ -10,6 +10,7 @@ from fastapi.exceptions import (
 
 from app.core.exceptions import CivicAIException
 from app.utils.response import error_response
+from app.core.logging import logger
 
 
 def register_exception_handlers(
@@ -68,9 +69,12 @@ def register_exception_handlers(
         request: Request,
         exc: Exception,
     ):
+        # Actual error log मध्ये जाईल
+        logger.exception(exc)
+
         response = error_response(
             message="Internal Server Error",
-            errors=str(exc),
+            errors=None,
         )
 
         return JSONResponse(

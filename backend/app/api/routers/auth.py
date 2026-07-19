@@ -17,13 +17,17 @@ from app.schemas.user import (
 from app.services.auth_service import (
     AuthService
 )
-
+from fastapi import Request
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
-
+limiter = Limiter(
+    key_func=get_remote_address
+)
 
 
 @router.post(
@@ -31,9 +35,11 @@ router = APIRouter(
     response_model=UserRegisterResponse,
     status_code=status.HTTP_201_CREATED
 )
+@limiter.limit("3/minute")
 def register(
+    request: Request,
     user_data: UserCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
 
     auth_service = AuthService(db)
@@ -49,9 +55,11 @@ def register(
 
 
 @router.post("/login")
+@limiter.limit("5/minute")
 def login(
+    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     auth_service = AuthService(db)
 
