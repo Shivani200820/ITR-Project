@@ -13,6 +13,7 @@ from app.schemas.user import (
     UserResponse,
     UserRegisterResponse,
 )
+from app.schemas.auth import LoginResponse
 
 from app.services.auth_service import (
     AuthService
@@ -32,8 +33,15 @@ limiter = Limiter(
 
 @router.post(
     "/register",
+    summary="Register a new user",
+    description="Creates a new user account in CivicAI.",
     response_model=UserRegisterResponse,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {"description": "User registered successfully"},
+        400: {"description": "Bad Request"},
+        422: {"description": "Validation Error"},
+    },
 )
 @limiter.limit("3/minute")
 def register(
@@ -54,7 +62,18 @@ def register(
     )
 
 
-@router.post("/login")
+@router.post(
+    "/login",
+    summary="User Login",
+    description="Authenticates the user and returns a JWT access token.",
+    response_model=LoginResponse,
+    responses={
+        200: {"description": "Login successful"},
+        401: {"description": "Invalid credentials"},
+        422: {"description": "Validation Error"},
+        429: {"description": "Too many requests"},
+    },
+)
 @limiter.limit("5/minute")
 def login(
     request: Request,
@@ -70,7 +89,7 @@ def login(
 
     token = auth_service.create_user_token(user)
 
-    return {
-    "access_token": token,
-    "token_type": "bearer"
-}
+    return LoginResponse(
+        access_token=token,
+        token_type="bearer",
+    )

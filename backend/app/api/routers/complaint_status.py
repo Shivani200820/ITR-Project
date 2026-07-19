@@ -32,8 +32,17 @@ router = APIRouter(
 
 @router.post(
     "",
+    summary="Create Complaint Status",
+    description="Creates a new complaint status. Only administrators can perform this operation.",
     response_model=ApiResponse[ComplaintStatusResponse],
     status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {"description": "Complaint status created successfully"},
+        400: {"description": "Invalid request"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        422: {"description": "Validation error"},
+    },
 )
 def create_status(
     status_data: ComplaintStatusCreate,
@@ -57,7 +66,13 @@ def create_status(
 
 @router.get(
     "",
-    response_model=ApiResponse[list[ComplaintStatusResponse]]
+    summary="Get All Complaint Statuses",
+    description="Returns the list of all complaint statuses.",
+    response_model=ApiResponse[list[ComplaintStatusResponse]],
+    responses={
+        200: {"description": "Complaint statuses fetched successfully"},
+        401: {"description": "Unauthorized"},
+    },
 )
 def get_statuses(
     db: Session = Depends(get_db),
@@ -78,7 +93,14 @@ def get_statuses(
 
 @router.get(
     "/{status_id}",
-    response_model=ApiResponse[ComplaintStatusResponse]
+    summary="Get Complaint Status",
+    description="Returns a complaint status using its ID.",
+    response_model=ApiResponse[ComplaintStatusResponse],
+    responses={
+        200: {"description": "Complaint status fetched successfully"},
+        401: {"description": "Unauthorized"},
+        404: {"description": "Complaint status not found"},
+    },
 )
 def get_status(
     status_id: int,
@@ -100,7 +122,16 @@ def get_status(
 
 @router.put(
     "/{status_id}",
-    response_model=ApiResponse[ComplaintStatusResponse]
+    summary="Update Complaint Status",
+    description="Updates an existing complaint status. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintStatusResponse],
+    responses={
+        200: {"description": "Complaint status updated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Complaint status not found"},
+        422: {"description": "Validation error"},
+    },
 )
 def update_status(
     status_id: int,
@@ -127,7 +158,15 @@ def update_status(
 
 @router.patch(
     "/{status_id}/activate",
-    response_model=ApiResponse[ComplaintStatusResponse]
+    summary="Activate Complaint Status",
+    description="Activates a complaint status. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintStatusResponse],
+    responses={
+        200: {"description": "Complaint status activated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Complaint status not found"},
+    },
 )
 def activate_status(
     status_id: int,
@@ -150,7 +189,15 @@ def activate_status(
 
 @router.patch(
     "/{status_id}/deactivate",
-    response_model=ApiResponse[ComplaintStatusResponse]
+    summary="Deactivate Complaint Status",
+    description="Deactivates a complaint status. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintStatusResponse],
+    responses={
+        200: {"description": "Complaint status deactivated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Complaint status not found"},
+    },
 )
 def deactivate_status(
     status_id: int,

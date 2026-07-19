@@ -16,7 +16,13 @@ router = APIRouter(
 
 @router.get(
     "/profile",
-    response_model=ApiResponse[UserResponse]
+    summary="Get User Profile",
+    description="Returns the profile details of the currently authenticated user.",
+    response_model=ApiResponse[UserResponse],
+    responses={
+        200: {"description": "Profile fetched successfully"},
+        401: {"description": "Unauthorized or invalid token"},
+    },
 )
 def get_profile(
     current_user: User = Depends(get_current_user)

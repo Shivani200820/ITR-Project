@@ -19,7 +19,15 @@ router = APIRouter(
 
 @router.patch(
     "/{complaint_id}/accept",
+    summary="Accept Complaint",
+    description="Allows an officer to accept a pending complaint.",
     response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Complaint accepted successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Officer access required"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def accept_complaint(
     complaint_id: int,
@@ -42,7 +50,15 @@ def accept_complaint(
 
 @router.patch(
     "/{complaint_id}/reject",
+    summary="Reject Complaint",
+    description="Allows an officer to reject a complaint by providing a reason.",
     response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Complaint rejected successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Officer access required"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def reject_complaint(
     complaint_id: int,
@@ -66,7 +82,15 @@ def reject_complaint(
 
 @router.patch(
     "/{complaint_id}/start-work",
+    summary="Start Complaint Work",
+    description="Marks the complaint as work in progress.",
     response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Work started successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Officer access required"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def start_work(
     complaint_id: int,
@@ -87,7 +111,15 @@ def start_work(
 
 @router.patch(
     "/{complaint_id}/resolve",
+    summary="Resolve Complaint",
+    description="Marks the complaint as resolved with resolution details.",
     response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Complaint resolved successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Officer access required"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def resolve_complaint(
     complaint_id: int,
@@ -111,7 +143,15 @@ def resolve_complaint(
 
 @router.patch(
     "/{complaint_id}/restart-work",
+    summary="Restart Complaint Work",
+    description="Restarts work on a reopened complaint.",
     response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Work restarted successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Officer access required"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def restart_work(
     complaint_id: int,

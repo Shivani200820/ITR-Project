@@ -18,18 +18,30 @@ class UserBase(BaseModel):
     full_name: str = Field(
         ...,
         min_length=2,
-        max_length=MAX_NAME_LENGTH
+        max_length=MAX_NAME_LENGTH,
+        description="Full name of the user",
+        examples=["Shivani Dahiphale"],
     )
 
-    email: EmailStr
+    email: EmailStr = Field(
+        ...,
+        description="User email address",
+        examples=["shivani@example.com"],
+    )
 
     phone: str = Field(
         ...,
         min_length=10,
-        max_length=MAX_PHONE_LENGTH
+        max_length=MAX_PHONE_LENGTH,
+        description="10-digit mobile number",
+        examples=["9876543210"],
     )
 
-    language: str = "English"
+    language: str = Field(
+        default="English",
+        description="Preferred language",
+        examples=["English"],
+    )
 
 
 
@@ -41,7 +53,9 @@ class UserCreate(UserBase):
 
     password: str = Field(
         ...,
-        min_length=8
+        min_length=8,
+        description="Password (minimum 8 characters)",
+        examples=["Password@123"],
     )
 
 
@@ -55,16 +69,24 @@ class UserUpdate(BaseModel):
     full_name: str | None = Field(
         default=None,
         min_length=2,
-        max_length=MAX_NAME_LENGTH
+        max_length=MAX_NAME_LENGTH,
+        description="Updated full name",
+        examples=["Shivani Dahiphale"],
     )
 
     phone: str | None = Field(
         default=None,
         min_length=10,
-        max_length=MAX_PHONE_LENGTH
+        max_length=MAX_PHONE_LENGTH,
+        description="Updated mobile number",
+        examples=["9876543210"],
     )
 
-    language: str | None = None
+    language: str | None = Field(
+        default=None,
+        description="Updated preferred language",
+        examples=["Marathi"],
+    )
 
 
 

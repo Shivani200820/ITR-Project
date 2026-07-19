@@ -24,9 +24,17 @@ router = APIRouter(
 
 @router.post(
     "",
+    summary="Create Department",
+    description="Creates a new complaint department. Only administrators can perform this operation.",
     response_model=ApiResponse[DepartmentResponse],
-
     status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {"description": "Department created successfully"},
+        400: {"description": "Invalid request"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        422: {"description": "Validation error"},
+    },
 )
 def create_department(
     department_data: DepartmentCreate,
@@ -46,7 +54,13 @@ def create_department(
 
 @router.get(
     "",
-    response_model=ApiResponse[list[DepartmentResponse]]
+    summary="Get All Departments",
+    description="Returns the list of all departments.",
+    response_model=ApiResponse[list[DepartmentResponse]],
+    responses={
+        200: {"description": "Departments fetched successfully"},
+        401: {"description": "Unauthorized"},
+    },
 )
 def get_departments(
     db: Session = Depends(get_db),
@@ -64,7 +78,14 @@ def get_departments(
 
 @router.get(
     "/{department_id}",
-    response_model=ApiResponse[DepartmentResponse]
+    summary="Get Department",
+    description="Returns a department using its ID.",
+    response_model=ApiResponse[DepartmentResponse],
+    responses={
+        200: {"description": "Department fetched successfully"},
+        404: {"description": "Department not found"},
+        401: {"description": "Unauthorized"},
+    },
 )
 def get_department(
     department_id: int,
@@ -82,7 +103,17 @@ def get_department(
 
 @router.put(
     "/{department_id}",
-    response_model=ApiResponse[DepartmentResponse])
+    summary="Update Department",
+    description="Updates an existing department. Only administrators can perform this operation.",
+    response_model=ApiResponse[DepartmentResponse],
+    responses={
+        200: {"description": "Department updated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Department not found"},
+        422: {"description": "Validation error"},
+    },
+)
 
 def update_department(
     department_id: int,
@@ -106,7 +137,16 @@ def update_department(
 
 @router.patch(
     "/{department_id}/activate",
-    response_model=ApiResponse[DepartmentResponse])
+    summary="Activate Department",
+    description="Activates a department. Only administrators can perform this operation.",
+    response_model=ApiResponse[DepartmentResponse],
+    responses={
+        200: {"description": "Department activated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Department not found"},
+    },
+)
 def activate_department(
     department_id: int,
     db: Session = Depends(get_db),
@@ -125,7 +165,16 @@ def activate_department(
 
 @router.patch(
     "/{department_id}/deactivate",
-    response_model=ApiResponse[DepartmentResponse])
+    summary="Deactivate Department",
+    description="Deactivates a department. Only administrators can perform this operation.",
+    response_model=ApiResponse[DepartmentResponse],
+    responses={
+        200: {"description": "Department deactivated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Department not found"},
+    },
+)
 def deactivate_department(
     department_id: int,
     db: Session = Depends(get_db),

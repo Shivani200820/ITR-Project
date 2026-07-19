@@ -19,7 +19,14 @@ router = APIRouter(
 
 @router.get(
     "/citizen-analytics",
-    response_model=ApiResponse[dict]
+    summary="Get Citizen Analytics",
+    description="Returns analytics and statistics related to citizens for the admin dashboard.",
+    response_model=ApiResponse[dict],
+    responses={
+        200: {"description": "Citizen analytics fetched successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+    },
 )
 def citizen_analytics(
     db: Session = Depends(get_db),

@@ -82,11 +82,23 @@ limiter = Limiter(
 
 # Create FastAPI application
 app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
-    description="AI Powered Smart Civic Complaint & Resolution Platform",
-    lifespan=lifespan,
+    title="CivicAI Backend API",
+    version="1.0.0",
 
+description="""
+AI Powered Smart Civic Complaint & Resolution Platform.
+
+This API enables citizens to register civic complaints, officers to manage complaint resolution, and administrators to monitor analytics and system performance.
+""".strip(),
+
+    contact={
+        "name": "CivicAI Development Team",
+        "email": "team@civicai.com",
+    },
+    license_info={
+        "name": "MIT License",
+    },
+    lifespan=lifespan,
 )
 
 app.state.limiter = limiter

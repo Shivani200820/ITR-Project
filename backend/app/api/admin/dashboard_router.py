@@ -15,7 +15,14 @@ router = APIRouter(
 
 @router.get(
     "/dashboard",
-    response_model=ApiResponse[dict]
+    summary="Get Admin Dashboard",
+    description="Returns the complete admin dashboard including statistics, analytics, charts, and recent activity.",
+    response_model=ApiResponse[dict],
+    responses={
+        200: {"description": "Dashboard fetched successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+    },
 )
 def dashboard(
     db: Session = Depends(get_db),

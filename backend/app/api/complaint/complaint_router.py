@@ -33,8 +33,16 @@ router = APIRouter(
 
 @router.post(
     "",
+    summary="Create Complaint",
+    description="Creates a new civic complaint for the authenticated citizen.",
     response_model=ApiResponse[ComplaintResponse],
     status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {"description": "Complaint created successfully"},
+        400: {"description": "Invalid complaint data"},
+        401: {"description": "Unauthorized"},
+        422: {"description": "Validation error"},
+    },
 )
 def create_complaint(
     complaint: ComplaintCreate,
@@ -55,8 +63,14 @@ def create_complaint(
 
 @router.get(
     "/me",
-    response_model=ApiResponse[list[ComplaintResponse]]
-    )
+    summary="Get My Complaints",
+    description="Returns all complaints created by the currently authenticated citizen.",
+    response_model=ApiResponse[list[ComplaintResponse]],
+    responses={
+        200: {"description": "Complaints fetched successfully"},
+        401: {"description": "Unauthorized"},
+    },
+)
 def my_complaints(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -74,7 +88,13 @@ def my_complaints(
 
 @router.get(
     "/number/{complaint_number}",
-    response_model=ApiResponse[ComplaintResponse]
+    summary="Get Complaint by Number",
+    description="Returns complaint details using the complaint number.",
+    response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Complaint fetched successfully"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def get_complaint_by_number(
     complaint_number: str,
@@ -94,7 +114,13 @@ def get_complaint_by_number(
 
 @router.get(
     "/{complaint_id}",
-    response_model=ApiResponse[ComplaintResponse]
+    summary="Get Complaint by ID",
+    description="Returns complaint details using the complaint ID.",
+    response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Complaint fetched successfully"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def get_complaint(
     complaint_id: int,
@@ -116,7 +142,12 @@ def get_complaint(
 
 @router.get(
     "",
-    response_model=ApiResponse[list[ComplaintResponse]]
+    summary="List Complaints",
+    description="Returns a paginated list of complaints.",
+    response_model=ApiResponse[list[ComplaintResponse]],
+    responses={
+        200: {"description": "Complaints fetched successfully"},
+    },
 )
 def list_complaints(
     page: int = Query(1, ge=1),
@@ -138,7 +169,14 @@ def list_complaints(
 
 @router.patch(
     "/{complaint_id}",
-    response_model=ApiResponse[ComplaintResponse]
+    summary="Update Complaint",
+    description="Allows a citizen to update their complaint before processing.",
+    response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Complaint updated successfully"},
+        403: {"description": "Not allowed to update this complaint"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def update_complaint(
     complaint_id: int,
@@ -161,8 +199,14 @@ def update_complaint(
 
 @router.delete(
     "/{complaint_id}",
+    summary="Delete Complaint",
+    description="Deletes a complaint if permitted.",
     response_model=ApiResponse[None],
     status_code=status.HTTP_200_OK,
+    responses={
+        200: {"description": "Complaint deleted successfully"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def delete_complaint(
     complaint_id: int,
@@ -182,7 +226,13 @@ def delete_complaint(
 
 @router.post(
     "/{complaint_id}/support",
-    response_model=ApiResponse[ComplaintSupportResponse]
+    summary="Support Complaint",
+    description="Allows a citizen to support an existing complaint.",
+    response_model=ApiResponse[ComplaintSupportResponse],
+    responses={
+        200: {"description": "Complaint supported successfully"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def support_complaint(
     complaint_id: int,
@@ -203,7 +253,13 @@ def support_complaint(
 
 @router.patch(
     "/{complaint_id}/confirm",
-    response_model=ApiResponse[ComplaintResponse]
+    summary="Citizen Confirmation",
+    description="Allows the citizen to confirm or reject the complaint resolution.",
+    response_model=ApiResponse[ComplaintResponse],
+    responses={
+        200: {"description": "Citizen confirmation updated successfully"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def citizen_confirmation(
     complaint_id: int,
@@ -226,8 +282,13 @@ def citizen_confirmation(
 
 @router.get(
     "/{complaint_id}/timeline",
-    response_model=ApiResponse[list]
-
+    summary="Complaint Timeline",
+    description="Returns the complete history of a complaint.",
+    response_model=ApiResponse[list],
+    responses={
+        200: {"description": "Complaint timeline fetched successfully"},
+        404: {"description": "Complaint not found"},
+    },
 )
 def complaint_timeline(
     complaint_id: int,

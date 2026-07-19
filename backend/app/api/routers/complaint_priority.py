@@ -30,9 +30,17 @@ router = APIRouter(
 
 @router.post(
     "",
-
+    summary="Create Complaint Priority",
+    description="Creates a new complaint priority. Only administrators can perform this operation.",
     response_model=ApiResponse[ComplaintPriorityResponse],
     status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {"description": "Complaint priority created successfully"},
+        400: {"description": "Invalid request"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        422: {"description": "Validation error"},
+    },
 )
 def create_priority(
     priority_data: ComplaintPriorityCreate,
@@ -54,7 +62,13 @@ def create_priority(
 
 @router.get(
     "",
-    response_model=ApiResponse[list[ComplaintPriorityResponse]]
+    summary="Get All Complaint Priorities",
+    description="Returns the list of all complaint priorities.",
+    response_model=ApiResponse[list[ComplaintPriorityResponse]],
+    responses={
+        200: {"description": "Complaint priorities fetched successfully"},
+        401: {"description": "Unauthorized"},
+    },
 )
 def get_priorities(
     db: Session = Depends(get_db),
@@ -73,7 +87,14 @@ def get_priorities(
 
 @router.get(
     "/{priority_id}",
-    response_model=ApiResponse[ComplaintPriorityResponse]
+    summary="Get Complaint Priority",
+    description="Returns a complaint priority using its ID.",
+    response_model=ApiResponse[ComplaintPriorityResponse],
+    responses={
+        200: {"description": "Complaint priority fetched successfully"},
+        401: {"description": "Unauthorized"},
+        404: {"description": "Complaint priority not found"},
+    },
 )
 def get_priority(
     priority_id: int,
@@ -93,7 +114,16 @@ def get_priority(
 
 @router.put(
     "/{priority_id}",
-    response_model=ApiResponse[ComplaintPriorityResponse]
+    summary="Update Complaint Priority",
+    description="Updates an existing complaint priority. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintPriorityResponse],
+    responses={
+        200: {"description": "Complaint priority updated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Complaint priority not found"},
+        422: {"description": "Validation error"},
+    },
 )
 def update_priority(
     priority_id: int,
@@ -116,10 +146,17 @@ def update_priority(
         data=priority,
     )
 
-
 @router.patch(
     "/{priority_id}/activate",
-    response_model=ApiResponse[ComplaintPriorityResponse]
+    summary="Activate Complaint Priority",
+    description="Activates a complaint priority. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintPriorityResponse],
+    responses={
+        200: {"description": "Complaint priority activated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Complaint priority not found"},
+    },
 )
 def activate_priority(
     priority_id: int,
@@ -141,7 +178,15 @@ def activate_priority(
 
 @router.patch(
     "/{priority_id}/deactivate",
-    response_model=ApiResponse[ComplaintPriorityResponse]
+    summary="Deactivate Complaint Priority",
+    description="Deactivates a complaint priority. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintPriorityResponse],
+    responses={
+        200: {"description": "Complaint priority deactivated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Complaint priority not found"},
+    },
 )
 def deactivate_priority(
     priority_id: int,

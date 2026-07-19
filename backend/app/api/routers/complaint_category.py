@@ -26,8 +26,17 @@ router = APIRouter(
 
 @router.post(
     "",
+    summary="Create Complaint Category",
+    description="Creates a new complaint category. Only administrators can perform this operation.",
     response_model=ApiResponse[ComplaintCategoryResponse],
     status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {"description": "Category created successfully"},
+        400: {"description": "Invalid request"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        422: {"description": "Validation error"},
+    },
 )
 def create_category(
     category_data: ComplaintCategoryCreate,
@@ -47,7 +56,13 @@ def create_category(
 
 @router.get(
     "",
+    summary="Get All Complaint Categories",
+    description="Returns the list of all complaint categories.",
     response_model=ApiResponse[list[ComplaintCategoryResponse]],
+    responses={
+        200: {"description": "Categories fetched successfully"},
+        401: {"description": "Unauthorized"},
+    },
 )
 def get_categories(
     db: Session = Depends(get_db),
@@ -61,10 +76,16 @@ def get_categories(
         message="Categories fetched successfully.",
         data=categories,
     )
-
 @router.get(
     "/{category_id}",
-    response_model=ApiResponse[ComplaintCategoryResponse]
+    summary="Get Complaint Category",
+    description="Returns a complaint category using its ID.",
+    response_model=ApiResponse[ComplaintCategoryResponse],
+    responses={
+        200: {"description": "Category fetched successfully"},
+        401: {"description": "Unauthorized"},
+        404: {"description": "Category not found"},
+    },
 )
 def get_category(
     category_id: int,
@@ -82,7 +103,16 @@ def get_category(
 
 @router.put(
     "/{category_id}",
+    summary="Update Complaint Category",
+    description="Updates an existing complaint category. Only administrators can perform this operation.",
     response_model=ApiResponse[ComplaintCategoryResponse],
+    responses={
+        200: {"description": "Category updated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Category not found"},
+        422: {"description": "Validation error"},
+    },
 )
 def update_category(
     category_id: int,
@@ -107,7 +137,15 @@ def update_category(
 
 @router.patch(
     "/{category_id}/activate",
-    response_model=ApiResponse[ComplaintCategoryResponse]
+    summary="Activate Complaint Category",
+    description="Activates a complaint category. Only administrators can perform this operation.",
+    response_model=ApiResponse[ComplaintCategoryResponse],
+    responses={
+        200: {"description": "Category activated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Category not found"},
+    },
 )
 def activate_category(
     category_id: int,
@@ -127,8 +165,15 @@ def activate_category(
 
 @router.patch(
     "/{category_id}/deactivate",
-    
+    summary="Deactivate Complaint Category",
+    description="Deactivates a complaint category. Only administrators can perform this operation.",
     response_model=ApiResponse[ComplaintCategoryResponse],
+    responses={
+        200: {"description": "Category deactivated successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+        404: {"description": "Category not found"},
+    },
 )
 def deactivate_category(
     category_id: int,

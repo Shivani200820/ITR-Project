@@ -4,54 +4,69 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class ComplaintCreate(BaseModel):
+
     title: str = Field(
         ...,
         min_length=5,
         max_length=255,
-        description="Complaint title",
+        description="Short title of the complaint.",
+        examples=["Large pothole on Main Road"],
     )
 
     description: str = Field(
         ...,
         min_length=10,
         max_length=5000,
-        description="Complaint description",
+        description="Detailed description of the complaint.",
+        examples=["There is a large pothole near the bus stop causing traffic issues."],
     )
 
     latitude: float = Field(
         ...,
         ge=-90,
         le=90,
-        description="Latitude",
+        description="Latitude of the complaint location.",
+        examples=[18.5913],
     )
 
     longitude: float = Field(
         ...,
         ge=-180,
         le=180,
-        description="Longitude",
+        description="Longitude of the complaint location.",
+        examples=[73.7389],
     )
 
     voice_note_url: Optional[str] = Field(
         default=None,
         max_length=500,
+        description="Optional voice note URL uploaded by the citizen.",
+        examples=["https://example.com/audio.mp3"],
     )
 
     final_category_id: int | None = Field(
         default=None,
+        description="Final category selected by the citizen.",
+        examples=[1],
     )
 
     final_department_id: int | None = Field(
         default=None,
+        description="Final department selected by the citizen.",
+        examples=[2],
     )
 
     final_priority_id: int | None = Field(
         default=None,
+        description="Final priority selected by the citizen.",
+        examples=[1],
     )
 
     final_description: str | None = Field(
         default=None,
         max_length=5000,
+        description="Final complaint description after citizen confirmation.",
+        examples=["Large pothole on Main Road near the traffic signal."],
     )
 
     model_config = ConfigDict(

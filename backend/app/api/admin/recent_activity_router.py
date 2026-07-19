@@ -18,7 +18,14 @@ router = APIRouter(
 
 @router.get(
     "/dashboard/recent-activities",
-    response_model=ApiResponse[dict]
+    summary="Get Recent Activities",
+    description="Returns the latest complaint and user activities displayed on the admin dashboard.",
+    response_model=ApiResponse[dict],
+    responses={
+        200: {"description": "Recent activities fetched successfully"},
+        401: {"description": "Unauthorized"},
+        403: {"description": "Admin access required"},
+    },
 )
 def recent_activities(
     db: Session = Depends(get_db),
