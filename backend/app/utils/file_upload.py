@@ -31,6 +31,25 @@ class FileUploadUtility:
         # Read file
         content = await file.read()
 
+        if not content:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Empty file is not allowed."
+            )
+        
+        allowed_types = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+        ]
+
+        if file.content_type not in allowed_types:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Only JPEG, PNG and WebP images are allowed."
+            )
+
+
         # Validate size
         if len(content) > settings.max_image_size:
             raise HTTPException(

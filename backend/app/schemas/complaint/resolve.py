@@ -8,4 +8,7 @@ class ComplaintResolveRequest(BaseModel):
         max_length=1000,
     )
 
-    resolution_image_url: str | None = None
+    resolution_image_url: str | None = Field(
+        default=None,
+        max_length=500,
+    )

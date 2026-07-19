@@ -17,6 +17,7 @@ class UserBase(BaseModel):
 
     full_name: str = Field(
         ...,
+        min_length=2,
         max_length=MAX_NAME_LENGTH
     )
 
@@ -24,6 +25,7 @@ class UserBase(BaseModel):
 
     phone: str = Field(
         ...,
+        min_length=10,
         max_length=MAX_PHONE_LENGTH
     )
 
@@ -50,9 +52,17 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
 
-    full_name: str | None = None
+    full_name: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=MAX_NAME_LENGTH
+    )
 
-    phone: str | None = None
+    phone: str | None = Field(
+        default=None,
+        min_length=10,
+        max_length=MAX_PHONE_LENGTH
+    )
 
     language: str | None = None
 
