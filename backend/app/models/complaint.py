@@ -38,36 +38,42 @@ class Complaint(Base, TimestampMixin):
         Integer,
         ForeignKey("users.id"),
         nullable=False,
+        index=True,
     )
 
     department_id = Column(
         Integer,
         ForeignKey("departments.id"),
         nullable=False,
+        index=True,
     )
 
     category_id = Column(
         Integer,
         ForeignKey("complaint_categories.id"),
         nullable=False,
+        index=True,
     )
 
     priority_id = Column(
         Integer,
         ForeignKey("complaint_priorities.id"),
         nullable=False,
+        index=True,
     )
 
     status_id = Column(
         Integer,
         ForeignKey("complaint_statuses.id"),
         nullable=False,
+        index=True,
     )
 
     assigned_officer_id = Column(
         Integer,
         ForeignKey("users.id"),
         nullable=True,
+        index=True,
     )
 
     title = Column(
