@@ -48,7 +48,7 @@ class CloudinaryUploadUtility:
                 )
 
             # Size
-            if len(content) > settings.max_image_size:
+            if len(content) > settings.MAX_IMAGE_SIZE:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Image exceeds maximum size.",

@@ -19,7 +19,7 @@ class FileUploadUtility:
 
         allowed_extensions = [
             ext.strip().lower()
-            for ext in settings.allowed_image_extensions.split(",")
+            for ext in settings.ALLOWED_IMAGE_EXTENSIONS.split(",")
         ]
 
         if extension not in allowed_extensions:
@@ -51,7 +51,7 @@ class FileUploadUtility:
 
 
         # Validate size
-        if len(content) > settings.max_image_size:
+        if len(content) > settings.MAX_IMAGE_SIZE:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Image exceeds maximum size.",
@@ -60,7 +60,7 @@ class FileUploadUtility:
         # Generate unique filename
         filename = f"{uuid.uuid4()}.{extension}"
 
-        upload_dir = settings.upload_directory
+        upload_dir = settings.UPLOAD_DIRECTORY
 
         os.makedirs(upload_dir, exist_ok=True)
 

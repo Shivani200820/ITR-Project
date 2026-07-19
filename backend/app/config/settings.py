@@ -8,7 +8,10 @@ class Settings(BaseSettings):
     APP_NAME: str
     APP_VERSION: str
 
-    DEBUG: bool
+    ENVIRONMENT: str = "production"
+
+
+    DEBUG: bool = False
 
     HOST: str
     PORT: int
@@ -23,19 +26,20 @@ class Settings(BaseSettings):
 
     GROQ_MODEL: str
 
-    storage_driver: str = "local"
+    STORAGE_DRIVER: str = "local"
 
-    upload_directory: str = "uploads"
+    UPLOAD_DIRECTORY: str = "uploads"
 
-    max_image_size: int = 5242880
+    MAX_IMAGE_SIZE: int = 5242880
 
-    allowed_image_extensions: str = "jpg,jpeg,png,webp"
+    ALLOWED_IMAGE_EXTENSIONS: str = "jpg,jpeg,png,webp"
 
-    cloudinary_cloud_name: str = ""
+    CLOUDINARY_CLOUD_NAME: str = ""
 
-    cloudinary_api_key: str = ""
+    CLOUDINARY_API_KEY: str = ""
 
-    cloudinary_api_secret: str = ""
+    CLOUDINARY_API_SECRET: str = ""
+
 
     model_config = SettingsConfigDict(
         env_file=".env",

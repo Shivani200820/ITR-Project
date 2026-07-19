@@ -15,7 +15,7 @@ class UploadService:
         file: UploadFile,
     ) -> str:
 
-        if settings.storage_driver.lower() == "cloudinary":
+        if settings.STORAGE_DRIVER == "cloudinary":
             return await CloudinaryUploadUtility.upload_image(file)
 
         return await FileUploadUtility.save_image(file)
