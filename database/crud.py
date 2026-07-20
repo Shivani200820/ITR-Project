@@ -40,6 +40,7 @@ def update_complaint_status(db: Session, complaint_id: int, new_status: str):
 
     return complaint
 
+
 def delete_complaint(db: Session, complaint_id: int):
     complaint = (
         db.query(Complaint)
@@ -71,10 +72,9 @@ def update_ai_analysis(db, complaint, analysis):
     db.refresh(complaint)
 
     return complaint
-from database.models import Complaint
 
-def get_all_complaints(db):
-    return db.query(Complaint).all()
+
+
 def update_duplicate_info(db, complaint, result):
     complaint.is_duplicate = result["duplicate"].lower() == "true"
     complaint.duplicate_of = int(result["matched_complaint_id"])
