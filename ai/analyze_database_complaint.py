@@ -1,14 +1,12 @@
 import json
 from database.database import SessionLocal
 from database.crud import get_latest_complaint, update_ai_analysis
-from database.crud import get_complaint_by_id, update_ai_analysis
 from ai.groq_client import client
 
 db = SessionLocal()
 
 try:
-    complaint_id = 5
-    complaint = get_complaint_by_id(db, complaint_id)
+    complaint = get_latest_complaint(db)
 
     if complaint is None:
         print("No complaints found.")
