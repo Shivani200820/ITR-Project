@@ -10,98 +10,113 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 import { useNavigate } from "react-router-dom";
+
+
 const roles = [
   {
     title: "Citizen",
     icon: <PersonIcon sx={{ fontSize: 50 }} color="primary" />,
-    path: "/login/citizen",
+    path: "/auth/login/citizen",
   },
   {
     title: "Officer",
     icon: <EngineeringIcon sx={{ fontSize: 50 }} color="warning" />,
-    path: "/login/officer",
+    path: "/auth/login/officer",
   },
   {
     title: "Admin",
     icon: <AdminPanelSettingsIcon sx={{ fontSize: 50 }} color="error" />,
-    path: "/login/admin",
+    path: "/auth/login/admin",
   },
 ];
+
+
 function RoleSelection() {
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-return (
 
-<Box>
+  return (
 
-<Typography
-variant="h4"
-fontWeight="bold"
-textAlign="center"
-mb={5}
->
-Choose Login Type
-</Typography>
+    <Box>
 
-<Grid container spacing={3}>
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        textAlign="center"
+        mb={5}
+      >
+        Choose Login Type
+      </Typography>
 
-{roles.map((role)=>(
 
-<Grid item xs={12} key={role.title}>
+      <Grid container spacing={3}>
 
-<Paper
 
-onClick={()=>navigate(role.path)}
+        {roles.map((role)=>(
 
-sx={{
+          <Grid
+            item
+            xs={12}
+            key={role.title}
+          >
 
-p:4,
+            <Paper
 
-cursor:"pointer",
+              onClick={() => navigate(role.path)}
 
-textAlign:"center",
+              sx={{
 
-borderRadius:4,
+                p:4,
 
-transition:"0.3s",
+                cursor:"pointer",
 
-"&:hover":{
+                textAlign:"center",
 
-transform:"translateY(-8px)",
+                borderRadius:4,
 
-background:"#E3F2FD"
+                transition:"0.3s",
+
+                "&:hover":{
+                  transform:"translateY(-8px)",
+                  background:"#E3F2FD"
+                }
+
+              }}
+
+            >
+
+              {role.icon}
+
+
+              <Typography
+                mt={2}
+                fontWeight="bold"
+                variant="h6"
+              >
+
+                {role.title}
+
+              </Typography>
+
+
+            </Paper>
+
+
+          </Grid>
+
+
+        ))}
+
+
+      </Grid>
+
+
+    </Box>
+
+  );
 
 }
 
-}}
 
->
-
-{role.icon}
-
-<Typography
-mt={2}
-fontWeight="bold"
-variant="h6"
->
-
-{role.title}
-
-</Typography>
-
-</Paper>
-
-</Grid>
-
-))}
-
-</Grid>
-
-</Box>
-
-)
-
-}
-
-export default RoleSelection
+export default RoleSelection;

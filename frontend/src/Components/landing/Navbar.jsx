@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,227 +11,422 @@ import {
   ListItemText,
   Box,
   Stack,
+  Button,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
 
-// Navigation Items
+import { Link, useNavigate } from "react-router-dom";
+
+
 const navItems = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Features", path: "/features" },
-  { name: "Departments", path: "/departments" },
-  { name: "Contact", path: "/contact" },
+  {
+    name: "Home",
+    path: "/",
+  },
+  {
+    name: "About",
+    path: "#about",
+  },
+  {
+    name: "Features",
+    path: "#features",
+  },
+  {
+    name: "Departments",
+    path: "#departments",
+  },
+  {
+    name: "Contact",
+    path: "#contact",
+  },
 ];
 
+
 function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+
+  }, []);
+
   const [open, setOpen] = useState(false);
 
+  const navigate = useNavigate();
+
+
   const toggleDrawer = () => {
-    setOpen((prev) => !prev);
+    setOpen(!open);
   };
 
+
   return (
+
     <>
-      {/* Navbar */}
       <AppBar
-        position="sticky"
-        elevation={2}
+        position="fixed"
+        color="inherit"
+        elevation={3}
         sx={{
-          backgroundColor: "#fff",
+          borderRadius: "0 0 20px 20px",
+          background: "#ffffff"
         }}
       >
+
         <Toolbar>
 
+
           {/* Logo */}
+
           <Typography
-            variant="h5"
+
             component={Link}
+
             to="/"
+
+            variant="h5"
+
+            fontWeight="bold"
+
+            color="primary"
+
             sx={{
               flexGrow: 1,
-              color: "#1565C0",
-              fontWeight: "bold",
-              textDecoration: "none",
+              textDecoration: "none"
             }}
+
           >
             CivicAI
+
           </Typography>
 
+
+
           {/* Desktop Menu */}
+
           <Stack
+
             direction="row"
-            spacing={4}
+
+            spacing={3}
+
+            alignItems="center"
+
             sx={{
               display: {
                 xs: "none",
-                md: "flex",
-              },
-              alignItems: "center",
+                md: "flex"
+              }
             }}
-          >
-            {navItems.map((item) => (
-              <Typography
-                key={item.name}
-                component={Link}
-                to={item.path}
-                sx={{
-                  color: "#374151",
-                  textDecoration: "none",
-                  fontWeight: 600,
-                  fontSize: 16,
-                  transition: "0.3s",
 
-                  "&:hover": {
-                    color: "#1565C0",
-                  },
+          >
+
+
+            {
+              navItems.map((item) => (
+
+                item.path.startsWith("#") ?
+
+
+                  <Typography
+
+                    key={item.name}
+
+                    component="a"
+
+                    href={item.path}
+
+                    sx={{
+
+                      textDecoration: "none",
+
+                      color: "#374151",
+
+                      fontWeight: 600,
+
+                      cursor: "pointer",
+
+                      "&:hover": {
+                        color: "#1565C0"
+                      }
+
+                    }}
+
+                  >
+
+                    {item.name}
+
+                  </Typography>
+
+
+                  :
+
+
+                  <Typography
+
+                    key={item.name}
+
+                    component={Link}
+
+                    to={item.path}
+
+                    sx={{
+
+                      textDecoration: "none",
+
+                      color: "#374151",
+
+                      fontWeight: 600,
+
+                      "&:hover": {
+                        color: "#1565C0"
+                      }
+
+                    }}
+
+                  >
+
+                    {item.name}
+
+                  </Typography>
+
+
+              ))
+            }
+
+
+
+            {/* Login Button */}
+
+
+            {!isLoggedIn ? (
+              <>
+                {/* Login Button */}
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderRadius: 3,
+                    textTransform: "none",
+                  }}
+                  onClick={() => navigate("/auth/login/citizen")}
+                >
+                  Login
+                </Button>
+
+                {/* Register Complaint Button */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
+                    textTransform: "none",
+                    fontWeight: 600,
+                  }}
+                  onClick={() => navigate("/auth/register/citizen")}
+                >
+                  Register Complaint
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="contained"
+                color="error"
+                sx={{
+                  borderRadius: 3,
+                  px: 3,
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  setIsLoggedIn(false);
+                  navigate("/");
                 }}
               >
-                {item.name}
-              </Typography>
-            ))}
+                Logout
+              </Button>
+            )}
 
-            {/* Login */}
-            <Typography
-              component={Link}
-              to="/auth/login/citizen"
-              sx={{
-                color: "#374151",
-                textDecoration: "none",
-                fontWeight: 600,
-                fontSize: 16,
-
-                "&:hover": {
-                  color: "#1565C0",
-                },
-              }}
-            >
-              Login
-            </Typography>
-
-            {/* Signup */}
-            <Typography
-              component={Link}
-              to="/auth/register"
-              sx={{
-                color: "#374151",
-                textDecoration: "none",
-                fontWeight: 600,
-                fontSize: 16,
-
-                "&:hover": {
-                  color: "#1565C0",
-                },
-              }}
-            >
-              Signup
-            </Typography>
           </Stack>
 
+
+
+
           {/* Mobile Menu Button */}
+
+
           <IconButton
+
             onClick={toggleDrawer}
+
             sx={{
+
               display: {
                 xs: "block",
-                md: "none",
-              },
+                md: "none"
+              }
+
             }}
+
           >
+
             <MenuIcon />
+
           </IconButton>
+
+
         </Toolbar>
+
       </AppBar>
 
+
+
+
+
       {/* Mobile Drawer */}
+
+
       <Drawer
+
         anchor="right"
+
         open={open}
-        onClose={toggleDrawer}
+
+        onClose={() => setOpen(false)}
+
       >
-        <Box sx={{ width: 250 }}>
+
+
+        <Box width={250}>
+
+
           <List>
 
-            {navItems.map((item) => (
-              <ListItem
-                key={item.name}
-                disablePadding
-              >
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  onClick={toggleDrawer}
-                  sx={{
-                    justifyContent: "center",
-                    py: 1.5,
-                  }}
+
+            {
+              navItems.map((item) => (
+
+
+                <ListItem
+
+                  key={item.name}
+
+                  disablePadding
+
                 >
-                  <ListItemText
-                    primary={item.name}
-                    primaryTypographyProps={{
-                      sx: {
-                        textAlign: "center",
-                        fontWeight: 600,
-                        color: "#374151",
-                      },
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
 
-            {/* Login */}
-            <ListItem disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/auth/login/citizen"
-                onClick={toggleDrawer}
-                sx={{
-                  justifyContent: "center",
-                }}
-              >
-                <ListItemText
-                  primary="Login"
-                  primaryTypographyProps={{
-                    sx: {
-                      textAlign: "center",
-                      fontWeight: 600,
-                      color: "#374151",
-                    },
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
 
-            {/* Signup */}
-            <ListItem disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/auth/register"
-                onClick={toggleDrawer}
-                sx={{
-                  justifyContent: "center",
-                }}
-              >
-                <ListItemText
-                  primary="Signup"
-                  primaryTypographyProps={{
-                    sx: {
-                      textAlign: "center",
-                      fontWeight: 600,
-                      color: "#374151",
-                    },
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
+                  <ListItemButton
+
+
+                    component={
+
+                      item.path.startsWith("#")
+
+                        ?
+
+                        "a"
+
+                        :
+
+                        Link
+
+                    }
+
+
+                    href={
+
+                      item.path.startsWith("#")
+
+                        ?
+
+                        item.path
+
+                        :
+
+                        undefined
+
+                    }
+
+
+                    to={
+
+                      item.path.startsWith("#")
+
+                        ?
+
+                        undefined
+
+                        :
+
+                        item.path
+
+                    }
+
+
+                    onClick={() => setOpen(false)}
+
+
+                  >
+
+
+                    <ListItemText
+
+                      primary={item.name}
+
+                    />
+
+
+                  </ListItemButton>
+
+
+                </ListItem>
+
+
+              ))
+            }
+
 
           </List>
+
+
+          <Box p={2}>
+
+
+            <Button
+
+              fullWidth
+
+              variant="contained"
+
+              onClick={() => navigate("/auth/register/citizen")}
+
+            >
+
+              Register Complaint
+
+            </Button>
+
+
+          </Box>
+
+
         </Box>
+
+
       </Drawer>
+
+
     </>
+
   );
 }
+
 
 export default Navbar;

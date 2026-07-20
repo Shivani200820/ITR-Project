@@ -10,17 +10,18 @@ import {
   IconButton,
   FormControlLabel,
   Checkbox,
-  Link,
   Stack,
   Alert,
 } from "@mui/material";
+
+import { Link } from "react-router-dom";
 
 import { LoadingButton } from "@mui/lab";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-function LoginForm() {
+function LoginForm({ role }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
@@ -128,10 +129,7 @@ function LoginForm() {
             label="Remember Me"
           />
 
-          <Link
-            href="/forgot-password"
-            underline="hover"
-          >
+          <Link to="/auth/forgot-password">
             Forgot Password?
           </Link>
         </Stack>
@@ -157,10 +155,7 @@ function LoginForm() {
         >
           Don't have an account?
 
-          <Link
-            href="/register"
-            ml={1}
-          >
+          <Link to="/auth/register">
             Register
           </Link>
         </Typography>

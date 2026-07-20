@@ -1,17 +1,60 @@
+import { useParams } from "react-router-dom";
+
 import AuthHeader from "../../components/auth/AuthHeader";
 import LoginForm from "../../components/auth/LoginForm";
-import { useParams } from "react-router-dom";
+
+import {
+  Box,
+  Container,
+} from "@mui/material";
 
 
 function Login() {
-  const { role } = useParams();
+
+
+  const { role = "citizen" } = useParams();
+
+
 
   return (
-    <>
-      <AuthHeader role={role} />
-      <LoginForm />
-    </>
+
+    <Box
+
+      sx={{
+
+        minHeight:"100vh",
+
+        display:"flex",
+
+        alignItems:"center",
+
+        background:
+          "linear-gradient(135deg,#E3F2FD,#FFFFFF)",
+
+        py:5
+
+      }}
+
+    >
+
+
+      <Container maxWidth="sm">
+
+
+        <AuthHeader role={role} />
+
+
+        <LoginForm role={role} />
+
+
+      </Container>
+
+
+    </Box>
+
   );
+
 }
+
 
 export default Login;

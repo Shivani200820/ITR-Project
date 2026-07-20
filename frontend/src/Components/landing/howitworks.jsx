@@ -4,49 +4,66 @@ import {
   Typography,
   Grid,
   Paper,
+  Stack,
 } from "@mui/material";
 
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 
 const steps = [
   {
-    title: "Upload Complaint",
-    icon: <CloudUploadIcon fontSize="large" color="primary" />,
+    title: "1. Submit Complaint",
+
+    description:
+      "Upload image, add voice/text details and capture your location easily.",
+
+    icon: <UploadFileIcon fontSize="large" color="primary" />,
   },
+
   {
-    title: "AI Analysis",
+    title: "2. AI Analysis",
+
+    description:
+      "AI detects the issue, assigns department and calculates priority.",
+
     icon: <PsychologyIcon fontSize="large" color="secondary" />,
   },
+
   {
-    title: "Assign Department",
-    icon: <AccountBalanceIcon fontSize="large" color="success" />,
-  },
-  {
-    title: "Officer Resolves",
-    icon: <EngineeringIcon fontSize="large" color="warning" />,
-  },
-  {
-    title: "Citizen Feedback",
-    icon: <TaskAltIcon fontSize="large" color="primary" />,
+    title: "3. Resolution Tracking",
+
+    description:
+      "Track complaint progress until the issue is resolved.",
+
+    icon: <CheckCircleIcon fontSize="large" color="success" />,
   },
 ];
 
+
 function HowItWorks() {
+
   return (
-    <Box id="how-it-works" sx={{ py: 10 }}>
+
+    <Box
+      sx={{
+        py:10,
+      }}
+    >
+
       <Container maxWidth="lg">
+
 
         <Typography
           align="center"
           color="primary"
           fontWeight="bold"
         >
-          HOW CIVICAI WORKS
+          HOW IT WORKS
         </Typography>
+
+
 
         <Typography
           variant="h3"
@@ -55,46 +72,133 @@ function HowItWorks() {
           mt={2}
           mb={7}
         >
-          Simple, Smart & AI Driven Workflow
+          Simple Process, Smart Resolution
         </Typography>
 
-        <Grid container spacing={4} justifyContent="center">
-          {steps.map((step) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={2}
-              key={step.title}
-            >
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 4,
-                  textAlign: "center",
-                  borderRadius: 4,
-                  transition: "0.3s",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              >
-                {step.icon}
 
-                <Typography
-                  mt={2}
-                  fontWeight="bold"
+
+        <Grid
+          container
+          spacing={4}
+        >
+
+
+          {steps.map((step)=>(
+
+
+            <Grid
+
+              key={step.title}
+
+              size={{
+                xs:12,
+                md:4
+              }}
+
+            >
+
+
+              <Paper
+
+                elevation={4}
+
+                sx={{
+
+                  p:4,
+
+                  height:"100%",
+
+                  textAlign:"center",
+
+                  borderRadius:4,
+
+                  transition:"0.3s",
+
+                  "&:hover":{
+
+                    transform:"translateY(-8px)"
+
+                  }
+
+                }}
+
+              >
+
+
+
+                <Stack
+
+                  spacing={2}
+
+                  sx={{
+
+                    alignItems:"center"
+
+                  }}
+
                 >
-                  {step.title}
-                </Typography>
+
+
+
+                  {step.icon}
+
+
+
+                  <Typography
+
+                    variant="h6"
+
+                    fontWeight="bold"
+
+                  >
+
+                    {step.title}
+
+                  </Typography>
+
+
+
+
+                  <Typography
+
+                    color="text.secondary"
+
+                  >
+
+                    {step.description}
+
+                  </Typography>
+
+
+
+                </Stack>
+
+
+
               </Paper>
+
+
+
             </Grid>
+
+
+
           ))}
+
+
+
         </Grid>
 
+
       </Container>
+
+
     </Box>
+
+
   );
+
 }
+
 
 export default HowItWorks;

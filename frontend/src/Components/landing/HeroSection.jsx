@@ -1,36 +1,64 @@
 import {
   Box,
   Container,
-  Grid,
   Typography,
   Button,
   Stack,
   Paper,
+  Grid,
 } from "@mui/material";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import { Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
+
 import heroImage from "../../assets/images/hero.png";
 
 function HeroSection() {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
         background: "linear-gradient(135deg,#E3F2FD,#FFFFFF)",
-        minHeight: "90vh",
+        minHeight: "calc(100vh - 70px)",
         display: "flex",
         alignItems: "center",
       }}
     >
-      <Container maxWidth="lg">
-        <Grid container spacing={5} alignItems="center">
+      <Container
+        maxWidth="lg"
+        sx={{
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Grid
+          container
+          spacing={5}
+          sx={{
+            width: "100%",
+            alignItems: "center",
+            minHeight: "calc(100vh - 70px)",
+          }}
+        >
+          {/* Left Content */}
 
-          {/* Left Side */}
-
-          <Grid item xs={12} md={6}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
             <Typography
-              variant="h2"
+              variant="h3"
               fontWeight="bold"
               color="primary"
             >
@@ -48,26 +76,17 @@ function HeroSection() {
             </Typography>
 
             <Stack
-              direction="row"
+              direction={{
+                xs: "column",
+                sm: "row",
+              }}
               spacing={2}
               mt={4}
+              alignItems={{
+                xs: "stretch",
+                sm: "center",
+              }}
             >
-              <Button
-                variant="contained"
-                size="large"
-                endIcon={<ArrowForwardIcon />}
-                sx={{
-                  borderRadius: 3,
-                  px: 4,
-                  "&:hover": {
-                    transform: "translateY(-3px)",
-                    transition: "0.3s",
-                  },
-                }}
-              >
-                Register Complaint
-              </Button>
-
               <Button
                 variant="outlined"
                 size="large"
@@ -85,7 +104,10 @@ function HeroSection() {
               direction="row"
               spacing={2}
               mt={5}
-              flexWrap="wrap"
+              sx={{
+                flexWrap: "wrap",
+                gap: 2,
+              }}
             >
               <Paper sx={{ p: 2 }}>
                 AI Image Detection
@@ -103,22 +125,28 @@ function HeroSection() {
                 Live Status
               </Paper>
             </Stack>
-
           </Grid>
 
-          {/* Right Side */}
+          {/* Image */}
 
-          <Grid item xs={12} md={6}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <Box
               component="img"
               src={heroImage}
-              alt="Civic AI"
+              alt="CivicAI"
               sx={{
                 width: "100%",
+                maxWidth: 500,
+                mx: "auto",
+                display: "block",
               }}
             />
           </Grid>
-
         </Grid>
       </Container>
     </Box>

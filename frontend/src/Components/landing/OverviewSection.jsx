@@ -7,111 +7,246 @@ import {
   Stack,
 } from "@mui/material";
 
+
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import PublicIcon from "@mui/icons-material/Public";
 
+
 const overviewData = [
+
   {
-    title: "Current Problem",
-    icon: <ReportProblemIcon color="error" />,
+    title:"Current Problem",
+
+    icon:<ReportProblemIcon color="error" fontSize="large"/>,
+
     description:
-      "Citizens often struggle with slow complaint registration, unclear departments, and lack of complaint tracking.",
+      "Citizens often struggle with slow complaint registration, unclear departments, and lack of complaint tracking."
+
   },
+
+
   {
-    title: "AI Powered Solution",
-    icon: <PsychologyIcon color="primary" />,
+    title:"AI Powered Solution",
+
+    icon:<PsychologyIcon color="primary" fontSize="large"/>,
+
     description:
-      "CivicAI uses AI to identify complaint categories, assign departments, prioritize urgency, and simplify the reporting process.",
+      "CivicAI uses AI to identify complaint categories, assign departments, prioritize urgency, and simplify the reporting process."
+
   },
+
+
   {
-    title: "Smart City Benefits",
-    icon: <PublicIcon color="success" />,
+    title:"Smart City Benefits",
+
+    icon:<PublicIcon color="success" fontSize="large"/>,
+
     description:
-      "Improves transparency, accelerates complaint resolution, and strengthens collaboration between citizens and government.",
-  },
+      "Improves transparency, accelerates complaint resolution, and strengthens collaboration between citizens and government."
+
+  }
+
 ];
 
-function OverviewSection() {
+
+
+function OverviewSection(){
+
+
   return (
-    <Box sx={{ py: 10, bgcolor: "#fafafa" }}>
+
+    <Box
+
+      sx={{
+
+        py:10,
+
+        bgcolor:"#FAFAFA"
+
+      }}
+
+    >
+
       <Container maxWidth="lg">
 
+
         <Typography
+
           color="primary"
+
           fontWeight="bold"
+
           align="center"
+
         >
+
           PROJECT OVERVIEW
+
         </Typography>
 
+
+
         <Typography
+
           variant="h3"
+
           align="center"
+
           fontWeight="bold"
+
           mt={2}
+
         >
+
           Building Smarter Cities with Artificial Intelligence
+
         </Typography>
 
+
+
+
         <Typography
+
           align="center"
+
           color="text.secondary"
+
           mt={3}
+
           mb={7}
+
         >
+
           CivicAI helps citizens report civic issues quickly while enabling
           government departments to respond efficiently through AI-powered
           automation.
+
         </Typography>
 
-        <Grid container spacing={4}>
 
-          {overviewData.map((item) => (
 
-            <Grid item xs={12} md={4} key={item.title}>
+
+        <Grid
+
+          container
+
+          spacing={4}
+
+        >
+
+
+
+          {overviewData.map((item)=>(
+
+
+
+            <Grid
+
+              key={item.title}
+
+              size={{
+
+                xs:12,
+
+                md:4
+
+              }}
+
+            >
+
 
               <Paper
+
                 elevation={4}
+
                 sx={{
+
                   p:4,
-                  borderRadius:4,
+
                   height:"100%",
+
+                  borderRadius:4,
+
                   transition:"0.3s",
+
                   "&:hover":{
+
                     transform:"translateY(-10px)"
+
                   }
+
                 }}
+
               >
 
-                <Stack spacing={2}>
+
+
+                <Stack
+
+                  spacing={2}
+
+                >
+
 
                   {item.icon}
 
+
+
                   <Typography
+
                     variant="h6"
+
                     fontWeight="bold"
+
                   >
+
                     {item.title}
+
+
                   </Typography>
 
-                  <Typography color="text.secondary">
+
+
+                  <Typography
+
+                    color="text.secondary"
+
+                  >
+
                     {item.description}
+
+
                   </Typography>
+
+
 
                 </Stack>
 
+
               </Paper>
+
 
             </Grid>
 
+
           ))}
+
+
 
         </Grid>
 
+
+
       </Container>
+
+
     </Box>
+
+
   );
+
 }
+
 
 export default OverviewSection;

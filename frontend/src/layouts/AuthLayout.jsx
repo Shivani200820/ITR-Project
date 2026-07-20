@@ -5,15 +5,18 @@ function AuthLayout() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        bgcolor: "#F4F8FB",
-        display: "flex",
-        alignItems: "center",
+        minHeight:"100vh",
+        background:"linear-gradient(135deg,#E3F2FD,#FFFFFF)",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
       }}
     >
+
       <Container maxWidth="sm">
-        <Outlet />
+        <Outlet/>
       </Container>
+
     </Box>
   );
 }

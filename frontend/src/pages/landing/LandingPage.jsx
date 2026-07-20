@@ -1,26 +1,30 @@
-import Navbar from "../../Components/landing/Navbar";
-import HeroSection from "../../Components/landing/HeroSection";
-import OverviewSection from "../../Components/landing/OverviewSection";
-import howitworks from "../../Components/landing/howitworks";
-import featuressection from "../../Components/landing/featuressection";
-import StatisticsSection from "../../Components/landing/StatisticsSection";
-import departmentssection from "../../Components/landing/departmentssection";
-import ContactSection from "../../Components/landing/ContactSection";
-import footer from "../../Components/landing/footer";
-import ScrollTop from "../../Components/common/ScrollTop";
+import Navbar from "../../components/landing/Navbar";
+import HeroSection from "../../components/landing/HeroSection";
+import OverviewSection from "../../components/landing/OverviewSection";
+import HowItWorks from "../../components/landing/HowItWorks";
+import FeaturesSection from "../../components/landing/FeaturesSection";
+import StatisticsSection from "../../components/landing/StatisticsSection";
+import DepartmentsSection from "../../components/landing/DepartmentsSection";
+import ContactSection from "../../components/landing/ContactSection";
+import Footer from "../../components/landing/Footer";
+import ScrollTop from "../../components/common/ScrollTop";
 
 function LandingPage() {
   return (
     <>
       <Navbar />
-      <HeroSection />
-      <OverviewSection />
-      <howitworks />
-      <featuressection />
-      <StatisticsSection />
-      <departmentssection />
-      <ContactSection />
-      <footer />
+
+      <main>
+        <HeroSection />
+        <OverviewSection />
+        <HowItWorks />
+        <FeaturesSection />
+        <StatisticsSection />
+        <DepartmentsSection />
+        <ContactSection />
+      </main>
+
+      <Footer />
       <ScrollTop />
     </>
   );

@@ -1,30 +1,102 @@
-import { Box, Typography, Avatar } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Stack,
+} from "@mui/material";
+
 import SecurityIcon from "@mui/icons-material/Security";
 
-    function AuthHeader({ role }) {
-        return (
-            <Box textAlign="center" mb={4}>
-                <Avatar
-                    sx={{
-                        width: 70,
-                        height: 70,
-                        bgcolor: "primary.main",
-                        margin: "auto",
-                        mb: 2,
-                    }}
-                >
-                    <SecurityIcon sx={{ fontSize: 40 }} />
-                </Avatar>
 
-                <Typography color="text.secondary">
-                    Login as {role}
-                </Typography>
+function AuthHeader({ role }) {
 
-                <Typography color="text.secondary" mt={1}>
-                    Sign in to continue to CivicAI
-                </Typography>
-            </Box>
-        );
-    }
 
-    export default AuthHeader;
+  const displayRole =
+    role?.charAt(0).toUpperCase() + role?.slice(1);
+
+
+
+  return (
+
+    <Box
+      textAlign="center"
+      mb={4}
+    >
+
+
+      <Avatar
+
+        sx={{
+          width:80,
+          height:80,
+          margin:"auto",
+          mb:2,
+
+          background:
+            "linear-gradient(135deg,#1565C0,#42A5F5)",
+        }}
+
+      >
+
+        <SecurityIcon
+          sx={{
+            fontSize:45
+          }}
+        />
+
+      </Avatar>
+
+
+
+      <Typography
+
+        variant="h4"
+
+        fontWeight="bold"
+
+        color="primary"
+
+      >
+
+        CivicAI
+
+      </Typography>
+
+
+
+      <Typography
+
+        variant="h6"
+
+        mt={1}
+
+        fontWeight={600}
+
+      >
+
+        Login as {displayRole}
+
+      </Typography>
+
+
+
+      <Typography
+
+        color="text.secondary"
+
+        mt={1}
+
+      >
+
+        Sign in to continue to your smart civic platform
+
+      </Typography>
+
+
+    </Box>
+
+  );
+}
+
+
+export default AuthHeader;

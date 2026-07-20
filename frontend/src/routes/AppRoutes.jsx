@@ -3,14 +3,14 @@ import { Navigate, Route, Routes, Outlet } from "react-router-dom";
 // Layouts
 import AuthLayout from "../layouts/AuthLayout";
 import CitizenLayout from "../layouts/CitizenLayout";
+import AdminLayout from "../layouts/AdminLayout";
 
-// Landing Page
+// Landing
 import LandingPage from "../pages/landing/LandingPage";
 
-// Authentication Pages
+// Auth Pages
 import RoleSelection from "../pages/auth/RoleSelection";
 import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 
@@ -23,24 +23,18 @@ import ComplaintDetails from "../pages/citizen/ComplaintDetails";
 import ComplaintSuccess from "../pages/citizen/ComplaintSuccess";
 import DuplicateComplaint from "../pages/citizen/DuplicateComplaint";
 
+// Admin Pages
+import AdminDashboard from "../pages/admin/AdminDashboard";
+
 // Protected Route
 import PrivateRoute from "./ProtectedRoute";
+import Register from "../pages/auth/Register";
 
 // ---------------- Officer Layout ----------------
 
 function OfficerLayout() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>
-      <Outlet />
-    </div>
-  );
-}
-
-// ---------------- Admin Layout ----------------
-
-function AdminLayout() {
-  return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>
+    <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
       <Outlet />
     </div>
   );
@@ -48,29 +42,25 @@ function AdminLayout() {
 
 // ---------------- Officer Pages ----------------
 
-function OfficerDashboardPage() {
+function OfficerDashboard() {
   return <div style={{ padding: 24 }}>Officer Dashboard</div>;
 }
 
-function OfficerComplaintsPage() {
+function OfficerComplaints() {
   return <div style={{ padding: 24 }}>Officer Complaints</div>;
 }
 
-function OfficerProfilePage() {
+function OfficerProfile() {
   return <div style={{ padding: 24 }}>Officer Profile</div>;
 }
 
 // ---------------- Admin Pages ----------------
 
-function AdminDashboardPage() {
-  return <div style={{ padding: 24 }}>Admin Dashboard</div>;
-}
-
-function AdminUsersPage() {
+function AdminUsers() {
   return <div style={{ padding: 24 }}>Admin Users</div>;
 }
 
-function AdminReportsPage() {
+function AdminReports() {
   return <div style={{ padding: 24 }}>Admin Reports</div>;
 }
 
@@ -80,19 +70,22 @@ function AppRoutes() {
   return (
     <Routes>
 
-      {/* Landing Page */}
+      {/* Landing */}
       <Route path="/" element={<LandingPage />} />
 
       {/* Authentication */}
       <Route element={<AuthLayout />}>
         <Route path="/auth" element={<RoleSelection />} />
         <Route path="/auth/login/:role" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
+        <Route
+          path="/auth/register/:role"
+          element={<Register />}
+        />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/reset-password" element={<ResetPassword />} />
       </Route>
 
-      {/* Citizen Routes */}
+      {/* Citizen */}
       <Route
         path="/citizen"
         element={
@@ -104,22 +97,17 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
+        <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="register-complaint" element={<RegisterComplaint />} />
         <Route path="ai-preview" element={<AIPreview />} />
         <Route path="my-complaints" element={<MyComplaints />} />
         <Route path="complaints/:id" element={<ComplaintDetails />} />
-        <Route
-          path="duplicate-complaints"
-          element={<DuplicateComplaint />}
-        />
-        <Route
-          path="complaint-success"
-          element={<ComplaintSuccess />}
-        />
+        <Route path="duplicate-complaints" element={<DuplicateComplaint />} />
+        <Route path="complaint-success" element={<ComplaintSuccess />} />
       </Route>
 
-      {/* Officer Routes */}
+      {/* Officer */}
       <Route
         path="/officer"
         element={
@@ -131,12 +119,13 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
-        <Route path="dashboard" element={<OfficerDashboardPage />} />
-        <Route path="complaints" element={<OfficerComplaintsPage />} />
-        <Route path="profile" element={<OfficerProfilePage />} />
+        <Route index element={<OfficerDashboard />} />
+        <Route path="dashboard" element={<OfficerDashboard />} />
+        <Route path="complaints" element={<OfficerComplaints />} />
+        <Route path="profile" element={<OfficerProfile />} />
       </Route>
 
-      {/* Admin Routes */}
+      {/* Admin */}
       <Route
         path="/admin"
         element={
@@ -148,16 +137,14 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
-        <Route path="dashboard" element={<AdminDashboardPage />} />
-        <Route path="users" element={<AdminUsersPage />} />
-        <Route path="reports" element={<AdminReportsPage />} />
+        <Route index element={<AdminDashboard />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="reports" element={<AdminReports />} />
       </Route>
 
       {/* 404 */}
-      <Route
-        path="*"
-        element={<Navigate to="/" replace />}
-      />
+      <Route path="*" element={<Navigate to="/" replace />} />
 
     </Routes>
   );
