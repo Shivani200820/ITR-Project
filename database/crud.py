@@ -53,3 +53,45 @@ def delete_complaint(db: Session, complaint_id: int):
         return True
 
     return False
+from database.models import Complaint
+
+def get_latest_complaint(db):
+    return (
+        db.query(Complaint)
+        .order_by(Complaint.complaint_id.desc())
+        .first()
+    )
+def update_ai_analysis(db, complaint, analysis):
+    complaint.ai_category = analysis["category"]
+    complaint.ai_priority = analysis["priority"]
+    complaint.ai_department = analysis["department"]
+    complaint.ai_summary = analysis["summary"]
+
+    db.commit()
+    db.refresh(complaint)
+
+    return complaint
+from database.models import Complaint
+
+def get_all_complaints(db):
+    return db.query(Complaint).all()
+def update_duplicate_info(db, complaint, result):
+    complaint.is_duplicate = result["duplicate"].lower() == "true"
+    complaint.duplicate_of = int(result["matched_complaint_id"])
+    complaint.duplicate_reason = result["reason"]
+
+    db.commit()
+    db.refresh(complaint)
+
+    return complaint
+
+def update_officer_recommendation(db, complaint, recommendation):
+    complaint.recommended_action = recommendation["recommended_action"]
+    complaint.estimated_resolution_time = recommendation["estimated_resolution_time"]
+    complaint.required_team = recommendation["required_team"]
+    complaint.severity = recommendation["severity"]
+
+    db.commit()
+    db.refresh(complaint)
+
+    return complaint

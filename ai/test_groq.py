@@ -5,7 +5,7 @@ response = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": "Reply with only: Groq connection successful!"
+            "content": "Say Hello from Groq!"
         }
     ]
 )
