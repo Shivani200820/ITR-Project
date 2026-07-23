@@ -24,7 +24,7 @@ import MyComplaints from "../pages/citizen/MyComplaints";
 import ComplaintDetails from "../pages/citizen/ComplaintDetails";
 import ComplaintSuccess from "../pages/citizen/ComplaintSuccess";
 import DuplicateComplaint from "../pages/citizen/DuplicateComplaint";
-
+import DepartmentManagement from "../pages/admin/DepartmentManagement";
 // Admin Pages
 import AdminDashboard from "../pages/admin/AdminDashboard";
 
@@ -121,6 +121,13 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
+        <Route
+
+          path="departments"
+
+          element={<DepartmentManagement />}
+
+        />
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="register-complaint" element={<RegisterComplaint />} />

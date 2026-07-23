@@ -39,7 +39,7 @@ const menuItems = [
   {
     title: "Departments",
     path: "/admin/departments",
-    icon: <BusinessIcon />,
+    icon: <BusinessIcon />
   },
   {
     title: "Complaints",
