@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, Outlet } from "react-router-dom";
 import AuthLayout from "../layouts/AuthLayout";
 import CitizenLayout from "../layouts/CitizenLayout";
 import AdminLayout from "../layouts/AdminLayout";
+import UserManagement from "../pages/admin/UserManagement";
 
 // Landing
 import LandingPage from "../pages/landing/LandingPage";
@@ -33,11 +34,11 @@ import Register from "../pages/auth/Register";
 // ---------------- Officer Layout ----------------
 
 function OfficerLayout() {
-  return (
+  return 
     <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
       <Outlet />
     </div>
-  );
+  ;
 }
 
 // ---------------- Officer Pages ----------------
@@ -63,7 +64,29 @@ function AdminUsers() {
 function AdminReports() {
   return <div style={{ padding: 24 }}>Admin Reports</div>;
 }
+function AdminOfficers() {
+  return <div style={{ padding: 24 }}>Admin Officers</div>;
+}
 
+function AdminDepartments() {
+  return <div style={{ padding: 24 }}>Admin Departments</div>;
+}
+
+function AdminComplaints() {
+  return <div style={{ padding: 24 }}>Admin Complaints</div>;
+}
+
+function AdminAnalytics() {
+  return <div style={{ padding: 24 }}>Admin Analytics</div>;
+}
+
+function AdminHeatmap() {
+  return <div style={{ padding: 24 }}>Admin Heatmap</div>;
+}
+
+function AdminSettings() {
+  return <div style={{ padding: 24 }}>Admin Settings</div>;
+}
 // ---------------- Routes ----------------
 
 function AppRoutes() {
@@ -126,6 +149,9 @@ function AppRoutes() {
       </Route>
 
       {/* Admin */}
+      
+      
+      
       <Route
         path="/admin"
         element={
@@ -136,7 +162,14 @@ function AppRoutes() {
             <AdminLayout />
           </PrivateRoute>
         }
+
       >
+        <Route path="officers" element={<AdminOfficers />} />
+<Route path="departments" element={<AdminDepartments />} />
+<Route path="complaints" element={<AdminComplaints />} />
+<Route path="analytics" element={<AdminAnalytics />} />
+<Route path="heatmap" element={<AdminHeatmap />} />
+<Route path="settings" element={<AdminSettings />} />
         <Route index element={<AdminDashboard />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<AdminUsers />} />
