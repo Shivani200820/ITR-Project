@@ -17,6 +17,7 @@ import Login from "../pages/auth/Login";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import ComplaintHeatmap from "../pages/admin/ComplaintHeatmap";
+import Reports from "../pages/admin/Reports";
 // Citizen Pages
 import Dashboard from "../pages/citizen/Dashboard";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
@@ -97,6 +98,13 @@ function AppRoutes() {
 
       {/* Landing */}
       <Route path="/" element={<LandingPage />} />
+      <Route
+
+        path="reports"
+
+        element={<Reports />}
+
+      />
 
       {/* Authentication */}
       <Route element={<AuthLayout />}>
