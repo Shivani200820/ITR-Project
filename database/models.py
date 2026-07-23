@@ -20,6 +20,7 @@ class Complaint(Base):
     complaint_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer)
     department_id = Column(Integer)
+
     title = Column(String(200))
     description = Column(Text)
 
@@ -27,12 +28,13 @@ class Complaint(Base):
     priority = Column(String(20))
     status = Column(String(20))
 
-    # AI-generated fields
+    # AI Analysis
     ai_category = Column(String(100))
     ai_priority = Column(String(20))
     ai_department = Column(String(100))
     ai_summary = Column(Text)
 
+    # Duplicate Detection
     is_duplicate = Column(Boolean, default=False)
     duplicate_of = Column(Integer)
     duplicate_reason = Column(Text)
@@ -40,10 +42,21 @@ class Complaint(Base):
     latitude = Column(String(20))
     longitude = Column(String(20))
     address = Column(Text)
+
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)
 
+    # Officer Recommendation
     recommended_action = Column(Text)
-estimated_resolution_time = Column(String(100))
-required_team = Column(String(100))
-severity = Column(String(20))
+    estimated_resolution_time = Column(String(100))
+    required_team = Column(String(100))
+    severity = Column(String(20))
+
+    # Status Prediction
+    predicted_status = Column(String(100))
+    expected_progress = Column(Text)
+    risk_level = Column(String(50))
+
+    resolution_status = Column(String(50))
+    verification_remark = Column(Text)
+    confidence_score = Column(String(20))

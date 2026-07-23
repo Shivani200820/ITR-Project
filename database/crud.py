@@ -93,5 +93,21 @@ def update_officer_recommendation(db, complaint, recommendation):
 
     db.commit()
     db.refresh(complaint)
+def update_status_prediction(db, complaint, prediction):
+    complaint.predicted_status = prediction["next_status"]
+    complaint.expected_progress = prediction["expected_progress"]
+    complaint.risk_level = prediction["risk_level"]
+
+    db.commit()
+    db.refresh(complaint)
+
+def update_resolution_verification(db, complaint, verification):
+    complaint.resolution_status = verification["resolution_status"]
+    complaint.verification_remark = verification["verification_remark"]
+    complaint.confidence_score = verification["confidence_score"]
+
+    db.commit()
+    db.refresh(complaint)
 
     return complaint
+
