@@ -16,7 +16,7 @@ import RoleSelection from "../pages/auth/RoleSelection";
 import Login from "../pages/auth/Login";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
-
+import ComplaintHeatmap from "../pages/admin/ComplaintHeatmap";
 // Citizen Pages
 import Dashboard from "../pages/citizen/Dashboard";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
@@ -170,6 +170,13 @@ function AppRoutes() {
         path="officers"
 
         element={<OfficerManagement />}
+
+      />
+      <Route
+
+        path="heatmap"
+
+        element={<ComplaintHeatmap />}
 
       />
 
