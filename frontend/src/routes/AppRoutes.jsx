@@ -20,6 +20,7 @@ import ComplaintHeatmap from "../pages/admin/ComplaintHeatmap";
 import Reports from "../pages/admin/Reports";
 // Citizen Pages
 import Dashboard from "../pages/citizen/Dashboard";
+import AdminSettings from "../pages/admin/AdminSettings";
 import RegisterComplaint from "../pages/citizen/RegisterComplaint";
 import AIPreview from "../pages/citizen/AIPreview";
 import MyComplaints from "../pages/citizen/MyComplaints";
@@ -117,6 +118,13 @@ function AppRoutes() {
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/reset-password" element={<ResetPassword />} />
       </Route>
+      <Route
+
+        path="settings"
+
+        element={<AdminSettings />}
+
+      />
 
       {/* Citizen */}
       <Route
