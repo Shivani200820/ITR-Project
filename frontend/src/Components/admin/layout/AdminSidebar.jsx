@@ -49,7 +49,7 @@ const menuItems = [
   {
     title: "Analytics",
     path: "/admin/analytics",
-    icon: <AnalyticsIcon />,
+    icon: <AnalyticsIcon />
   },
   {
     title: "Heatmap",

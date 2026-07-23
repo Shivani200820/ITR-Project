@@ -6,6 +6,7 @@ import CitizenLayout from "../layouts/CitizenLayout";
 import AdminLayout from "../layouts/AdminLayout";
 import UserManagement from "../pages/admin/UserManagement";
 import OfficerManagement from "../pages/admin/OfficerManagement";
+import ComplaintAnalytics from "../pages/admin/ComplaintAnalytics";
 
 // Landing
 import LandingPage from "../pages/landing/LandingPage";
@@ -157,6 +158,13 @@ function AppRoutes() {
       </Route>
 
       {/* Admin */}
+      <Route
+
+        path="analytics"
+
+        element={<ComplaintAnalytics />}
+
+      />
       <Route
 
         path="officers"
