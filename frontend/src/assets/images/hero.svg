@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="500" viewBox="0 0 600 500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8F1FF"/>
+      <stop offset="100%" stop-color="#F8FBFF"/>
+    </linearGradient>
+
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1565C0"/>
+      <stop offset="100%" stop-color="#00ACC1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="500" rx="30" fill="url(#bg)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="500" cy="90" r="55" fill="#1565C0" opacity="0.08"/>
+  <circle cx="90" cy="420" r="70" fill="#00ACC1" opacity="0.08"/>
+
+  <!-- Main dashboard -->
+  <rect x="130" y="70" width="340" height="320" rx="24" fill="white" stroke="#D9E8FF" stroke-width="2"/>
+
+  <!-- Header -->
+  <rect x="160" y="100" width="180" height="18" rx="9" fill="#1565C0"/>
+  <rect x="160" y="135" width="240" height="10" rx="5" fill="#D8E7FF"/>
+  <rect x="160" y="155" width="200" height="10" rx="5" fill="#D8E7FF"/>
+
+  <!-- AI Card -->
+  <rect x="160" y="200" width="120" height="90" rx="16" fill="url(#card)"/>
+  <text x="220" y="235" text-anchor="middle" fill="white" font-size="16" font-family="Arial" font-weight="bold">
+    AI
+  </text>
+  <text x="220" y="258" text-anchor="middle" fill="white" font-size="12" font-family="Arial">
+    Detection
+  </text>
+
+  <!-- GPS Card -->
+  <rect x="300" y="200" width="140" height="90" rx="16" fill="#EEF7FF"/>
+  <circle cx="330" cy="225" r="10" fill="#00ACC1"/>
+  <rect x="350" y="220" width="60" height="10" rx="5" fill="#1565C0"/>
+  <rect x="350" y="240" width="45" height="8" rx="4" fill="#BFD9FF"/>
+
+  <!-- Complaint List -->
+  <rect x="160" y="320" width="250" height="12" rx="6" fill="#1565C0"/>
+  <rect x="160" y="345" width="210" height="10" rx="5" fill="#D8E7FF"/>
+
+  <!-- Floating AI Badge -->
+  <g>
+    <circle cx="505" cy="170" r="34" fill="#1565C0"/>
+    <text x="505" y="176" text-anchor="middle" fill="white" font-size="18" font-family="Arial" font-weight="bold">
+      AI
+    </text>
+  </g>
+
+  <!-- Floating Location Badge -->
+  <g>
+    <circle cx="95" cy="180" r="30" fill="#00ACC1"/>
+    <path d="M95 165C87 165 81 171 81 179C81 191 95 204 95 204C95 204 109 191 109 179C109 171 103 165 95 165Z" fill="white"/>
+    <circle cx="95" cy="179" r="4" fill="#00ACC1"/>
+  </g>
+
+  <!-- Floating Success Badge -->
+  <g>
+    <circle cx="500" cy="330" r="30" fill="#4CAF50"/>
+    <path d="M488 330L497 339L512 322" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
