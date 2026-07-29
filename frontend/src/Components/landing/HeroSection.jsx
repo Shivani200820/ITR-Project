@@ -1,156 +1,479 @@
 import {
   Box,
+  Chip,
   Container,
-  Typography,
-  Button,
-  Stack,
-  Paper,
   Grid,
+  Paper,
+  Stack,
+  Typography,
 } from "@mui/material";
 
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import { motion } from "framer-motion";
+
+import HeroImage from "../../assets/images/hero.svg";
+
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import TrackChangesIcon from "@mui/icons-material/TrackChanges";
+import VerifiedIcon from "@mui/icons-material/Verified";
 
 import { useNavigate } from "react-router-dom";
 
-import heroImage from "../../assets/images/hero.png";
 
 function HeroSection() {
+
   const navigate = useNavigate();
 
+
   return (
-    <Box
-      sx={{
-        background: "linear-gradient(135deg,#E3F2FD,#FFFFFF)",
-        minHeight: "calc(100vh - 70px)",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <Container
-        maxWidth="lg"
+    <>
+
+      {/* ================= HERO ================= */}
+
+      <Box
         sx={{
-          height: "100%",
+          background:
+            "linear-gradient(135deg,#E8F1FF 0%,#F8FBFF 100%)",
+
+          minHeight: "90vh",
+
           display: "flex",
+
           alignItems: "center",
+
+          py: 10,
+
+          overflow: "hidden",
         }}
       >
-        <Grid
-          container
-          spacing={5}
-          sx={{
-            width: "100%",
-            alignItems: "center",
-            minHeight: "calc(100vh - 70px)",
-          }}
-        >
-          {/* Left Content */}
 
-          <Grid
-            size={{
-              xs: 12,
-              md: 6,
-            }}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <Typography
-              variant="h3"
-              fontWeight="bold"
-              color="primary"
-            >
-              AI Powered Smart Civic Complaint Platform
-            </Typography>
+        <Container maxWidth="xl">
 
-            <Typography
-              mt={3}
-              color="text.secondary"
-              fontSize={20}
-            >
-              Register complaints instantly using AI image analysis,
-              GPS location, and intelligent department assignment.
-              Help make your city smarter and cleaner.
-            </Typography>
+          <Grid container spacing={6} alignItems="center">
 
-            <Stack
-              direction={{
-                xs: "column",
-                sm: "row",
-              }}
-              spacing={2}
-              mt={4}
-              alignItems={{
-                xs: "stretch",
-                sm: "center",
-              }}
-            >
-              <Button
-                variant="outlined"
-                size="large"
-                startIcon={<PlayCircleIcon />}
+
+            {/* LEFT */}
+
+            <Grid size={{ xs:12, md:6 }}>
+
+
+              <Typography
+
+                variant="h2"
+
+                fontWeight={800}
+
                 sx={{
-                  borderRadius: 3,
-                  px: 4,
+
+                  lineHeight:1.2,
+
+                  mb:3,
+
+                  fontSize:{
+
+                    xs:"2.4rem",
+
+                    md:"3.8rem",
+
+                  }
+
                 }}
+
               >
-                Watch Demo
-              </Button>
-            </Stack>
 
-            <Stack
-              direction="row"
-              spacing={2}
-              mt={5}
+                AI Powered
+
+                <br />
+
+
+                <Box
+
+                  component="span"
+
+                  sx={{
+
+                    background:
+                    "linear-gradient(90deg,#1565C0,#00ACC1)",
+
+                    WebkitBackgroundClip:"text",
+
+                    WebkitTextFillColor:"transparent",
+
+                  }}
+
+                >
+
+                  Smart Civic Complaint
+
+                  <br />
+
+                  Resolution Platform
+
+
+                </Box>
+
+
+              </Typography>
+
+
+
+              <Typography
+
+                sx={{
+
+                  color:"text.secondary",
+
+                  fontSize:14,
+
+                  mb:4,
+
+                  maxWidth:560,
+
+                }}
+
+              >
+
+                Report civic issues instantly using AI-powered image
+                recognition, GPS location tracking, intelligent
+                complaint routing and live complaint tracking.
+
+              </Typography>
+
+
+
+
+              {/* CHIPS */}
+
+
+              <Stack
+
+                direction={{
+
+                  xs:"column",
+
+                  sm:"row",
+
+                }}
+
+                spacing={2}
+
+                sx={{
+
+                  mt:3,
+
+                  alignItems:{
+
+                    xs:"center",
+
+                    sm:"flex-start",
+
+                  }
+
+                }}
+
+              >
+
+
+                <Chip
+
+                  clickable
+
+                  icon={<PsychologyIcon />}
+
+                  label="AI Detection"
+
+                  color="primary"
+
+                  onClick={()=>navigate("/citizen/ai-review")}
+
+                />
+
+
+
+                <Chip
+
+                  clickable
+
+                  icon={<LocationOnIcon />}
+
+                  label="GPS Enabled"
+
+                  color="success"
+
+                  onClick={()=>navigate("/citizen/map")}
+
+                />
+
+
+
+                <Chip
+
+                  clickable
+
+                  icon={<TrackChangesIcon />}
+
+                  label="Smart Priority"
+
+                  color="warning"
+
+                  onClick={()=>navigate("/citizen/register-complaint")}
+
+                />
+
+
+
+                <Chip
+
+                  clickable
+
+                  icon={<VerifiedIcon />}
+
+                  label="Live Tracking"
+
+                  color="secondary"
+
+                  onClick={()=>navigate("/citizen/my-complaints")}
+
+                />
+
+
+              </Stack>
+
+
+            </Grid>
+
+
+
+
+
+            {/* RIGHT IMAGE */}
+
+
+            <Grid
+
+              size={{xs:12,md:6}}
+
               sx={{
-                flexWrap: "wrap",
-                gap: 2,
+
+                position:"relative",
+
+                display:"flex",
+
+                justifyContent:"center",
+
+                alignItems:"center",
+
+                mt:{
+
+                  xs:5,
+
+                  md:0,
+
+                },
+
+                height:{
+
+                  xs:"350px",
+
+                  md:"520px",
+
+                }
+
               }}
+
             >
-              <Paper sx={{ p: 2 }}>
-                AI Image Detection
+
+
+              <motion.img
+
+                src={HeroImage}
+
+                alt="Hero"
+
+                animate={{
+
+                  y:[0,-15,0],
+
+                }}
+
+                transition={{
+
+                  duration:4,
+
+                  repeat:Infinity,
+
+                }}
+
+                style={{
+
+                  width:"100%",
+
+                  maxWidth:"520px",
+
+                  height:"auto",
+
+                  objectFit:"contain",
+
+                }}
+
+              />
+
+
+
+
+
+              {/* Floating Cards */}
+
+
+
+              <Paper
+
+                sx={{
+
+                  position:"absolute",
+
+                  top:{xs:10,md:40},
+
+                  left:{xs:10,md:0},
+
+                  px:{xs:1.5,md:3},
+
+                  py:{xs:1,md:2},
+
+                  borderRadius:5,
+
+                  backdropFilter:"blur(12px)",
+
+                  background:"rgba(255,255,255,.75)",
+
+                  boxShadow:"0 15px 40px rgba(0,0,0,.08)",
+
+                }}
+
+              >
+
+                🤖 AI Detection
+
               </Paper>
 
-              <Paper sx={{ p: 2 }}>
-                GPS Tracking
+
+
+
+              <Paper
+
+                sx={{
+
+                  position:"absolute",
+
+                  top:{xs:100,md:170},
+
+                  right:{xs:10,md:0},
+
+                  px:{xs:1.5,md:3},
+
+                  py:{xs:1,md:2},
+
+                  borderRadius:5,
+
+                  backdropFilter:"blur(12px)",
+
+                  background:"rgba(255,255,255,.75)",
+
+                  boxShadow:"0 15px 40px rgba(0,0,0,.08)",
+
+                }}
+
+              >
+
+                📍 GPS Enabled
+
               </Paper>
 
-              <Paper sx={{ p: 2 }}>
-                Smart Priority
+
+
+
+              <Paper
+
+                sx={{
+
+                  position:"absolute",
+
+                  bottom:{xs:20,md:40},
+
+                  left:{xs:10,md:30},
+
+                  px:{xs:1.5,md:3},
+
+                  py:{xs:1,md:2},
+
+                  borderRadius:5,
+
+                  backdropFilter:"blur(12px)",
+
+                  background:"rgba(255,255,255,.75)",
+
+                  boxShadow:"0 15px 40px rgba(0,0,0,.08)",
+
+                }}
+
+              >
+
+                ⚡ Smart Priority
+
               </Paper>
 
-              <Paper sx={{ p: 2 }}>
-                Live Status
+
+
+
+
+              <Paper
+
+                sx={{
+
+                  position:"absolute",
+
+                  bottom:{xs:90,md:140},
+
+                  right:{xs:10,md:20},
+
+                  px:{xs:1.5,md:3},
+
+                  py:{xs:1,md:2},
+
+                  borderRadius:5,
+
+                  backdropFilter:"blur(12px)",
+
+                  background:"rgba(255,255,255,.75)",
+
+                  boxShadow:"0 15px 40px rgba(0,0,0,.08)",
+
+                }}
+
+              >
+
+                ✅ Live Tracking
+
               </Paper>
-            </Stack>
+
+
+
+            </Grid>
+
+
           </Grid>
 
-          {/* Image */}
 
-          <Grid
-            size={{
-              xs: 12,
-              md: 6,
-            }}
-          >
-            <Box
-              component="img"
-              src={heroImage}
-              alt="CivicAI"
-              sx={{
-                width: "100%",
-                maxWidth: 500,
-                mx: "auto",
-                display: "block",
-              }}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+        </Container>
+
+
+      </Box>
+
+
+    </>
   );
+
 }
+
 
 export default HeroSection;

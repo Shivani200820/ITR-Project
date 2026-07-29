@@ -1,81 +1,125 @@
 import {
 
-BarChart,
+Chart as ChartJS,
 
-Bar,
+BarElement,
 
-XAxis,
+CategoryScale,
 
-YAxis,
+LinearScale,
 
 Tooltip,
 
-ResponsiveContainer
+Legend
 
 }
 
-from "recharts";
+from "chart.js";
 
 
-const data=[
+import {Bar}
 
-{
-department:"Road",
-rate:90
-},
+from "react-chartjs-2";
 
-{
-department:"Water",
-rate:85
-},
 
-{
-department:"Garbage",
-rate:95
+import {
+Paper,
+Typography
 }
+from "@mui/material";
 
-];
+
+ChartJS.register(
+
+BarElement,
+
+CategoryScale,
+
+LinearScale,
+
+Tooltip,
+
+Legend
+
+);
+
 
 
 function DepartmentPerformanceChart(){
 
 
+const data={
+
+
+labels:[
+
+"Road",
+
+"Water",
+
+"Garbage",
+
+"Electricity"
+
+],
+
+
+datasets:[
+
+{
+
+label:"Resolved Complaints",
+
+data:[
+90,
+75,
+85,
+70
+],
+
+
+borderWidth:2
+
+}
+
+]
+
+
+};
+
+
+
 return(
 
-<ResponsiveContainer
+<Paper
 
-width="100%"
-
-height={300}
+sx={{
+p:3,
+borderRadius:4
+}}
 
 >
 
 
-<BarChart data={data}>
+<Typography
+
+variant="h6"
+
+fontWeight="bold"
+
+mb={2}
+
+>
+
+Department Performance
+
+</Typography>
 
 
-<XAxis dataKey="department"/>
+<Bar data={data}/>
 
 
-<YAxis/>
-
-
-<Tooltip/>
-
-
-<Bar
-
-dataKey="rate"
-
-fill="#10B981"
-
-/>
-
-
-</BarChart>
-
-
-</ResponsiveContainer>
+</Paper>
 
 )
 

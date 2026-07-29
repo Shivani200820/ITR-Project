@@ -8,13 +8,11 @@ import {
   Container,
 } from "@mui/material";
 
+// ❌ Removed useNotification because it was causing infinite re-render
 
 function Login() {
 
-
   const { role = "citizen" } = useParams();
-
-
 
   return (
 
@@ -37,24 +35,18 @@ function Login() {
 
     >
 
-
       <Container maxWidth="sm">
-
 
         <AuthHeader role={role} />
 
-
         <LoginForm role={role} />
 
-
       </Container>
-
 
     </Box>
 
   );
 
 }
-
 
 export default Login;

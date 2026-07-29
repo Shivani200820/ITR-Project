@@ -4,25 +4,11 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: Roboto, Arial, sans-serif;
-  background: #f5f7fb;
-}
-html {
-  scroll-behavior: smooth;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: #f4f8fc;
   font-family: "Poppins", sans-serif;
 }
 
@@ -46,4 +32,44 @@ img {
 
 ::-webkit-scrollbar-track {
   background: #eaf2ff;
+}
+/* Responsive Improvements */
+
+
+img {
+  max-width:100%;
+  height:auto;
+}
+
+
+body{
+  overflow-x:hidden;
+}
+
+
+
+/* Mobile Devices */
+
+@media(max-width:600px){
+
+  h1{
+    font-size:2rem !important;
+  }
+
+
+  h2{
+    font-size:1.6rem !important;
+  }
+
+
+  h3{
+    font-size:1.3rem !important;
+  }
+
+
+  .container{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
 }

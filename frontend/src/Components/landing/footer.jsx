@@ -1,229 +1,212 @@
 import {
   Box,
   Container,
-  Typography,
   Grid,
-  Stack,
+  IconButton,
   Link,
+  Stack,
+  Typography,
 } from "@mui/material";
 
+import FacebookIcon from "@mui/icons-material/Facebook";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import EmailIcon from "@mui/icons-material/Email";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 function Footer() {
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
-
     <Box
-
       sx={{
-
-        bgcolor:"#0D47A1",
-
-        color:"white",
-
-        py:6,
-
+        mt: 10,
+        background:
+          "linear-gradient(135deg,#0D47A1,#1565C0,#00ACC1)",
+        color: "#fff",
+        pt: 8,
+        pb: 3,
       }}
-
     >
-
       <Container maxWidth="lg">
-
-
-        <Grid
-
-          container
-
-          spacing={4}
-
-        >
-
-
-
-          <Grid
-
-            size={{
-
-              xs:12,
-
-              md:6
-
-            }}
-
-          >
-
-
+        <Grid container spacing={5}>
+          {/* Logo */}
+          <Grid item xs={12} md={4}>
             <Typography
-
               variant="h4"
-
               fontWeight="bold"
-
+              gutterBottom
             >
-
               CivicAI
-
             </Typography>
-
-
 
             <Typography
-
-              mt={2}
-
               sx={{
-
-                opacity:0.9
-
+                opacity: 0.9,
+                lineHeight: 1.8,
               }}
-
             >
-
-              AI Powered Smart Civic Complaint & 
-              Resolution Platform
-
+              AI Powered Smart Civic Complaint &
+              Resolution Platform that connects
+              citizens with government departments
+              for faster issue resolution.
             </Typography>
-
-
           </Grid>
 
+          {/* Quick Links */}
+          <Grid item xs={12} md={4}>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              mb={2}
+            >
+              Quick Links
+            </Typography>
 
+            <Stack spacing={1.2}>
+              <Link href="#home" color="inherit" underline="hover">
+                Home
+              </Link>
 
+              <Link href="#about" color="inherit" underline="hover">
+                About
+              </Link>
 
+              <Link href="#features" color="inherit" underline="hover">
+                Features
+              </Link>
 
-          <Grid
+              <Link
+                href="#departments"
+                color="inherit"
+                underline="hover"
+              >
+                Departments
+              </Link>
 
-            size={{
+              <Link href="#contact" color="inherit" underline="hover">
+                Contact
+              </Link>
+            </Stack>
+          </Grid>
 
-              xs:12,
+          {/* Contact */}
+          <Grid item xs={12} md={4}>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              mb={2}
+            >
+              Contact
+            </Typography>
 
-              md:6
+            <Typography mb={1}>
+              📧 support@civicai.com
+            </Typography>
 
-            }}
+            <Typography mb={1}>
+              📞 +91 98765 43210
+            </Typography>
 
-          >
-
+            <Typography>
+              📍 Pune, Maharashtra, India
+            </Typography>
 
             <Stack
-
-              spacing={1}
-
-              sx={{
-
-                alignItems:{
-
-                  xs:"flex-start",
-
-                  md:"flex-end"
-
-                }
-
-              }}
-
+              direction="row"
+              spacing={2}
+              mt={3}
             >
-
-
-              <Typography
-
-                fontWeight="bold"
-
+              <IconButton
+                sx={{
+                  color: "#fff",
+                  "&:hover": {
+                    background: "rgba(255,255,255,.15)",
+                    transform: "scale(1.1)",
+                  },
+                }}
               >
+                <FacebookIcon />
+              </IconButton>
 
-                Quick Links
-
-              </Typography>
-
-
-
-              <Link
-
-                href="#"
-
-                color="inherit"
-
-                underline="hover"
-
+              <IconButton
+                sx={{
+                  color: "#fff",
+                  "&:hover": {
+                    background: "rgba(255,255,255,.15)",
+                    transform: "scale(1.1)",
+                  },
+                }}
               >
+                <LinkedInIcon />
+              </IconButton>
 
-                Home
-
-              </Link>
-
-
-
-              <Link
-
-                href="#"
-
-                color="inherit"
-
-                underline="hover"
-
+              <IconButton
+                sx={{
+                  color: "#fff",
+                  "&:hover": {
+                    background: "rgba(255,255,255,.15)",
+                    transform: "scale(1.1)",
+                  },
+                }}
               >
+                <GitHubIcon />
+              </IconButton>
 
-                Features
-
-              </Link>
-
-
-
-              <Link
-
-                href="#contact"
-
-                color="inherit"
-
-                underline="hover"
-
+              <IconButton
+                sx={{
+                  color: "#fff",
+                  "&:hover": {
+                    background: "rgba(255,255,255,.15)",
+                    transform: "scale(1.1)",
+                  },
+                }}
               >
-
-                Contact
-
-              </Link>
-
-
-
+                <EmailIcon />
+              </IconButton>
             </Stack>
-
-
           </Grid>
-
-
-
         </Grid>
 
-
-
-
-
-        <Typography
-
+        {/* Bottom */}
+        <Box
           sx={{
-
-            mt:5,
-
-            pt:3,
-
-            borderTop:"1px solid rgba(255,255,255,0.3)"
-
+            mt: 6,
+            pt: 3,
+            borderTop: "1px solid rgba(255,255,255,.2)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 2,
           }}
-
         >
+          <Typography variant="body2">
+            © 2026 CivicAI. All Rights Reserved.
+          </Typography>
 
-          © 2026 CivicAI. All Rights Reserved.
+          <IconButton
+            onClick={scrollTop}
+            sx={{
+              background: "#fff",
+              color: "primary.main",
 
-        </Typography>
-
-
-
+              "&:hover": {
+                background: "#E3F2FD",
+              },
+            }}
+          >
+            <KeyboardArrowUpIcon />
+          </IconButton>
+        </Box>
       </Container>
-
-
     </Box>
-
-
   );
-
 }
-
 
 export default Footer;

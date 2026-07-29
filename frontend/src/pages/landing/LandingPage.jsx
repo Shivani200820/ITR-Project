@@ -3,12 +3,13 @@ import HeroSection from "../../components/landing/HeroSection";
 import OverviewSection from "../../components/landing/OverviewSection";
 import HowItWorks from "../../components/landing/HowItWorks";
 import FeaturesSection from "../../components/landing/FeaturesSection";
-import StatisticsSection from "../../components/landing/StatisticsSection";
 import DepartmentsSection from "../../components/landing/DepartmentsSection";
 import ContactSection from "../../components/landing/ContactSection";
 import Footer from "../../components/landing/Footer";
 import ScrollTop from "../../components/common/ScrollTop";
-
+import StatsCounter from "../../components/landing/StatsCounter";
+import TestimonialsSection from "../../components/landing/TestimonialsSection";
+import FAQSection from "../../components/landing/FAQSection";
 function LandingPage() {
   return (
     <>
@@ -16,15 +17,18 @@ function LandingPage() {
 
       <main>
         <HeroSection />
+        <StatsCounter />
         <OverviewSection />
         <HowItWorks />
         <FeaturesSection />
-        <StatisticsSection />
         <DepartmentsSection />
+        <TestimonialsSection />
+        <FAQSection />
         <ContactSection />
       </main>
 
       <Footer />
+    
       <ScrollTop />
     </>
   );

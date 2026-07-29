@@ -1,93 +1,66 @@
 import {
-
-TextField,
-
-Button,
-
-Stack,
-
-Typography
-
-}
-
-from "@mui/material";
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Stack
+} from "@mui/material";
 
 
-function ChangePassword(){
+function ChangePassword() {
 
 
-return(
+  return (
 
-<>
+    <Paper
+      sx={{
+        p: 3,
+        borderRadius: 4
+      }}
+    >
 
-
-<Typography
-
-variant="h6"
-
-mb={3}
-
->
-
-Change Password
-
-</Typography>
-
-
-
-<Stack spacing={2}>
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        mb={2}
+      >
+        Change Password
+      </Typography>
 
 
-<TextField
+      <Stack spacing={2}>
 
-type="password"
-
-label="Current Password"
-
-/>
-
+        <TextField
+          label="Current Password"
+          type="password"
+        />
 
 
-<TextField
-
-type="password"
-
-label="New Password"
-
-/>
+        <TextField
+          label="New Password"
+          type="password"
+        />
 
 
-
-<TextField
-
-type="password"
-
-label="Confirm Password"
-
-/>
+        <TextField
+          label="Confirm Password"
+          type="password"
+        />
 
 
-
-<Button
-
-variant="contained"
-
-color="warning"
-
->
-
-Update Password
-
-</Button>
+        <Button
+          variant="contained"
+        >
+          Update Password
+        </Button>
 
 
+      </Stack>
 
-</Stack>
 
+    </Paper>
 
-</>
-
-)
+  );
 
 }
 

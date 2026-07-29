@@ -12,46 +12,61 @@ import {
   Checkbox,
   Stack,
   Alert,
+  Button,
 } from "@mui/material";
 
-import { Link } from "react-router-dom";
-
-import { LoadingButton } from "@mui/lab";
-
+import { Link, useNavigate } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+import useNotification from "../../hooks/useNotification";
+
 function LoginForm({ role }) {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+
+  const { showNotification } = useNotification();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  console.log("Role =", role);
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    setApiError("");
+ const onSubmit = async (data) => {
+  console.log("Submit Started");
 
-    try {
-      console.log(data);
+  setLoading(true);
+  setApiError("");
 
-      // -------------------------
-      // Later connect FastAPI
-      // await loginAPI(data);
-      // -------------------------
+  try {
+  console.log("Step 1");
 
-    } catch (error) {
-      setApiError("Invalid email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
+  localStorage.setItem("token", "demo-token");
+  console.log("Step 2");
+
+  localStorage.setItem("role", role);
+  console.log("Step 3");
+
+  console.log(localStorage.getItem("token"));
+  console.log(localStorage.getItem("role"));
+
+  console.log("Step 4");
+
+  navigate(`/${role}/dashboard`);
+}catch (error) {
+  console.error("Login Error:", error);
+
+  setApiError("Invalid email or password");
+}
+};
 
   return (
+
     <Paper
       elevation={5}
       sx={{
@@ -59,13 +74,17 @@ function LoginForm({ role }) {
         borderRadius: 4,
       }}
     >
+
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
       >
 
         {apiError && (
-          <Alert severity="error" sx={{ mb: 2 }}>
+          <Alert
+            severity="error"
+            sx={{ mb: 2 }}
+          >
             {apiError}
           </Alert>
         )}
@@ -74,6 +93,7 @@ function LoginForm({ role }) {
           fullWidth
           label="Email Address"
           margin="normal"
+
           {...register("email", {
             required: "Email is required",
             pattern: {
@@ -81,6 +101,7 @@ function LoginForm({ role }) {
               message: "Enter a valid email address",
             },
           })}
+
           error={!!errors.email}
           helperText={errors.email?.message}
         />
@@ -89,7 +110,13 @@ function LoginForm({ role }) {
           fullWidth
           label="Password"
           margin="normal"
-          type={showPassword ? "text" : "password"}
+
+          type={
+            showPassword
+              ? "text"
+              : "password"
+          }
+
           {...register("password", {
             required: "Password is required",
             minLength: {
@@ -97,33 +124,40 @@ function LoginForm({ role }) {
               message: "Minimum 6 characters",
             },
           })}
+
           error={!!errors.password}
           helperText={errors.password?.message}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() =>
-                    setShowPassword(!showPassword)
-                  }
-                >
-                  {showPassword ? (
-                    <VisibilityOff />
-                  ) : (
-                    <Visibility />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            ),
+
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+
+                  <IconButton
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
+                  >
+                    {showPassword
+                      ? <VisibilityOff />
+                      : <Visibility />}
+                  </IconButton>
+
+                </InputAdornment>
+              ),
+            },
           }}
         />
 
         <Stack
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          mt={2}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            mt: 2,
+          }}
         >
+
           <FormControlLabel
             control={<Checkbox />}
             label="Remember Me"
@@ -132,36 +166,44 @@ function LoginForm({ role }) {
           <Link to="/auth/forgot-password">
             Forgot Password?
           </Link>
+
         </Stack>
 
-        <LoadingButton
+        <Button
           fullWidth
-          loading={loading}
           variant="contained"
           size="large"
           type="submit"
+          disabled={loading}
           sx={{
             mt: 4,
             borderRadius: 3,
             py: 1.5,
           }}
         >
-          Login
-        </LoadingButton>
+          {loading
+            ? "Logging in..."
+            : "LOGIN"}
+        </Button>
 
         <Typography
-          align="center"
-          mt={3}
+          sx={{
+            textAlign: "center",
+            mt: 3,
+          }}
         >
-          Don't have an account?
+          Don't have an account?{" "}
 
-          <Link to="/auth/register">
+          <Link to={`/auth/register/${role}`}>
             Register
           </Link>
+
         </Typography>
 
       </Box>
+
     </Paper>
+
   );
 }
 

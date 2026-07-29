@@ -2,7 +2,6 @@ import {
   Box,
   Typography,
   Avatar,
-  Stack,
 } from "@mui/material";
 
 import SecurityIcon from "@mui/icons-material/Security";
@@ -12,25 +11,28 @@ function AuthHeader({ role }) {
 
 
   const displayRole =
-    role?.charAt(0).toUpperCase() + role?.slice(1);
-
+    role
+      ? role.charAt(0).toUpperCase() + role.slice(1)
+      : "User";
 
 
   return (
 
     <Box
-      textAlign="center"
-      mb={4}
+      sx={{
+        textAlign: "center",
+        mb: 4,
+      }}
     >
 
 
       <Avatar
 
         sx={{
-          width:80,
-          height:80,
-          margin:"auto",
-          mb:2,
+          width: 80,
+          height: 80,
+          mx: "auto",
+          mb: 2,
 
           background:
             "linear-gradient(135deg,#1565C0,#42A5F5)",
@@ -39,9 +41,11 @@ function AuthHeader({ role }) {
       >
 
         <SecurityIcon
+
           sx={{
-            fontSize:45
+            fontSize: 45,
           }}
+
         />
 
       </Avatar>
@@ -64,13 +68,15 @@ function AuthHeader({ role }) {
 
 
 
+
       <Typography
 
         variant="h6"
 
-        mt={1}
-
-        fontWeight={600}
+        sx={{
+          mt: 1,
+          fontWeight: 600,
+        }}
 
       >
 
@@ -80,11 +86,14 @@ function AuthHeader({ role }) {
 
 
 
+
       <Typography
 
         color="text.secondary"
 
-        mt={1}
+        sx={{
+          mt: 1,
+        }}
 
       >
 

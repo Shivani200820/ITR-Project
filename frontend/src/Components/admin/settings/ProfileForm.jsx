@@ -1,86 +1,59 @@
 import {
-
-TextField,
-
-Button,
-
-Stack,
-
-Typography
-
-}
-
-from "@mui/material";
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Stack
+} from "@mui/material";
 
 
-function ProfileForm(){
+function ProfileForm() {
+
+  return (
+
+    <Paper
+      sx={{
+        p: 3,
+        borderRadius: 4
+      }}
+    >
+
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        mb={2}
+      >
+        Admin Profile
+      </Typography>
 
 
-return(
+      <Stack spacing={2}>
 
-<>
-
-
-<Typography
-
-variant="h6"
-
-mb={3}
-
->
-
-Profile Information
-
-</Typography>
+        <TextField
+          label="Name"
+          fullWidth
+        />
 
 
-
-<Stack spacing={2}>
-
-
-<TextField
-
-label="Full Name"
-
-defaultValue="Admin User"
-
-/>
+        <TextField
+          label="Email"
+          fullWidth
+        />
 
 
-<TextField
-
-label="Email"
-
-defaultValue="admin@civicai.com"
-
-/>
+        <Button
+          variant="contained"
+        >
+          Save Profile
+        </Button>
 
 
-<TextField
-
-label="Phone Number"
-
-/>
+      </Stack>
 
 
+    </Paper>
 
-<Button
-
-variant="contained"
-
->
-
-Save Changes
-
-</Button>
-
-
-</Stack>
-
-
-</>
-
-)
+  );
 
 }
 

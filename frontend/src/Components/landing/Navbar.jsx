@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import {
   AppBar,
   Toolbar,
@@ -17,6 +18,8 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link, useNavigate } from "react-router-dom";
+
+import ThemeToggle from "../common/ThemeToggle";
 
 
 const navItems = [
@@ -43,8 +46,18 @@ const navItems = [
 ];
 
 
+
 function Navbar() {
+
+
+  const [open, setOpen] = useState(false);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  const navigate = useNavigate();
+
+
 
   useEffect(() => {
 
@@ -56,28 +69,47 @@ function Navbar() {
 
   }, []);
 
-  const [open, setOpen] = useState(false);
-
-  const navigate = useNavigate();
 
 
   const toggleDrawer = () => {
+
     setOpen(!open);
+
   };
+
+
+
+  const logout = () => {
+
+    localStorage.removeItem("token");
+
+    setIsLoggedIn(false);
+
+    navigate("/");
+
+  };
+
 
 
   return (
 
     <>
+
+
       <AppBar
+
         position="fixed"
-        color="inherit"
+
         elevation={3}
+
         sx={{
+          bgcolor: "background.paper",
+          color: "text.primary",
           borderRadius: "0 0 20px 20px",
-          background: "#ffffff"
         }}
+
       >
+
 
         <Toolbar>
 
@@ -94,21 +126,26 @@ function Navbar() {
 
             fontWeight="bold"
 
-            color="primary"
-
             sx={{
+
               flexGrow: 1,
-              textDecoration: "none"
+
+              textDecoration: "none",
+
+              color: "primary.main"
             }}
 
           >
+
             CivicAI
 
           </Typography>
 
 
 
+
           {/* Desktop Menu */}
+
 
           <Stack
 
@@ -119,19 +156,26 @@ function Navbar() {
             alignItems="center"
 
             sx={{
+
               display: {
                 xs: "none",
                 md: "flex"
               }
+
             }}
 
           >
 
 
             {
+
               navItems.map((item) => (
 
-                item.path.startsWith("#") ?
+
+                item.path.startsWith("#")
+
+
+                  ?
 
 
                   <Typography
@@ -146,14 +190,14 @@ function Navbar() {
 
                       textDecoration: "none",
 
-                      color: "#374151",
-
+                      color: "text.primary",
                       fontWeight: 600,
 
                       cursor: "pointer",
 
                       "&:hover": {
-                        color: "#1565C0"
+
+                        color: "primary.main"
                       }
 
                     }}
@@ -165,31 +209,24 @@ function Navbar() {
                   </Typography>
 
 
+
                   :
 
-
                   <Typography
-
                     key={item.name}
-
                     component={Link}
-
                     to={item.path}
-
                     sx={{
-
                       textDecoration: "none",
-
-                      color: "#374151",
-
+                      color: "text.primary",
                       fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "0.3s",
 
                       "&:hover": {
-                        color: "#1565C0"
-                      }
-
+                        color: "primary.main",
+                      },
                     }}
-
                   >
 
                     {item.name}
@@ -198,67 +235,96 @@ function Navbar() {
 
 
               ))
+
             }
 
 
 
-            {/* Login Button */}
+            {/* Theme Toggle */}
+
+            <ThemeToggle />
 
 
-            {!isLoggedIn ? (
-              <>
-                {/* Login Button */}
-                <Button
-                  variant="outlined"
-                  sx={{
-                    borderRadius: 3,
-                    textTransform: "none",
-                  }}
-                  onClick={() => navigate("/auth/login/citizen")}
-                >
-                  Login
-                </Button>
 
-                {/* Register Complaint Button */}
-                <Button
-                  variant="contained"
-                  sx={{
-                    borderRadius: 3,
-                    px: 3,
-                    textTransform: "none",
-                    fontWeight: 600,
-                  }}
-                  onClick={() => navigate("/auth/register/citizen")}
-                >
-                  Register Complaint
-                </Button>
-              </>
-            ) : (
+            
+
+              {
+              !isLoggedIn ? (
+            <>
+              {/* Sign In */}
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/auth/login/citizen")}
+                sx={{
+                  borderRadius: 3,
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+              >
+                Sign In
+              </Button>
+
+              {/* Register Complaint */}
               <Button
                 variant="contained"
-                color="error"
+                onClick={() => navigate("/auth/register/citizen")}
                 sx={{
                   borderRadius: 3,
                   px: 3,
                   textTransform: "none",
-                  fontWeight: 600,
-                }}
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  setIsLoggedIn(false);
-                  navigate("/");
+                  fontWeight: 700,
                 }}
               >
-                Logout
+                Register Complaint
               </Button>
-            )}
+            </>
+            ) : (
+            <>
+              {/* Sign Out */}
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={logout}
+                sx={{
+                  borderRadius: 3,
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+              >
+                Sign Out
+              </Button>
+
+              {/* Register Complaint */}
+              <Button
+                variant="contained"
+                onClick={() => navigate("/citizen/register-complaint")}
+                sx={{
+                  borderRadius: 3,
+                  px: 3,
+                  textTransform: "none",
+                  fontWeight: 700,
+                }}
+              >
+                Register Complaint
+              </Button>
+            </>
+            )
+
+
+
+            
+
+            }
+
+
 
           </Stack>
 
 
 
 
-          {/* Mobile Menu Button */}
+
+          {/* Mobile Menu */}
 
 
           <IconButton
@@ -268,8 +334,11 @@ function Navbar() {
             sx={{
 
               display: {
+
                 xs: "block",
+
                 md: "none"
+
               }
 
             }}
@@ -281,7 +350,9 @@ function Navbar() {
           </IconButton>
 
 
+
         </Toolbar>
+
 
       </AppBar>
 
@@ -292,24 +363,30 @@ function Navbar() {
       {/* Mobile Drawer */}
 
 
+
       <Drawer
 
         anchor="right"
 
         open={open}
 
-        onClose={() => setOpen(false)}
+        onClose={toggleDrawer}
 
       >
 
 
-        <Box width={250}>
+        <Box
+
+          width={260}
+
+        >
 
 
           <List>
 
 
             {
+
               navItems.map((item) => (
 
 
@@ -323,7 +400,6 @@ function Navbar() {
 
 
                   <ListItemButton
-
 
                     component={
 
@@ -370,8 +446,7 @@ function Navbar() {
                     }
 
 
-                    onClick={() => setOpen(false)}
-
+                    onClick={toggleDrawer}
 
                   >
 
@@ -390,28 +465,118 @@ function Navbar() {
 
 
               ))
+
             }
+
 
 
           </List>
 
 
-          <Box p={2}>
 
 
-            <Button
+          <Box
 
-              fullWidth
+            p={2}
 
-              variant="contained"
+          >
 
-              onClick={() => navigate("/auth/register/citizen")}
 
-            >
+            <Stack spacing={2}>
 
-              Register Complaint
 
-            </Button>
+              <ThemeToggle />
+
+
+
+
+              {
+
+                !isLoggedIn &&
+
+                <>
+
+
+                  <Button
+
+                    fullWidth
+
+                    variant="outlined"
+
+                    onClick={() => navigate("/auth/login/citizen")}
+
+                  >
+
+                    Login
+
+                  </Button>
+
+
+
+                  <Button
+
+                    fullWidth
+
+                    variant="text"
+
+                    onClick={() => navigate("/auth/register")}
+
+                  >
+
+                    Signup
+
+                  </Button>
+
+
+
+
+                  <Button
+
+                    fullWidth
+
+                    variant="contained"
+
+                    onClick={() => navigate("/auth/register/citizen")}
+
+                  >
+
+                    Register Complaint
+
+                  </Button>
+
+
+                </>
+
+
+              }
+
+
+
+              {
+
+                isLoggedIn &&
+
+                <Button
+
+                  fullWidth
+
+                  color="error"
+
+                  variant="contained"
+
+                  onClick={logout}
+
+                >
+
+                  Logout
+
+                </Button>
+
+              }
+
+
+
+            </Stack>
 
 
           </Box>
@@ -423,9 +588,11 @@ function Navbar() {
       </Drawer>
 
 
+
     </>
 
   );
+
 }
 
 

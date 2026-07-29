@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import useNotification from "../../../hooks/useNotification";
+
 import { LoadingButton } from "@mui/lab";
 
 import { analyzeComplaint } from "../../../services/complaintService";
@@ -17,6 +19,7 @@ import { analyzeComplaint } from "../../../services/complaintService";
 import ComplaintImageUpload from "./ComplaintImageUpload";
 import LocationButton from "./LocationButton";
 import VoiceUpload from "./VoiceUpload";
+
 
 const categories = [
   "Road Damage",
@@ -29,12 +32,22 @@ const categories = [
   "Other",
 ];
 
+
 function ComplaintForm() {
+
 
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+
+  // ✅ ADD THIS
+  const {
+    showNotification
+  } = useNotification();
+
+
 
   const {
     register,
@@ -42,50 +55,97 @@ function ComplaintForm() {
     formState: { errors },
   } = useForm();
 
+
+
   const onSubmit = async (data) => {
 
+
     if (!image) {
-      alert("Please upload a complaint image.");
+
+      showNotification(
+        "Please upload a complaint image.",
+        "warning"
+      );
+
       return;
     }
 
+
+
     try {
+
 
       setLoading(true);
 
+
+
       const formData = new FormData();
+
 
       formData.append("image", image);
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("category", data.category);
 
+
+
       const aiData = await analyzeComplaint(formData);
 
+
+
+      // ✅ ADD SUCCESS MESSAGE HERE
+      showNotification(
+        "Complaint Registered Successfully 🚀",
+        "success"
+      );
+
+
+
       navigate("/citizen/ai-preview", {
+
         state: aiData,
+
       });
+
+
 
     } catch (error) {
 
+
       console.error(error);
-      alert("AI analysis failed.");
+
+
+
+      // ✅ ADD ERROR MESSAGE HERE
+      showNotification(
+        "AI analysis failed.",
+        "error"
+      );
+
+
 
     } finally {
 
+
       setLoading(false);
+
 
     }
 
+
   };
 
+
+
   return (
+
     <Paper
       sx={{
         p: 5,
         borderRadius: 4,
       }}
     >
+
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -94,19 +154,28 @@ function ComplaintForm() {
         Register Complaint
       </Typography>
 
+
+
       <form onSubmit={handleSubmit(onSubmit)}>
+
 
         <Grid container spacing={3}>
 
+
           <Grid item xs={12} md={4}>
+
 
             <ComplaintImageUpload
               onImageSelect={setImage}
             />
 
+
           </Grid>
 
+
+
           <Grid item xs={12} md={8}>
+
 
             <TextField
               fullWidth
@@ -119,6 +188,8 @@ function ComplaintForm() {
               helperText={errors.title?.message}
             />
 
+
+
             <TextField
               fullWidth
               multiline
@@ -127,6 +198,8 @@ function ComplaintForm() {
               margin="normal"
               {...register("description")}
             />
+
+
 
             <TextField
               fullWidth
@@ -140,15 +213,25 @@ function ComplaintForm() {
               error={!!errors.category}
               helperText={errors.category?.message}
             >
+
+
               {categories.map((category) => (
+
                 <MenuItem
                   key={category}
                   value={category}
                 >
+
                   {category}
+
                 </MenuItem>
+
               ))}
+
+
             </TextField>
+
+
 
             <LocationButton />
 
@@ -156,6 +239,8 @@ function ComplaintForm() {
             <br />
 
             <VoiceUpload />
+
+
 
             <LoadingButton
               loading={loading}
@@ -165,17 +250,27 @@ function ComplaintForm() {
               fullWidth
               sx={{ mt: 4 }}
             >
+
               Analyze with AI
+
             </LoadingButton>
+
+
 
           </Grid>
 
+
         </Grid>
+
 
       </form>
 
+
     </Paper>
+
   );
+
 }
+
 
 export default ComplaintForm;

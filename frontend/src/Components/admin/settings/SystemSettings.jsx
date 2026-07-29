@@ -1,79 +1,92 @@
 import {
-
-Typography,
-
-Switch,
-
-FormControlLabel,
-
-Stack
-
-}
-
-from "@mui/material";
+  Paper,
+  Typography,
+  Switch,
+  FormControlLabel,
+  Stack
+} from "@mui/material";
 
 
-function SystemSettings(){
+function SystemSettings() {
 
 
-return(
+  return (
 
-<>
+    <Paper
 
+      sx={{
 
-<Typography
+        p: 4,
 
-variant="h6"
+        borderRadius: 4
 
-mb={3}
+      }}
 
->
-
-System Settings
-
-</Typography>
+    >
 
 
+      <Typography
 
-<Stack>
+        variant="h6"
 
+        fontWeight="bold"
 
-<FormControlLabel
+        mb={3}
 
-control={<Switch defaultChecked/>}
+      >
 
-label="Email Notifications"
+        ⚙️ System Settings
 
-/>
+      </Typography>
 
 
 
-<FormControlLabel
 
-control={<Switch defaultChecked/>}
+      <Stack
 
-label="AI Complaint Detection"
+        spacing={2}
 
-/>
-
-
-
-<FormControlLabel
-
-control={<Switch defaultChecked/>}
-
-label="Live Map Tracking"
-
-/>
-
-
-</Stack>
+      >
 
 
 
-</>
+        <FormControlLabel
 
-)
+          control={<Switch defaultChecked />}
+
+          label="Enable AI Complaint Analysis"
+
+        />
+
+
+
+        <FormControlLabel
+
+          control={<Switch defaultChecked />}
+
+          label="Enable Citizen Notifications"
+
+        />
+
+
+
+        <FormControlLabel
+
+          control={<Switch />}
+
+          label="Maintenance Mode"
+
+        />
+
+
+
+      </Stack>
+
+
+
+    </Paper>
+
+  );
 
 }
 

@@ -1,5 +1,5 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
+
 import "leaflet/dist/leaflet.css";
 
 import { BrowserRouter } from "react-router-dom";
@@ -9,22 +9,44 @@ import App from "./App";
 
 import { store } from "./redux/store";
 
+import ThemeContext from "./theme/ThemeContext";
+
+import NotificationProvider 
+from "./context/NotificationContext";
+
 import "./styles/global.css";
-import "leaflet/dist/leaflet.css";
 
 
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
 
+
   <Provider store={store}>
 
-    <BrowserRouter>
 
-      <App />
+    <ThemeContext>
 
-    </BrowserRouter>
+
+      <NotificationProvider>
+
+
+        <BrowserRouter>
+
+
+          <App />
+
+
+        </BrowserRouter>
+
+
+      </NotificationProvider>
+
+
+    </ThemeContext>
+
 
   </Provider>
+
 
 );

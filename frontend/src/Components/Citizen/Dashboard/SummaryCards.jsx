@@ -1,66 +1,106 @@
+import Grid from "@mui/material/Grid";
 import {
-  Grid,
-  Paper,
+  Card,
+  CardContent,
   Typography,
+  Box,
 } from "@mui/material";
 
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 const cards = [
   {
-    title: "Total",
+    title: "Total Complaints",
     value: 15,
-    icon: <AssignmentIcon color="primary" />,
+    icon: <AssignmentIcon fontSize="large" />,
+    color: "#1976D2",
   },
   {
     title: "Pending",
     value: 4,
-    icon: <PendingActionsIcon color="warning" />,
+    icon: <PendingActionsIcon fontSize="large" />,
+    color: "#F59E0B",
   },
   {
     title: "In Progress",
     value: 6,
-    icon: <EngineeringIcon color="info" />,
+    icon: <EngineeringIcon fontSize="large" />,
+    color: "#8B5CF6",
   },
   {
     title: "Resolved",
     value: 5,
-    icon: <CheckCircleIcon color="success" />,
+    icon: <CheckCircleIcon fontSize="large" />,
+    color: "#10B981",
   },
 ];
+
 function SummaryCards() {
   return (
-    <Grid container spacing={3} mb={4}>
+    <Grid container spacing={3} sx={{ mb: 4 }}>
       {cards.map((card) => (
-        <Grid item xs={12} sm={6} md={3} key={card.title}>
-          <Paper
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          lg={3}
+          key={card.title}
+        >
+          <Card
+            elevation={0}
             sx={{
-              p: 3,
-              borderRadius: 3,
-              textAlign: "center",
+              borderRadius: 4,
+              border: "1px solid #E5E7EB",
               transition: "0.3s",
               "&:hover": {
-                transform: "translateY(-5px)",
-                boxShadow: 6,
+                transform: "translateY(-6px)",
+                boxShadow: "0 12px 24px rgba(0,0,0,0.12)",
               },
             }}
           >
-            {card.icon}
+            <CardContent>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography
+                    color="text.secondary"
+                    fontSize={15}
+                  >
+                    {card.title}
+                  </Typography>
 
-            <Typography
-              variant="h4"
-              mt={2}
-              fontWeight="bold"
-            >
-              {card.value}
-            </Typography>
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    mt={1}
+                  >
+                    {card.value}
+                  </Typography>
+                </Box>
 
-            <Typography>
-              {card.title}
-            </Typography>
-          </Paper>
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: "50%",
+                    bgcolor: card.color,
+                    color: "#fff",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {card.icon}
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
         </Grid>
       ))}
     </Grid>

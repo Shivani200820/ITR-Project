@@ -1,6 +1,6 @@
 import { Card, CardMedia } from "@mui/material";
 
-import demoImage from "../../../assets/images/hero.png";
+import demoImage from "../../../assets/images/hero.svg";
 function PreviewImage() {
   return (
     <Card>

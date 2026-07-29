@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 
 import WelcomeBanner from "../../components/officer/dashboard/WelcomeBanner";
-import StatsCards from "../../components/officer/dashboard/StatsCards";
+import StatCard from "../../components/officer/dashboard/StatCard";
 import QuickActions from "../../components/officer/dashboard/QuickActions";
 import RecentActivity from "../../components/officer/dashboard/RecentActivity";
 
@@ -10,7 +10,7 @@ function OfficerDashboard() {
     <>
       <WelcomeBanner />
 
-      <StatsCards />
+      <StatCard />
 
       <Grid container spacing={3} mt={1}>
 
