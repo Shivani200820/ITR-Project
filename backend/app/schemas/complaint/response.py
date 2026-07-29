@@ -26,6 +26,12 @@ class ComplaintResponse(BaseModel):
 
     voice_note_url: Optional[str] = None
 
+    image_url: str | None = None
+
+    ai_description: str | None = None
+
+    ai_confidence: float | None = None
+
     created_at: datetime
   
     rejection_reason: str | None = None

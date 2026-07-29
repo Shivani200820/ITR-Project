@@ -22,10 +22,17 @@ def register_exception_handlers(
         request: Request,
         exc: HTTPException,
     ):
-        response = error_response(
-            message=exc.detail,
-            errors=None,
-        )
+
+        if isinstance(exc.detail, dict):
+            response = error_response(
+                message=exc.detail.get("message", "Request failed"),
+                errors=exc.detail,
+            )
+        else:
+            response = error_response(
+                message=str(exc.detail),
+                errors=None,
+            )
 
         return JSONResponse(
             status_code=exc.status_code,

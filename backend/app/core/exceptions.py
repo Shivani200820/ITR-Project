@@ -24,11 +24,15 @@ class InvalidCredentialsException(
     pass
 
 
-class UserNotFoundException(
-    CivicAIException
-):
-    pass
-
+class UserNotFoundException(CivicAIException):
+    def __init__(
+        self,
+        message: str = "User not found.",
+    ):
+        super().__init__(
+            message=message,
+            status_code=404,
+        )
 
 class PermissionDeniedException(
     CivicAIException

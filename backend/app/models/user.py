@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Enum, String
+from sqlalchemy import Boolean, Enum, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
@@ -56,6 +56,11 @@ class User(Base, BaseModel, TimestampMixin):
         nullable=False,
     )
 
+    department_id: Mapped[int | None] = mapped_column(
+        ForeignKey("departments.id"),
+        nullable=True,
+    )
+
     complaints = relationship(
         "Complaint",
         foreign_keys="Complaint.citizen_id",
@@ -67,3 +72,18 @@ class User(Base, BaseModel, TimestampMixin):
         foreign_keys="Complaint.assigned_officer_id",
         back_populates="assigned_officer",
     )
+
+    department = relationship(
+        "Department",
+        back_populates="officers",
+    )
+
+    notifications = relationship(
+    "Notification",
+    back_populates="user",
+    cascade="all, delete-orphan",
+)
+
+
+
+

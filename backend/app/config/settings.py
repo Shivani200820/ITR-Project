@@ -26,9 +26,14 @@ class Settings(BaseSettings):
 
     GROQ_MODEL: str
 
-    STORAGE_DRIVER: str = "local"
+    GEMINI_API_KEY: str
+
+
+    STORAGE_DRIVER: str = "cloudinary"
 
     UPLOAD_DIRECTORY: str = "uploads"
+
+    PENDING_UPLOAD_DIRECTORY: str = "uploads/pending"
 
     MAX_IMAGE_SIZE: int = 5242880
 

@@ -10,6 +10,7 @@ from app.schemas.complaint.reject import ComplaintRejectRequest
 from app.schemas.complaint import ComplaintResolveRequest
 from app.schemas.common import ApiResponse
 from app.utils.response import success_response
+from app.schemas.officer.dashboard import OfficerDashboardResponse
 
 router = APIRouter(
     prefix="/officer/complaints",
@@ -169,4 +170,44 @@ def restart_work(
     return success_response(
         message="Work restarted successfully.",
         data=complaint,
+    )
+@router.get(
+    "",
+    summary="Department Complaints",
+    response_model=ApiResponse[list[ComplaintResponse]],
+)
+def department_complaints(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_officer),
+):
+    service = ComplaintService(db)
+
+    complaints = service.officer_department_complaints(
+        current_user
+    )
+
+    return success_response(
+        message="Department complaints fetched successfully.",
+        data=complaints,
+    )
+
+@router.get(
+    "/dashboard",
+    summary="Officer Dashboard",
+    description="Returns dashboard statistics for the logged-in officer.",
+    response_model=ApiResponse[OfficerDashboardResponse],
+)
+def officer_dashboard(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_officer),
+):
+    service = ComplaintService(db)
+
+    dashboard = service.officer_dashboard(
+        current_user
+    )
+
+    return success_response(
+        message="Dashboard fetched successfully.",
+        data=dashboard,
     )

@@ -101,6 +101,11 @@ class Complaint(Base, TimestampMixin):
         nullable=True,
     )
 
+    image_url = Column(
+        String(500),
+        nullable=True,
+    )
+
     rejection_reason = Column(
         Text,
         nullable=True,

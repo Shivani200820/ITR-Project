@@ -78,7 +78,9 @@ def my_complaints(
     service = ComplaintService(db)
 
     complaints = service.citizen_complaints(
-        current_user.id
+        current_user.id,
+        language=current_user.language,
+
     )
 
     return success_response(
@@ -104,7 +106,9 @@ def get_complaint_by_number(
     service = ComplaintService(db)
 
     complaint = service.get_by_number(
-        complaint_number
+        complaint_number,
+        current_user.language,
+
     )
 
     return success_response(
@@ -130,7 +134,8 @@ def get_complaint(
     service = ComplaintService(db)
 
     complaint = service.get_complaint(
-        complaint_id
+        complaint_id,
+        current_user.language,
     )
 
     return success_response(
@@ -160,6 +165,7 @@ def list_complaints(
     complaints = service.list_complaints(
         page=page,
         page_size=page_size,
+        language=current_user.language,
     )
 
     return success_response(
@@ -273,6 +279,7 @@ def citizen_confirmation(
         complaint_id=complaint_id,
         citizen=current_user,
         request=request,
+        
     )
 
     return success_response(

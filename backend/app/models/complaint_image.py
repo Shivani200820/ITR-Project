@@ -4,6 +4,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Enum,
+    Boolean,
 )
 
 from sqlalchemy.orm import relationship
@@ -46,4 +47,21 @@ class ComplaintImage(Base, TimestampMixin):
     complaint = relationship(
         "Complaint",
         back_populates="images",
+    )
+
+    local_path = Column(
+        String(500),
+        nullable=True,
+    )
+
+    storage_type = Column(
+        String(20),
+        nullable=False,
+        default="cloudinary",
+    )
+
+    is_synced = Column(
+        Boolean,
+        default=True,
+        nullable=False,
     )

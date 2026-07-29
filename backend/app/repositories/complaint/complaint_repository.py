@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.models.complaint import Complaint
+from app.constants.complaint_status import ComplaintStatus
 
 class ComplaintRepository:
 
@@ -100,3 +101,45 @@ class ComplaintRepository:
         self.db.commit()
         self.db.refresh(complaint)
         return complaint
+    
+    def get_by_department(
+        self,
+        department_id: int,
+    ):
+        return (
+            self.db.query(Complaint)
+            .filter(
+                Complaint.department_id == department_id
+            )
+            .all()
+        )
+    
+    def dashboard_counts(
+        self,
+        department_id: int,
+    ):
+        query = (
+            self.db.query(Complaint)
+            .filter(
+                Complaint.department_id == department_id
+            )
+        )
+
+        return {
+            "total_complaints": query.count(),
+            "pending": query.filter(
+                Complaint.status_id == ComplaintStatus.PENDING
+            ).count(),
+            "accepted": query.filter(
+                Complaint.status_id == ComplaintStatus.ACCEPTED
+            ).count(),
+            "in_progress": query.filter(
+                Complaint.status_id == ComplaintStatus.IN_PROGRESS
+            ).count(),
+            "resolved": query.filter(
+                Complaint.status_id == ComplaintStatus.RESOLVED
+            ).count(),
+            "reopened": query.filter(
+                Complaint.status_id == ComplaintStatus.REOPENED
+            ).count(),
+        }

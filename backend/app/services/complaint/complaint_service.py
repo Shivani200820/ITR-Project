@@ -30,8 +30,6 @@ from app.schemas.complaint.update import ComplaintUpdate
 
 from app.utils.complaint_number import generate_complaint_number
 
-from app.ai.complaint_analyzer import ComplaintAnalyzer
-from app.ai.response_parser import AIResponseParser
 from app.services.complaint.duplicate_detection_service import (
     DuplicateDetectionService,
 )
@@ -51,6 +49,9 @@ from app.schemas.complaint import (
     CitizenConfirmationRequest,
 )
 from app.core.logging import logger
+from app.repositories.user_repository import UserRepository
+from app.services.notification_service import NotificationService
+from app.services.translation.translation_service import TranslationService
 
 
 CATEGORY_MAP = {
@@ -96,6 +97,41 @@ class ComplaintService:
         self.priority_repository = ComplaintPriorityRepository(db)
         self.support_repository = ComplaintSupportRepository(db)
         self.history_repository = ComplaintHistoryRepository(db)
+        self.user_repository = UserRepository(db)
+        self.notification_service = NotificationService(db)
+
+    def translate_complaint(
+        self,
+        complaint,
+        language,
+    ):
+
+        complaint.title = TranslationService.translate(
+            complaint.title,
+            language,
+        )
+
+        complaint.description = TranslationService.translate(
+            complaint.description,
+            language,
+        )
+
+        complaint.ai_description = TranslationService.translate(
+            complaint.ai_description,
+            language,
+        )
+
+        complaint.resolution_remarks = TranslationService.translate(
+            complaint.resolution_remarks,
+            language,
+        )
+
+        complaint.citizen_feedback = TranslationService.translate(
+            complaint.citizen_feedback,
+            language,
+        )
+
+        return complaint
 
     def calculate_resolution_duration(
         self,
@@ -118,15 +154,29 @@ class ComplaintService:
     ) -> Complaint:
 
         # AI Analysis
-        analyzer = ComplaintAnalyzer()
+        class AIData:
+            pass
 
-        raw_response = analyzer.analyze(
-            citizen_text=data.description,
-        )
 
-        parsed = AIResponseParser.parse(
-            raw_response,
-        )
+        parsed = AIData()
+
+        parsed.category = data.ai_category
+        parsed.department = data.ai_department
+        parsed.priority = data.ai_priority
+        parsed.description = data.ai_description
+        parsed.confidence = data.ai_confidence
+        parsed.title = data.ai_title
+
+        if not parsed.category:
+            raise HTTPException(
+                status_code=400,
+                detail="AI category missing."
+            )
+
+        title = data.ai_title or data.title
+
+        if not title or title.strip() == "":
+            title = parsed.category
 
         category_name = CATEGORY_MAP.get(
             parsed.category.strip().lower(),
@@ -139,9 +189,10 @@ class ComplaintService:
         )
 
         priority_name = PRIORITY_MAP.get(
-            parsed.priority.value.strip().lower(),
-            parsed.priority.value,
+            parsed.priority.strip().lower(),
+            parsed.priority,
         )
+
         category = self.category_repository.get_by_name(
             category_name
         )
@@ -168,7 +219,7 @@ class ComplaintService:
         if priority is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Priority '{parsed.priority.value}' not found.",
+                detail=f"Priority '{parsed.priority}' not found.",
             )
 
         # Duplicate Detection
@@ -197,19 +248,36 @@ class ComplaintService:
                 },
             )
 
+
+        officers = self.user_repository.get_officers_by_department(
+            department.id
+        )
+
+        assigned_officer = None
+
+        if officers:
+            assigned_officer = officers[0]
       
 
         complaint = Complaint(
             complaint_number=generate_complaint_number(),
             citizen_id=citizen_id,
 
-            title=data.title,
+            assigned_officer_id=(
+                assigned_officer.id
+                if assigned_officer
+                else None
+            ),
+
+            title=title,
             description=data.description,
 
             latitude=data.latitude,
             longitude=data.longitude,
 
             voice_note_url=data.voice_note_url,
+
+            image_url=data.image_url,
 
             # Current values
             department_id=department.id,
@@ -223,6 +291,7 @@ class ComplaintService:
             ai_priority_id=priority.id,
             ai_description=parsed.description,
             ai_confidence=parsed.confidence,
+            
 
             # Final values
             final_category_id=category.id,
@@ -231,7 +300,16 @@ class ComplaintService:
             final_description=parsed.description,
         )
 
+
         created_complaint = self.repository.create(complaint)
+
+        if assigned_officer:
+            self.notification_service.create_notification(
+                user_id=assigned_officer.id,
+                title="New Complaint Assigned",
+                message=f"Complaint {created_complaint.complaint_number} has been assigned to you.",
+                notification_type="complaint_assigned",
+            )
 
         logger.info(
             f"Complaint {created_complaint.id} created by user {citizen_id}"
@@ -243,6 +321,7 @@ class ComplaintService:
     def get_complaint(
         self,
         complaint_id: int,
+        language: str = "en",
     ):
 
         complaint = self.repository.get_by_id(
@@ -255,11 +334,30 @@ class ComplaintService:
                 detail="Complaint not found.",
             )
 
+        self.translate_complaint(
+            complaint,
+            language,
+        )
+
+
         return complaint
+    
+    def validate_officer_department(
+        self,
+        complaint: Complaint,
+        officer: User,
+    ):
+        if complaint.department_id != officer.department_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not allowed to access complaints from another department.",
+            )
 
     def get_by_number(
         self,
         complaint_number: str,
+        language: str,
+
     ):
 
         complaint = self.repository.get_by_number(
@@ -272,55 +370,136 @@ class ComplaintService:
                 detail="Complaint not found.",
             )
 
+        self.translate_complaint(
+            complaint,
+            language,
+        )
+
         return complaint
 
     def list_complaints(
         self,
         page: int = 1,
         page_size: int = 10,
+        language: str = "en",
     ):
 
         query = self.query_repository.get_query()
 
         query = self.query_repository.sort(query)
 
-        return self.query_repository.paginate(
+        complaints = self.query_repository.paginate(
             query,
             page,
             page_size,
         )
 
+        for complaint in complaints:
+            self.translate_complaint(
+                complaint,
+                language,
+            )
+
+        return complaints
+
     def complaints_by_status(
         self,
         status_id: int,
+        language: str = "en",
     ):
 
-        return (
+        complaints = (
             self.query_repository
             .filter_by_status(status_id)
             .all()
         )
 
+        for complaint in complaints:
+            self.translate_complaint(
+                complaint,
+                language,
+            )
+
+        return complaints
+
     def complaints_by_department(
         self,
         department_id: int,
+        language: str = "en",
     ):
 
-        return (
+        complaints = (
             self.query_repository
             .filter_by_department(department_id)
             .all()
         )
 
+        for complaint in complaints:
+            self.translate_complaint(
+                complaint,
+                language,
+            )
+
+        return complaints
+
     def citizen_complaints(
         self,
         citizen_id: int,
+        language: str,
     ):
 
-        return (
+        complaints = (
             self.query_repository
             .filter_by_citizen(citizen_id)
             .all()
+        )
+
+        for complaint in complaints:
+            self.translate_complaint(
+                complaint,
+                language,
+            )
+
+        return complaints
+    
+    def officer_department_complaints(
+        self,
+        officer: User,
+        language: str = "en",
+    ):
+
+        if officer.department_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Officer is not assigned to any department.",
+            )
+
+        complaints = (
+            self.query_repository
+            .filter_by_department(officer.department_id)
+            .all()
+        )
+
+        for complaint in complaints:
+            self.translate_complaint(
+                complaint,
+                language,
+            )
+
+        return complaints
+    
+    def officer_dashboard(
+        self,
+        officer: User,
+    ):
+        if officer.department_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Officer is not assigned to any department.",
+            )
+
+        return self.repository.dashboard_counts(
+            officer.department_id
         )
 
     def update_complaint(
@@ -462,6 +641,22 @@ class ComplaintService:
             complaint_id
         )
 
+        print("Complaint ID:", complaint.id)
+        print("Current Status:", complaint.status_id)
+        print("Current Status Enum:", ComplaintStatus(complaint.status_id))
+        print(
+            "Can Accept:",
+            is_valid_transition(
+                ComplaintStatus(complaint.status_id),
+                ComplaintStatus.ACCEPTED,
+            ),
+        )
+
+        self.validate_officer_department(
+            complaint,
+            officer,
+        )
+
         if complaint.is_locked:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -499,6 +694,13 @@ class ComplaintService:
             history
         )
 
+        self.notification_service.create_notification(
+            user_id=complaint.citizen_id,
+            title="Complaint Accepted",
+            message=f"Your complaint {complaint.complaint_number} has been accepted by the officer.",
+            notification_type="complaint_accepted",
+        )
+
         logger.info(
             f"Complaint {complaint.id} accepted by officer {officer.id}"
         )
@@ -515,6 +717,12 @@ class ComplaintService:
         complaint = self.get_complaint(
             complaint_id
         )
+
+        self.validate_officer_department(
+            complaint,
+            officer,
+        )
+
         if complaint.is_locked:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -552,6 +760,13 @@ class ComplaintService:
             history
         )
 
+        self.notification_service.create_notification(
+            user_id=complaint.citizen_id,
+            title="Complaint Rejected",
+            message=f"Your complaint {complaint.complaint_number} has been rejected.",
+            notification_type="complaint_rejected",
+        )
+
         logger.info(
             f"Complaint {complaint.id} rejected by officer {officer.id}"
         )
@@ -565,6 +780,11 @@ class ComplaintService:
     ):
         complaint = self.get_complaint(
             complaint_id
+        )
+
+        self.validate_officer_department(
+            complaint,
+            officer,
         )
 
         if complaint.is_locked:
@@ -611,6 +831,13 @@ class ComplaintService:
             history
         )
 
+        self.notification_service.create_notification(
+            user_id=complaint.citizen_id,
+            title="Work Started",
+            message=f"Work has started on your complaint {complaint.complaint_number}.",
+            notification_type="work_started",
+        )
+
         logger.info(
             f"Officer {officer.id} started work on complaint {complaint.id}"
         )
@@ -625,6 +852,11 @@ class ComplaintService:
     ):
         complaint = self.get_complaint(
             complaint_id
+        )
+
+        self.validate_officer_department(
+            complaint,
+            officer,
         )
 
         if complaint.is_locked:
@@ -671,6 +903,13 @@ class ComplaintService:
             history
         )
 
+        self.notification_service.create_notification(
+            user_id=complaint.citizen_id,
+            title="Work Restarted",
+            message=f"Work has restarted on your complaint {complaint.complaint_number}.",
+            notification_type="work_restarted",
+        )
+
         logger.info(
             f"Officer {officer.id} restarted work on complaint {complaint.id}"
         )
@@ -686,6 +925,11 @@ class ComplaintService:
     ):
         complaint = self.get_complaint(
             complaint_id
+        )
+
+        self.validate_officer_department(
+            complaint,
+            officer,
         )
 
         if complaint.is_locked:
@@ -737,6 +981,13 @@ class ComplaintService:
 
         self.history_repository.create(
             history
+        )
+
+        self.notification_service.create_notification(
+            user_id=complaint.citizen_id,
+            title="Complaint Resolved",
+            message=f"Your complaint {complaint.complaint_number} has been resolved.",
+            notification_type="complaint_resolved",
         )
 
         logger.info(
@@ -810,6 +1061,24 @@ class ComplaintService:
         self.history_repository.create(
             history
         )
+
+        if request.decision == "close":
+
+            self.notification_service.create_notification(
+                user_id=complaint.assigned_officer_id,
+                title="Complaint Closed",
+                message=f"Complaint {complaint.complaint_number} has been closed by the citizen.",
+                notification_type="complaint_closed",
+            )
+
+        else:
+
+            self.notification_service.create_notification(
+                user_id=complaint.assigned_officer_id,
+                title="Complaint Reopened",
+                message=f"Complaint {complaint.complaint_number} has been reopened by the citizen.",
+                notification_type="complaint_reopened",
+            )
 
         logger.info(
             f"Citizen {citizen.id} marked complaint {complaint.id} as {new_status.name}"

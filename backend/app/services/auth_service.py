@@ -141,3 +141,42 @@ class AuthService:
 
 
         return token
+
+    def change_password(
+        self,
+        current_user: User,
+        current_password: str,
+        new_password: str,
+        confirm_password: str,
+    ):
+
+        if not verify_password(
+            current_password,
+            current_user.password_hash,
+        ):
+            raise InvalidCredentialsException(
+                message="Current password is incorrect.",
+                status_code=400,
+            )
+
+        if new_password != confirm_password:
+            raise ValueError(
+                "New password and confirm password do not match."
+            )
+
+        if verify_password(
+            new_password,
+            current_user.password_hash,
+        ):
+            raise ValueError(
+                "New password cannot be same as current password."
+            )
+
+        password_hash = hash_password(
+            new_password
+        )
+
+        return self.user_repository.update_password(
+            current_user,
+            password_hash,
+        )

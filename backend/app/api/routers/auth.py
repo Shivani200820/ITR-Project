@@ -21,6 +21,12 @@ from app.services.auth_service import (
 from fastapi import Request
 from slowapi import Limiter
 from slowapi.util import get_remote_address
+from app.schemas.auth import (
+    LoginResponse,
+    ChangePasswordRequest,
+)
+from app.dependencies.auth import get_current_user
+from app.models.user import User
 
 router = APIRouter(
     prefix="/auth",
@@ -74,7 +80,7 @@ def register(
         429: {"description": "Too many requests"},
     },
 )
-@limiter.limit("5/minute")
+@limiter.limit("60/minute")
 def login(
     request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -93,3 +99,28 @@ def login(
         access_token=token,
         token_type="bearer",
     )
+
+@router.patch(
+    "/change-password",
+    summary="Change Password",
+)
+def change_password(
+    request: Request,
+    password_data: ChangePasswordRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    auth_service = AuthService(db)
+
+    auth_service.change_password(
+        current_user=current_user,
+        current_password=password_data.current_password,
+        new_password=password_data.new_password,
+        confirm_password=password_data.confirm_password,
+    )
+
+    return {
+        "success": True,
+        "message": "Password changed successfully.",
+        "errors": None,
+    }

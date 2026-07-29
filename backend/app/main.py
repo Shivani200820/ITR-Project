@@ -58,6 +58,11 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.extension import _rate_limit_exceeded_handler
+from app.api.routers.notification import router as notification_router
+from app.api.admin.officer_management_router import (
+    router as officer_management_router,
+)
+from app.api.translation.translation_router import router as translation_router
 
 @asynccontextmanager
 async def lifespan(app):
@@ -206,4 +211,19 @@ app.include_router(chart_router)
 
 app.include_router(
     recent_activity_router
+)
+
+app.include_router(
+    officer_management_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    notification_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    translation_router,
+    prefix="/api/v1",
 )

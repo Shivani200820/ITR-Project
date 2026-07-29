@@ -20,13 +20,13 @@ class UserBase(BaseModel):
         min_length=2,
         max_length=MAX_NAME_LENGTH,
         description="Full name of the user",
-        examples=["Shivani Dahiphale"],
+        examples=["John Doe"],
     )
 
     email: EmailStr = Field(
         ...,
         description="User email address",
-        examples=["shivani@example.com"],
+        examples=["john@example.com"],
     )
 
     phone: str = Field(
@@ -100,6 +100,8 @@ class UserResponse(UserBase):
 
     role: UserRole
 
+    department_id: int | None = None
+
     is_active: bool
 
     created_at: datetime
@@ -116,3 +118,4 @@ class UserRegisterResponse(BaseModel):
     message: str
     data: UserResponse
     errors: str | None = None
+
