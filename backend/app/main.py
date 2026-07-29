@@ -1,13 +1,140 @@
 from fastapi import FastAPI
-
+from app.api.routers import database
 from app.config.settings import settings
 from app.api.routers import health
+from app.api.routers import (
+    admin,
+    auth,
+    citizen,
+    officer,
+    users,
+)
+from app.core.handlers import (
+    register_exception_handlers
+)
+from app.api.routers import department
+from app.api.routers import complaint_category
+from app.api.routers import complaint_priority
+from app.api.routers import complaint_status
+from contextlib import asynccontextmanager
+
+from app.database.session import SessionLocal
+from app.database.seed import run_seeders
+from app.api.routers import upload
+from fastapi.staticfiles import StaticFiles
+import app.core.cloudinary
+from app.api.complaint.complaint_router import router as complaint_router
+from app.api.complaint.officer_router import (
+    router as officer_router,
+)
+from app.api.admin.dashboard_router import router as dashboard_router
+from app.api.admin.analytics_router import (
+    router as analytics_router,
+)
+from app.api.admin.department_analytics_router import (
+    router as department_analytics_router,
+)
+from app.api.admin.officer_analytics_router import (
+    router as officer_analytics_router,
+)
+from app.api.admin.citizen_analytics_router import (
+    router as citizen_analytics_router,
+)
+from app.api.admin.chart_router import (
+    router as chart_router,
+)
+from app.api.admin.recent_activity_router import (
+    router as recent_activity_router,
+)
+from app.core.request_logger import (
+    RequestLoggingMiddleware,
+)
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.security_headers import (
+    SecurityHeadersMiddleware,
+)
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.extension import _rate_limit_exceeded_handler
+from app.api.routers.notification import router as notification_router
+from app.api.admin.officer_management_router import (
+    router as officer_management_router,
+)
+from app.api.translation.translation_router import router as translation_router
+
+@asynccontextmanager
+async def lifespan(app):
+    """
+    Runs once when the application starts.
+    """
+
+    db = SessionLocal()
+
+    try:
+        run_seeders(db)
+        print("✅ Master data initialized.")
+    finally:
+        db.close()
+
+    yield
+
+
+limiter = Limiter(
+    key_func=get_remote_address
+)
 
 # Create FastAPI application
 app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
-    description="AI Powered Smart Civic Complaint & Resolution Platform",
+    title="CivicAI Backend API",
+    version="1.0.0",
+
+description="""
+AI Powered Smart Civic Complaint & Resolution Platform.
+
+This API enables citizens to register civic complaints, officers to manage complaint resolution, and administrators to monitor analytics and system performance.
+""".strip(),
+
+    contact={
+        "name": "CivicAI Development Team",
+        "email": "team@civicai.com",
+    },
+    license_info={
+        "name": "MIT License",
+    },
+    lifespan=lifespan,
+)
+
+app.state.limiter = limiter
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.add_middleware(
+    RequestLoggingMiddleware
+)
+
+app.add_middleware(
+    SlowAPIMiddleware
+)
+
+app.add_middleware(
+    SecurityHeadersMiddleware
+)
+
+register_exception_handlers(app)
+
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler,
 )
 
 # Root Endpoint
@@ -19,4 +146,84 @@ def root():
 
 # Include Routers
 app.include_router(health.router)
+app.include_router(database.router)
 
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(users.router, prefix="/api/v1")
+app.include_router(admin.router, prefix="/api/v1")
+app.include_router(officer.router, prefix="/api/v1")
+app.include_router(citizen.router, prefix="/api/v1")
+app.include_router(
+    department.router,
+    prefix="/api/v1",
+)
+app.include_router(
+    complaint_category.router,
+    prefix="/api/v1",
+)
+app.include_router(
+    complaint_priority.router,
+    prefix="/api/v1",
+)
+app.include_router(
+    complaint_status.router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    upload.router,
+    prefix="/api/v1",
+)
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory="uploads"),
+    name="uploads",
+)
+
+app.include_router(complaint_router)
+
+app.include_router(
+    officer_router
+)
+app.include_router(
+    dashboard_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    analytics_router
+)
+
+app.include_router(
+    department_analytics_router
+)
+
+app.include_router(
+    officer_analytics_router
+)
+
+app.include_router(
+    citizen_analytics_router
+)
+
+app.include_router(chart_router)
+
+app.include_router(
+    recent_activity_router
+)
+
+app.include_router(
+    officer_management_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    notification_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    translation_router,
+    prefix="/api/v1",
+)

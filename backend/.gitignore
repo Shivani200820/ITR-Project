@@ -8,3 +8,5 @@ htmlcov/
 uploads/
 .idea/
 .vscode/
+uploads/*
+!uploads/.gitkeep

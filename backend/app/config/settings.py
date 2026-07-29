@@ -1,10 +1,17 @@
+from functools import lru_cache
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+
     APP_NAME: str
     APP_VERSION: str
-    DEBUG: bool
+
+    ENVIRONMENT: str = "production"
+
+
+    DEBUG: bool = False
 
     HOST: str
     PORT: int
@@ -15,16 +22,40 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str
 
+    GROQ_API_KEY: str
+
+    GROQ_MODEL: str
+
+    GEMINI_API_KEY: str
+
+
+    STORAGE_DRIVER: str = "cloudinary"
+
+    UPLOAD_DIRECTORY: str = "uploads"
+
+    PENDING_UPLOAD_DIRECTORY: str = "uploads/pending"
+
+    MAX_IMAGE_SIZE: int = 5242880
+
+    ALLOWED_IMAGE_EXTENSIONS: str = "jpg,jpeg,png,webp"
+
     CLOUDINARY_CLOUD_NAME: str = ""
+
     CLOUDINARY_API_KEY: str = ""
+
     CLOUDINARY_API_SECRET: str = ""
 
-    GROQ_API_KEY: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        case_sensitive=True
+        extra="ignore"
     )
 
 
-settings = Settings()
+@lru_cache
+def get_settings():
+    return Settings()
+
+
+settings = get_settings()
+
